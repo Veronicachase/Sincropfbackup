@@ -1,57 +1,65 @@
 const trabajadorDao = require("../services/DAO/trabajadorDao");
 const { jwtVerify } = require("jose");
 
-const addtrabajador = async (req, res) => {
-  //Obtenemos el token de autorizacion
-  const { authorization } = req.headers;
-  if (!authorization) return res.sendStatus(401);
-  const token = authorization.split(" ")[1];
-
+const getTrabajador = async (req, res) => {
   try {
-    const enconder = new TextEncoder();
-    const { payload } = await jwtVerify(
-      token,
-      enconder.encode(process.env.JWT_SECRET)
-    );
-    //construimos el objeto con los datos del pedido
-    const trabajadorData = {
-      idProduct: req.body.idProduct,
-      idUser: payload.id,
-      quantity: req.body.quantity,
-    };
-
-    const idtrabajador = await trabajadorDao.addtrabajador(trabajadorData);
-    if (!idtrabajador) return res.sendStatus(500).send("Error al insertar pedido");
-
-    const rProdOrdId = await trabajadorDao.addProductstrabajadors({
-      idProduct: req.body.idProduct,
-      idtrabajador,
-    });
-
-    if (!rProdOrdId)
-      return res.sendStatus(500).send("Error al insertar rel_product_trabajador");
-
-    const getTrabajador = await trabajadorDao.getTrabajador(req.body.trabajadorId);
-    if (getTrabajador.length === 0)
-      return res.status(404).send("no se encontro el producto");
-    // [{name: 'product', price:100, stock:10}]
-
-    // const productStock = getTrabajador[0].stock;
-
-    // const newStock = productStock - req.body.quantity;
-    const updateProductStock = await trabajadorDao.updateProductStock(
-      newStock,
-      req.body.idProduct
-    );
-
-    if (!updateProductStock)
-      return res.sendStatus(500).send("Error al actualizar stock");
-
-    return res.status(201).send(`Pedido Añadido con id ${idtrabajador}`);
+    const { employeeId } = req.params; 
+    const trabajador = await trabajadorDao.getTrabajadorByReference(employeeId);
+    if (!trabajador) return res.status(404).send("Trabajador no encontrado");
+    return res.status(200).json(trabajador);
   } catch (e) {
-    console.log(e.message);
-    throw new Error(e);
+    return res.status(500).send("Error al obtener el trabajador");
   }
 };
 
-module.exports = { addtrabajador };
+const addTrabajador = async (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) return res.sendStatus(401); 
+  const token = authorization.split(" ")[1];
+
+  try {
+    const encoder = new TextEncoder();
+    const { payload } = await jwtVerify(token, encoder.encode(process.env.JWT_SECRET));
+
+    const trabajadorData = {
+      date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      name: payload.name, 
+      position: req.body.position,
+      project: req.body.project,
+      mandatoryEquipment: req.body.mandatoryEquipment,
+      comments: req.body.comments,
+    };
+
+    const nuevoTrabajador = await trabajadorDao.addtrabajador(trabajadorData);
+    return res.status(201).send(`Trabajador añadido con ID: ${nuevoTrabajador.insertId}`);
+  } catch (e) {
+    console.error(e.message);
+    return res.status(500).send("Internal Server Error");
+  }
+};
+
+const updateTrabajador = async (req, res) => {
+  const { employeeId } = req.params; 
+  const { name, position, project, mandatoryEquipment, comments } = req.body;
+  try {
+    const trabajadorData = { name, position, project, mandatoryEquipment, comments };
+    const result = await trabajadorDao.updateTrabajador(employeeId, trabajadorData);
+    if (result.affectedRows === 0) return res.status(404).send("Trabajador no encontrado");
+    return res.status(200).send("Trabajador actualizado correctamente");
+  } catch (e) {
+    return res.status(500).send("Error al actualizar trabajador");
+  }
+};
+
+const deleteTrabajador = async (req, res) => {
+  try {
+    const { employeeId } = req.params; 
+    const result = await trabajadorDao.deleteTrabajador(employeeId);
+    if (result.affectedRows === 0) return res.status(404).send("Trabajador no encontrado");
+    return res.status(200).send("Trabajador eliminado correctamente");
+  } catch (e) {
+    return res.status(500).send("Error al eliminar trabajador");
+  }
+};
+
+module.exports = { getTrabajador, addTrabajador, updateTrabajador, deleteTrabajador };
