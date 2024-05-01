@@ -6,6 +6,7 @@ const userRouter = require("./routes/userRouter");
 const proyectoRouter = require("./routes/proyectoRouter");
 const fileUpload = require("express-fileupload");
 const trabajadorRouter = require("./routes/trabajadorRouter");
+const imagesRouter = require("./routes/imagesRouter")
 const cors = require('cors');
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.text());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true })); 
 app.use(cors());
 app.use(
   fileUpload({
@@ -33,6 +35,7 @@ app.use(
 app.use("/users", userRouter);
 app.use("/proyectos", proyectoRouter);
 app.use("/trabajadores", trabajadorRouter);
+app.use ("/images",imagesRouter)
 
 //servidor
 app.listen(port, () => {
