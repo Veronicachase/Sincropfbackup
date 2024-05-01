@@ -2,10 +2,10 @@ const express = require("express");
 const { addproyecto } = require("../controllers/proyectoController");
 const proyectoRouter = express.Router();
 
-proyectoRouter.get("/:id", getProyecto);
+proyectoRouter.get("/:projectId", getProyecto);
 proyectoRouter.post("/", addproyecto);
-proyectoRouter.delete("/:id", deleteProyecto);
-proyectoRouter.patch("/:id", updateProyecto);
+proyectoRouter.delete("/:projectId", deleteProyecto);
+proyectoRouter.patch("/:projectId", updateProyecto);
 
 module.exports = proyectoRouter;
 
