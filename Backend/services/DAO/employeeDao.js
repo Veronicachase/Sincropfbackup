@@ -1,10 +1,10 @@
 const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys");
 const moment = require("moment");
-const db = "traer de base de datos"
+const db = require("../db")
 
-const trabajadorDao = {};
+const employeeDao = {};
 
-trabajadorDao.getTrabajadorByReference = async (employeeId) => {
+employeeDao.getEmployeeByReference = async (employeeId) => {
   
   let conn = null;
   try {
@@ -22,26 +22,26 @@ trabajadorDao.getTrabajadorByReference = async (employeeId) => {
   }
 };
 
-trabajadorDao.addtrabajador = async (trabajadorData) => {
+employeeDao.addEmployee = async (employeeData) => {
  
   let conn = null;
   try {
     conn = await db.createConnection();
     
-    let trabajadorObj = {
+    let employeeObj = {
       date: moment().format("YYYY-MM-DD HH:mm:ss"),
-      name: trabajadorData.name,
-      position: trabajadorData.position,
-      project: trabajadorData.project,
-      mandatoryEquipment: trabajadorData.mandatoryEquipment,
-      comments: trabajadorData.comments
+      name: employeeData.name,
+      position: employeeData.position,
+      project: employeeData.project,
+      mandatoryEquipment: employeeData.mandatoryEquipment,
+      comments: employeeData.comments
     };
    
-    trabajadorObj = await removeUndefinedKeys(trabajadorObj);
+    employeeObj = await removeUndefinedKeys(employeeObj);
    
     return await db.query(
       "INSERT INTO employee SET ?",
-      trabajadorObj,
+      employeeObj,
       "insert",
       conn
     );
@@ -52,24 +52,24 @@ trabajadorDao.addtrabajador = async (trabajadorData) => {
   }
 };
 
-trabajadorDao.updateTrabajador = async (employeeId, trabajadorData) => {
+employeeDao.updateEmployee = async (employeeId, employeeData) => {
   let conn = null;
   try {
     conn = await db.createConnection();
    
-      let trabajadorObj = {
+      let employeeObj = {
         date: moment().format("YYYY-MM-DD HH:mm:ss"),
-        name: trabajadorData.name,
-        position: trabajadorData.position,
-        project: trabajadorData.project,
-        mandatoryEquipment: trabajadorData.mandatoryEquipment,
-        comments: trabajadorData.comments
+        name: employeeData.name,
+        position: employeeData.position,
+        project: employeeData.project,
+        mandatoryEquipment: employeeData.mandatoryEquipment,
+        comments: employeeData.comments
     };
     
-    trabajadorObj = await removeUndefinedKeys(trabajadorObj);
+    employeeObj = await removeUndefinedKeys(employeeObj);
     return await db.query(
       "UPDATE employee SET ? WHERE employeeId = ?",
-      [trabajadorObj, employeeId],
+      [employeeObj, employeeId],
       "update",
       conn
     );
@@ -81,7 +81,7 @@ trabajadorDao.updateTrabajador = async (employeeId, trabajadorData) => {
 };
 
 
-trabajadorDao.deleteTrabajador = async (employeeId) => {
+employeeDao.deleteEmployee = async (employeeId) => {
 
   let conn = null;
   try {
@@ -97,4 +97,4 @@ trabajadorDao.deleteTrabajador = async (employeeId) => {
 
 
 
-module.exports = trabajadorDao;
+module.exports = employeeDao;

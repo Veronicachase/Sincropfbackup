@@ -15,10 +15,10 @@ const upload = multer({ storage: storage });
 const filesRouter = express.Router();
 
 filesRouter.get('/:fileId', getFile);
-filesRouter.post('/', upload.single('file'), addFile);
+filesRouter.post('/', upload.array('file', 5), addFile); 
 filesRouter.patch('/:fileId', updateFile);
 filesRouter.delete('/:fileId', deleteFile);
-filesRouter.post('/project/:projectId', upload.single('file'), addFile);
-filesRouter.post('/employee/:employeeId', upload.single('file'), addFile);
+filesRouter.post('/project/:projectId', upload.array('file', 5), addFile); 
+filesRouter.post('/employee/:employeeId', upload.array('file', 5), addFile);
 
 module.exports = filesRouter;
