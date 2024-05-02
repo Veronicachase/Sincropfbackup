@@ -12,11 +12,14 @@ export default function Layout() {
       <Box  className='bg-primario'
         sx={{
           textAlign: "center",
-          p: 2,
+          paddingLeft: 2,
+          paddingTop:2,
+          paddingBottom:2,
           width: "100%",
           borderRadius: "10px",
           display: "flex",
           margin: "0 auto"
+          
          
        
         }}

@@ -32,6 +32,7 @@ projectDao.addProject = async (projectData) => {
             bathRoom: projectData.bathRoom,
             terrace: projectData.terrace,
             laundry: projectData.laundry,
+            pool:projectData.pool,
             addedSection: projectData.addedSection,
             identifier: projectData.identifier,
             hiringCompany: projectData.hiringCompany,

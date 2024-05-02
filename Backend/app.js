@@ -3,10 +3,10 @@ const dotenv = require("dotenv");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/userRouter");
-const proyectoRouter = require("./routes/proyectoRouter");
+const projectRouter = require("./routes/projectRouter");
 const fileUpload = require("express-fileupload");
-const trabajadorRouter = require("./routes/trabajadorRouter");
-const imagesRouter = require("./routes/imagesRouter")
+const employeeRouter = require("./routes/employeeRouter");
+const filesRouter = require("./routes/filesRouter")
 const cors = require('cors');
 
 dotenv.config();
@@ -33,9 +33,9 @@ app.use(
 
 //Peticiones de Nuesta API
 app.use("/users", userRouter);
-app.use("/proyectos", proyectoRouter);
-app.use("/trabajadores", trabajadorRouter);
-app.use ("/images",imagesRouter)
+app.use("/proyectos", projectRouter);
+app.use("/trabajadores", employeeRouter);
+app.use ("/files",filesRouter)
 
 //servidor
 app.listen(port, () => {

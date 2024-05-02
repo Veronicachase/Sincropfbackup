@@ -1,4 +1,4 @@
-const filesDao = require('../dao/filesDao');
+const filesDao = require("../services/DAO/filesDao");
 const cloudinary = require('cloudinary').v2;
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,

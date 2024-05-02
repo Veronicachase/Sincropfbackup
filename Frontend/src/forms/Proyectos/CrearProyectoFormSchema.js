@@ -1,28 +1,46 @@
 
 import * as yup from 'yup';
 
-export const AdvancedFormSchema = yup.object().shape({
- empresaContratante:yup.string(),
- identificador:yup.string().required("Debes agregar un identificador"),
- bea:yup.string().max(20),
+export const crearProyectoFormSchema = yup.object().shape({
+ projectName:yup.string(),
+ hiringCompany:yup.string(),
+ identifier:yup.string().required("Debes agregar un identificador"),
+ address:yup.string(),
+ block:yup.string().max(20),
  portal:yup.string().max(10),
- unidad:yup.string().max(10),
- detalleDireccion:yup.string(),
- codigoPostal:yup.number().max(5),
- provincia:yup.string(),
- tipodeTrabajo:yup.string().oneOf(["construccion", "reparasos", "instalaciónEquipo", "piscinas","instPaneleSolares",  "otra"]),
- tipodeConstucción:yup.string().oneOf(["chalet", "piso", "rural", "otra"]),
- ubicacionMap: yup.string()
+ unit:yup.string().max(10),
+ addressDescription:yup.string(),
+ zipCode:yup.number(),
+ province:yup.string(),
+ TypeOfWork:yup.string().oneOf(["construccion", "reparasos", "instalaciónEquipo", "piscinas","instPaneleSolares",  "otra"]),
+ ConstructionType:yup.string().oneOf(["chalet", "piso", "rural", "otra"]),
+ map: yup.string()
         .required('Este campo es obligatorio')
         .matches(
             /^-?\d+(\.\d+)?, \s*-?\d+(\.\d+)?$/,
             'El formato de la ubicación debe ser "latitud, longitud"'
         ) ,
  
- fechadeInicio:yup.date(),
- fechaEntrega:yup.date(),
- detalledeProyecto:yup.string()
- 
+ startDate:yup.date(),
+ endDate:yup.date(),
+ area:yup.string(),
+ projectDetails:yup.string(),
+ projectDescription:yup.string(),
+ taskDescription:yup.string(),
+ createTask:yup.string(),
+ addedSection:yup.string(),
+ livingRoom: yup.boolean(),
+ kitchen: yup.boolean(),
+ hall: yup.boolean(),
+ room1: yup.boolean(),
+ room2: yup.boolean(),
+ bathRoom: yup.boolean(),
+ terrace: yup.boolean(),
+ laundry: yup.boolean(),
+ pool: yup.boolean(),
+
+
+
 });
 
 
@@ -35,9 +53,3 @@ export const AdvancedFormSchema = yup.object().shape({
 
 
 
-
-// export const AdvancedFormSchema = yup.object().shape({
-//     username: yup.string().min(5).required("Username is required"),
-//     jobType: yup.string().oneOf(["developer", "designer", "manager", "other"], "Invalid Job Type").required("Job type is required"),
-//     acceptedTC: yup.boolean().oneOf([true], "Please accept the terms and conditions")
-// })

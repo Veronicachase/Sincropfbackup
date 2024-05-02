@@ -1,38 +1,26 @@
+/* eslint-disable react/prop-types */
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-import { useState } from 'react';
 
-export default function CheckboxC(){
+
+export default function CheckboxC({setFieldValue, values}){
 
     const secciones = [
-        { label: "Salón", value: "salon" },
-        { label: "Cocina", value: "cocina" },
-        { label: "Pasillo", value: "pasillo" },
-        { label: "Habitación 1", value: "habitacion1" },
-        { label: "Habitación 2", value: "habitacion2" },
-        { label: "Baño", value: "bano" },
-        { label: "Terraza", value: "terraza" },
-        { label: "Lavandería", value: "lavanderia" },
+        { label: "Salón", value: "salon", name:"livingRoom" },
+        { label: "Cocina", value: "cocina", name:"kitchen" },
+        { label: "Pasillo", value: "pasillo", name:"hall" },
+        { label: "Habitación 1", value: "habitacion1", name:"room1" },
+        { label: "Habitación 2", value: "habitacion2" , name:"room2" },
+        { label: "Baño", value: "bano", name:"bathroom" },
+        { label: "Terraza", value: "terraza", name:"terrace" },
+        { label: "Lavandería", value: "lavanderia",name:"laundry" },
+        { label: "Piscina", value: "piscina",name:"pool" }
+        
       ];
-      
-      const [checkedState, setCheckedState] = useState({
-        salon: false ,
-        cocina:false,
-        pasillo: false ,
-        habitación1:false ,
-        habitación2:false ,
-        baño:false,
-        terraza:false ,
-        lavandería:false ,
-    
-      }
      
-      );
      
-      const handleChange = (event) => {
-        setCheckedState({
-          ...checkedState,
-          [event.target.value]: event.target.checked
-        });
+      const handleChange = (name) =>(event)=> {
+        setFieldValue(name,event.target.checked)
+          
       };
     
       return (
@@ -41,8 +29,8 @@ export default function CheckboxC(){
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={checkedState[seccion.value]}
-                  onChange={handleChange}
+                  checked={values[seccion.name]}
+                  onChange={handleChange(seccion.name)}
                   value={seccion.value}
                 />
               }
