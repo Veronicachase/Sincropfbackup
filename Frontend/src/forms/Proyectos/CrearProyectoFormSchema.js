@@ -15,7 +15,6 @@ export const crearProyectoFormSchema = yup.object().shape({
  TypeOfWork:yup.string().oneOf(["construccion", "reparasos", "instalaciónEquipo", "piscinas","instPaneleSolares",  "otra"]),
  ConstructionType:yup.string().oneOf(["chalet", "piso", "rural", "otra"]),
  map: yup.string()
-        .required('Este campo es obligatorio')
         .matches(
             /^-?\d+(\.\d+)?, \s*-?\d+(\.\d+)?$/,
             'El formato de la ubicación debe ser "latitud, longitud"'

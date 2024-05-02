@@ -10,7 +10,7 @@ export default function CheckboxC({setFieldValue, values}){
         { label: "Pasillo", value: "pasillo", name:"hall" },
         { label: "Habitación 1", value: "habitacion1", name:"room1" },
         { label: "Habitación 2", value: "habitacion2" , name:"room2" },
-        { label: "Baño", value: "bano", name:"bathroom" },
+        { label: "Baño", value: "bathRoom", name:"bathRoom" },
         { label: "Terraza", value: "terraza", name:"terrace" },
         { label: "Lavandería", value: "lavanderia",name:"laundry" },
         { label: "Piscina", value: "piscina",name:"pool" }

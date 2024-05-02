@@ -12,14 +12,14 @@ import "leaflet/dist/leaflet.css";
 const center = { lat: 36.579395, lng: -4.597678 };
 
 function LocationMarker({ setFieldValue }) {
-  const [position, setPosition] = useState(center); // Inicia con un centro por defecto
+  const [position, setPosition] = useState(center); 
   const map = useMapEvents({
     click(e) {
       const newPos = e.latlng;
       setPosition(newPos);
       map.flyTo(newPos, map.getZoom());
       setFieldValue(
-        "ubicacionMap",
+        "map",
         `${newPos.lat.toFixed(5)}, ${newPos.lng.toFixed(5)}`
       );
     },

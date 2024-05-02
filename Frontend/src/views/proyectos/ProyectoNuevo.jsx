@@ -39,7 +39,7 @@ function ProyectoNuevo() {
         navigate("/mis-proyectos");
       }}
     >
-      {({ isSubmitting, setFieldValue, values }) => (
+      {({ isSubmitting, setFieldValue, values, errors }) => (
         <Form>
           <Box
             sx={{
@@ -174,6 +174,7 @@ function ProyectoNuevo() {
               </Grid>
             </Grid>
           </Box>
+          <pre>{JSON.stringify({values,errors}, null,1)}</pre>
         </Form>
       )}
     </Formik>
