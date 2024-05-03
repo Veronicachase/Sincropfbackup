@@ -4,20 +4,19 @@ export default function UsePageTitle() {
   const location = useLocation();
   const pathDir = {
     "/login": "",
-    "/inicio-proyecto": "INICIO PROYECTO",
-    "/proyecto-nuevo": "NUEVO PROYECTO",
-    "/mis-proyectos": "MIS PROYECTOS",
-    "/proyecto": "PROYECTO",
-    "/pendientes": "MIS PENDIENTES",
-    "/avances": "AVANCES DE PROYECTO",
-    "/material": "MATERIAL Y PEDIDOS",
-    "/contactos": "CONTACTOS",
-    "/inicio-personal": "INICIO PERSONAL",
-    "/crear-trabajador": "CREAR TRABAJADOR",
-    "/lista-trabajadores": "LISTA DE TRABAJADORES",
-    "/trabajador": "TRABAJADOR",
-    "/reportes": "REPORTE",
+    "/new-project": "Nuevo Proyecto",
+    "/my-projects": "Mis Proyectos",
+    "/project" : "Proyecto",
+    "/pendings" : "Mis pendientes",
+    "/progress": "Avances de Proyecto",
+    "/material": "Material y pedidos",
+    "/contacts": "Contactos",
+    "/staff-list": "Lista de trabajadores",
+    "/create-employee": "Crear Trabajador",
+    "/employee" : "Trabajador",
+    "/reports": "Report",
   };
 
   return pathDir[location.pathname] || "PÁGINA NO ENCONTRADA";
 }
+

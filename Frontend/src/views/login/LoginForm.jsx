@@ -73,14 +73,14 @@ const LoginForm = () => {
       flexDirection={"column"}
       margin={"auto"}
     >
-      <div>
+      <Box>
         <ToggleButtonGroup>
           <ToggleButton
             onClick={changeLanguage}
             value="Español"
             aria-label="español"
           >
-          <img src={Espana} alt="Bandera de España" />
+            <img src={Espana} alt="Bandera de España" />
           </ToggleButton>
           <ToggleButton
             onClick={changeLanguage}
@@ -88,76 +88,83 @@ const LoginForm = () => {
             aria-label="English"
           >
             {t("button")}
-        </ToggleButton>
+          </ToggleButton>
         </ToggleButtonGroup>
-      </div>
+      </Box>
       <img className="logo" src={Logo} alt="Sincro" />
-      <Typography className="fc-primary" mb={5} variant="h3">
-        Log in
-      </Typography>
-
-      <form onSubmit={handleSubmit}>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          margin={"auto"}
-          width={300}
-        >
-          <TextField
-            type="email"
-            label="Ingrese su email"
-            variant="outlined"
-            value={values.email}
-            onChange={handleChange("email")}
-            onBlur={handleBlur("email")}
-            className={errors.email && touched.email ? "input-error" : ""}
-            sx={{ marginBottom: "2em" }}
-          />
-          {errors.email && touched.email && (
-            <p className="error">{errors.email}</p>
-          )}
-
-          <TextField
-            type="password"
-            label="Ingrese su Contaseña"
-            variant="outlined"
-            onChange={handleChange("password")}
-            onBlur={handleBlur("password")}
-            className={errors.password && touched.password ? "input-error" : ""}
-            sx={{ marginBottom: "2em" }}
-          />
-          {errors.password && touched.password && (
-            <p className="error">{errors.password}</p>
-          )}
-
-          <MyButton disabled={isSubmitting}>Iniciar sesión</MyButton>
-            
-            
-      
-        </Box>
-
-        <Typography variant="body2">
-          ¿No tienes una cuenta?
-          <Link
-            to="/register"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            Registrate
-          </Link>
+      <Box
+        backgroundColor="#f6fbf9"
+        borderRadius="49px"
+        paddingTop={3}
+        paddingBottom={3}
+      >
+        <Typography className="fc-primary" mb={5} variant="h4">
+          Iniciar Sesión
         </Typography>
-        <Typography variant="body2">
-          ¿Olvidaste tu contraseña?
-          <Link
-            to="/forgot-password"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            Haz click aquí para recuperarla
-          </Link>
-        </Typography>
-      </form>
+
+        <form onSubmit={handleSubmit}>
+          <Box>
+            <TextField
+              type="email"
+              label="Ingrese su email"
+              variant="outlined"
+              value={values.email}
+              onChange={handleChange("email")}
+              onBlur={handleBlur("email")}
+              className={errors.email && touched.email ? "input-error" : ""}
+              InputProps={{style:{borderRadius:20}}}
+              sx={{
+                marginBottom: "2em",
+                width: "300px",
+                backgroundColor:"#fff"
+              }}
+            />
+            {errors.email && touched.email && (
+              <p className="error">{errors.email}</p>
+            )}
+
+            <TextField
+              type="password"
+              label="Ingrese su Contaseña"
+              variant="outlined"
+              onChange={handleChange("password")}
+              onBlur={handleBlur("password")}
+              className={
+              errors.password && touched.password ? "input-error" : ""
+              }
+              InputProps={{style:{borderRadius:20}}}
+              sx={{
+                marginBottom: "2em",
+                width: "300px",
+                borderRadius: "15.34px",
+                backgroundColor:"#fff"
+              }}
+            />
+            {errors.password && touched.password && (
+              <p className="error">{errors.password}</p>
+            )}
+
+            <MyButton disabled={isSubmitting}>Iniciar sesión</MyButton>
+          </Box>
+
+          <Typography variant="body2">
+            ¿No tienes una cuenta?
+            <Link to="/register" style={{ color: "inherit"}}>
+              Registrate
+            </Link>
+          </Typography>
+          <Typography variant="body2">¿Olvidaste tu contraseña?</Typography>
+          <Typography variant="body2">
+            <Link to="/forgot-password" style={{ color: "inherit" }}>
+              Haz click aquí para recuperarla
+            </Link>
+          </Typography>
+        </form>
+      </Box>
     </Box>
   );
 };
+export default LoginForm;
 
 /**  
  * import Espana from "../../assets/images/espana.png"
@@ -167,8 +174,6 @@ const LoginForm = () => {
       <ToggleButton value="no" aria-label="british">{BritishFlag}</ToggleButton>
       <ToggleButton value="incompleto" aria-label="british">{BritishFlag}</ToggleButton>
     </ToggleButtonGroup>      */
-
-export default LoginForm;
 
 // import { useState } from "react";
 // import { TextField, Container, Typography } from "@mui/material";

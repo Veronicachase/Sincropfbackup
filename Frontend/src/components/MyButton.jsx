@@ -10,9 +10,11 @@ function MyButton({ onClick, children, buttonType = 'submit', disabled = false }
       disabled={disabled} 
       sx={{
         display: "flex",
+        width:"224px",
+        height:"52px",
         margin: "1em auto",
-        borderRadius: "10px",
-        backgroundColor: "#021f59", 
+        borderRadius: "49px",
+        backgroundColor: "#84C7AE", 
         color:"#ffffff",
         padding:".5em 1em",
         "&:hover": {

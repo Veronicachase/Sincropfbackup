@@ -33,8 +33,8 @@ app.use(
 
 //Peticiones de Nuesta API
 app.use("/users", userRouter);
-app.use("/proyectos", projectRouter);
-app.use("/trabajadores", employeeRouter);
+app.use("/projects", projectRouter);
+app.use("/employee", employeeRouter);
 app.use ("/files",filesRouter)
 
 //servidor

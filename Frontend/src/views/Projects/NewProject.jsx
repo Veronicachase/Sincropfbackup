@@ -12,11 +12,13 @@ import CheckboxC from "../../components/CheckboxC";
 import { handleFileUpload } from "../../handlers/handleFileUpload";
 import Select from "../../ui/Select";
 import "../../assets/styles/estilosGenerales.css";
-import "./proyectoNuevo.css";
+import "./newProject.css";
 import MyButton from "../../components/MyButton";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
+// eslint-disable-next-line no-unused-vars
+import { handleSubmitProject } from "../../handlers/handlerSubmitProject";
 
-function ProyectoNuevo() {
+function NewProject() {
   const navigate = useNavigate();
 
   return (
@@ -25,6 +27,7 @@ function ProyectoNuevo() {
       validationSchema={crearProyectoFormSchema}
       onSubmit={(values, actions) => {
         console.log("Formulario enviado");
+        <handleSubmitProject />;
         if (values.files && values.files.length > 0) {
           Array.from(values.files).forEach((file) => {
             handleFileUpload(file).then((response) => {
@@ -36,7 +39,7 @@ function ProyectoNuevo() {
         actions.setSubmitting(false);
         actions.resetForm();
         alert("Proyecto creado correctamente");
-        navigate("/mis-proyectos");
+        navigate("/my-projects");
       }}
     >
       {({ isSubmitting, setFieldValue, values, errors }) => (
@@ -70,63 +73,74 @@ function ProyectoNuevo() {
                     key={field.name}
                     item
                     xs={
-                      field.name === "hiringCompany" ||
-                      field.name === "identifier" ||
-                      field.name === "addressDescription"
-                        ? 10
-                        : 5
+                      field.name === "block" ||
+                      field.name === "unit" ||
+                      field.name === "zipCode" ||
+                      field.name === "province"
+                        ? 5
+                        : 11
                     }
                   >
                     <CustomTextField
                       name={field.name}
+                      label={field.label}
                       type={field.type}
                       value={values[field.name]}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      sx={{ backgroundColor: "#f2faff" }}
+                      sx={{ backgroundColor: "#edf5f4"}}
+                      InputProps={{
+                        style: {
+                          borderRadius: '17px' 
+                        }
+                      }}
+                    
                     />
                   </Grid>
                 ))}
               </Grid>
 
-              <Grid item xs={10}>
+              <Grid item xs={11}>
                 <div id="map" style={{ height: "400px", width: "100%" }}>
                   <MapView setFieldValue={setFieldValue} />
                 </div>
               </Grid>
 
-              <Grid item xs={10} sm={5}>
+              <Grid item xs={11} sm={5}>
                 <Select
                   name="typeOfWork"
                   value={values.typeOfWork}
-                  onChange={event => setFieldValue("typeOfWork", event.target.value)}
+                  onChange={(event) =>
+                    setFieldValue("typeOfWork", event.target.value)
+                  }
                   label="Tipo de Trabajo"
-                  sx={{ backgroundColor: "#f2faff" }}
+                
                 >
                   <option value="">Selecciona un tipo</option>
-                  <option value="construccion">Construcción</option>
-                  <option value="repasos">Repasos</option>
-                  <option value="instalacionEquipo">
-                    Instalación de equipos
-                  </option>
-                  <option value="piscinas">Piscinas</option>
-                  <option value="instPanelesSolares">
+                  <option value="construction">Construcción</option>
+                  <option value="finishings">Repasos</option>
+                  <option value="installations">Instalación de equipos</option>
+                  <option value="pool">Piscinas</option>
+                  <option value="SolarPanels">
                     Instalación de paneles solares
                   </option>
                   <option value="otra">Otra</option>
                 </Select>
               </Grid>
-              <Grid item xs={10} sm={5}>
-                <Select 
-                name="constructionType"
-                value={values.constructionType}
-                onChange={event => setFieldValue("constructionType", event.target.value)}
-                label="Tipo de Construcción"
->
+              <Grid item xs={11} sm={5}>
+                <Select
+                  name="constructionType"
+                  value={values.constructionType}
+                  onChange={(event) =>
+                    setFieldValue("constructionType", event.target.value)
+                  }
+                  label="Tipo de Construcción" 
+                >
                   <option value="">Selecciona un tipo</option>
                   <option value="chalet">Chalet</option>
-                  <option value="piso">Piso</option>
-                  <option value="otra">Otra</option>
+                  <option value="apartment">Piso</option>
+                  <option value="rural">Rural</option>
+                  <option value="other">Otra</option>
                 </Select>
               </Grid>
 
@@ -138,20 +152,28 @@ function ProyectoNuevo() {
                 margin={"auto"}
               >
                 {projectTextField2.map((field) => (
-                  <Grid key={field.name} item xs={10}>
+                  <Grid key={field.name} item xs={11}>
                     <CustomTextField
                       name={field.name}
                       type={field.type}
                       value={values[field.name]}
+                      label={field.label}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      sx={{ backgroundColor: "#f2faff" }}
+                      InputProps={{
+                        style: {
+                          borderRadius: '17px',
+                          backgroundColor:"#edf5f4",
+                          color:"#000"
+                        }
+                      }}
                     />
                   </Grid>
                 ))}
               </Grid>
 
-              <Grid item xs={10} sm={5}>
+              <Grid item xs={11} sm={5}>
+              <Typography variant="body" sx={{ paddingBottom: "1em", display: "block", textAlign:"left" }}>Escoger las secciones a trabajar</Typography>
                 <CheckboxC setFieldValue={setFieldValue} values={values} />
               </Grid>
 
@@ -174,11 +196,11 @@ function ProyectoNuevo() {
               </Grid>
             </Grid>
           </Box>
-          <pre>{JSON.stringify({values,errors}, null,1)}</pre>
+          <pre>{JSON.stringify({ values, errors }, null, 1)}</pre>
         </Form>
       )}
     </Formik>
   );
 }
 
-export default ProyectoNuevo;
+export default NewProject;

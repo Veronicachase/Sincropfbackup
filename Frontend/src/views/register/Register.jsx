@@ -22,7 +22,7 @@ const Register = () => {
     validationSchema: RegisterFormSchema,
     onSubmit: async (values, actions) => {
       const { confirmPassword, ...userData } = values;
-      console.log('Enviando datos al servidor:', userData);
+      console.log("Enviando datos al servidor:", userData);
       try {
         const response = await fetch("http://localhost:3000/users", {
           method: "POST",
@@ -77,56 +77,62 @@ const Register = () => {
       margin={"auto"}
     >
       <img className="logo" src={Logo} alt="Sincro" />
-      <Typography className="fc-primary" mb={5} variant="h4">
-        Registrate
-      </Typography>
-
-      <form onSubmit={formik.handleSubmit}>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          margin={"auto"}
-          width={300}
-        >
-          {[
-            "name",
-            "surname",
-            "company",
-            "email",
-            "password",
-            "confirmPassword",
-          ].map((field) => (
-            <TextField
-              key={field}
-              type={field.includes("password") ? "password" : "text"}
-              name={field}
-              value={formik.values[field]}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder={placeHolderText(field)}
-              sx={{ marginBottom: "1em" }}
-              className={
-                formik.errors[field] && formik.touched[field]
-                  ? "input-error"
-                  : ""
-              }
-            />
-          ))}
-          <MyButton disabled={formik.isSubmitting}> Registrar</MyButton>
-            
-      
-        </Box>
-
-        <Typography variant="body2">
-          ¿Ya tienes una cuenta?
-          <Link
-            to="/login"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            Inicia Sesión
-          </Link>
+      <Box
+        backgroundColor="#f6fbf9"
+        borderRadius="49px"
+        paddingTop={3}
+        paddingBottom={3}
+      >
+        <Typography className="fc-primary" mb={5} variant="h4">
+          Registrar
         </Typography>
-      </form>
+
+        <form onSubmit={formik.handleSubmit}>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            margin={"auto"}
+            width={300}
+          >
+            {[
+              "name",
+              "surname",
+              "company",
+              "email",
+              "password",
+              "confirmPassword",
+            ].map((field) => (
+              <TextField
+                key={field}
+                type={field.includes("password") ? "password" : "text"}
+                name={field}
+                value={formik.values[field]}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder={placeHolderText(field)}
+                sx={{ marginBottom: "1em" }}
+                className={
+                  formik.errors[field] && formik.touched[field]
+                    ? "input-error"
+                    : ""
+                }
+                InputProps={{ style: { borderRadius: 18, backgroundColor:"#fff", marginBottom:".8em" } }}
+              />
+            ))}
+            <MyButton disabled={formik.isSubmitting}> Registrar</MyButton>
+          </Box>
+
+          <Typography variant="body2">
+            ¿Ya tienes una cuenta? 
+            <Link
+              to="/login"
+              style={{  color: "inherit" }}
+            >
+              Inicia Sesión
+            </Link>
+          </Typography>
+        </form>
+      </Box>
     </Box>
   );
 };

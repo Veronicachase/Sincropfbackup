@@ -7,16 +7,16 @@ export const ProjectTextField = [
     placeholder: "Empresa Contratante",
   },
   {
-    name: "identifier",
+    name: "projectName",
     type: "text",
-    label: "Identificador del Proyecto",
-    value:"identifier",
-    placeholder: "Identificador del proyecto",
+    label: "Identificador",
+    value:"projectName",
+    placeholder: "Nombre del proyecto",
   },
 
   { name: "block", type: "text", label: "Bloque", placeholder: "Bloque", value:"block"  },
 
-  { name: "portal", type: "text", label: "Portal", placeholder: "Portal", value:"portal" },
+  
   { name: "unit", type: "text", label: "Unidad", placeholder: "Unidad", value:"unit" },
   {
     name: "zipCode",
@@ -32,6 +32,7 @@ export const ProjectTextField = [
     value:"province",
     placeholder: "Provincia",
   },
+  
   {
     name: "addressDrescription",
     type: "text",
@@ -39,6 +40,7 @@ export const ProjectTextField = [
     value:"addressDrescription",
     placeholder: "Detalle de dirección",
   },
+
 
   {
     name: "endDate",
@@ -58,17 +60,23 @@ export const ProjectTextField = [
 
 export  const projectTextField2 = [
   
-  { name:"createTask",
+  { 
+  name:"createTask",
+  label:"Crear Tarea",
   type:"text",
   value:"createTask",
-  placeholder:"Crear Nueva Tarea" },
+  placeholder:"Nombre de la Tarea" },
 
-  { name:"area",
+  { 
+  name:"area",
+  label:"Área",
   type:"text",
   value:"area",
-  placeholder:"Área"},
+  placeholder:"Zona en que se hará el trabajo"},
 
-  {name:"proyectDescription",
+  {
+  name:"proyectDescription",
+  label:"Detalles",
   value:"proyectDescription",
   type:"text",
   placeholder:"Descripción del Trabajo"}

@@ -7,34 +7,30 @@ import StackedLineChartIcon from "@mui/icons-material/StackedLineChart";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SummarizeIcon from "@mui/icons-material/Summarize";
-import { useTheme, ThemeProvider } from "@mui/material/styles";
+
 
 const Options = [
   {
-    name: "Proyectos",
-    path: "/inicio-proyecto",
-    icon: <ArchitectureIcon color="theme.palette.primary.main" />,
+    name: "Proyectos", path: "/mis-proyectos",
+    icon: <ArchitectureIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/>,
   },
-
-  { name: "Pendientes", path: "/pendientes", icon: <PendingActionsIcon /> },
-  { name: "Avances", path: "/avances", icon: <StackedLineChartIcon /> },
-  { name: "Material y Pedidos", path: "/material", icon: <AllInboxIcon /> },
-  { name: "Contactos", path: "/contactos", icon: <ContactPhoneIcon /> },
-  { name: "Personal", path: "/personal", icon: <BadgeIcon /> },
-  { name: "Reportes", path: "/reportes", icon: <SummarizeIcon /> },
+  { name: "Pendientes", path: "/pendientes", icon: <PendingActionsIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Avances", path: "/avances", icon: <StackedLineChartIcon  sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
+  { name: "Material y Pedidos", path: "/material", icon: <AllInboxIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Contactos", path: "/contactos", icon: <ContactPhoneIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Personal", path: "/personal", icon: <BadgeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
+  { name: "Reportes", path: "/reportes", icon: <SummarizeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
 ];
 
 export default function HomeOptions() {
-  const theme = useTheme();
+
 
   return (
-    <ThemeProvider theme={theme}>
+ 
       <Box
         sx={{
           width: "80%",
-          margin: "auto",
-          color: theme.palette.primary.main,
-          
+          margin: "auto", 
         }}
       >
         <Grid container spacing={5} justifyContent={"space-between"} marginTop={"3em"} >
@@ -48,10 +44,11 @@ export default function HomeOptions() {
                   boxShadow: "1px 2px 3px #ccc",
                   display: "flex",
                   justifyContent:"center",
-                  backgroundColor:"#f2faff",
+                  backgroundColor:"#84C7AE",
                   borderRadius:"5px",
                   padding: "1em .5em",
-                  color:"#021F59"
+                  color:"#021F59",
+                  fontWeight:"Bold"
                 }}
               >
                 <Link
@@ -60,18 +57,20 @@ export default function HomeOptions() {
                     textDecoration: "none",
                     color: "inherit",
                     display: "flex",
+                    flexDirection:"column",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  {option.icon}{" "}
-                  <span style={{ marginLeft: "10px" }}>{option.name}</span>
+                <span style={{ marginLeft: "10px" }}>{option.name}</span>
+                  {option.icon }{" "}
+                  
                 </Link>
               </Box>
             </Grid>
           ))}
         </Grid>
       </Box>
-    </ThemeProvider>
+   
   );
 }

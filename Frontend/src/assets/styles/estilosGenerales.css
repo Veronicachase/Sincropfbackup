@@ -1,12 +1,12 @@
 /* Variables para el modo claro */
 :root {
-  --blue-primary-main: #021f59;
+  --green-primary-main: #84C7AE;
   --white-secondary-main: #ffffff;
-  --grey-secondary-light: rgba(179, 224, 253, 0.17);
+  --grey-secondary-light: #edf5f4d1;
   --red-error-main: #f25244;
   --orange-warning-main: #f2cb05;
   --green-success-main: #8bb443;
-  --lightBlue-info-main: #f2faff;
+  --lightGreen-info-main: #F6FBF9;
   --light-grey-A200: #d9d9d9;
   --borde-custom-inputBorder: #c7c3c3;
   --shadow-custom-lightShadow: rgba(0, 0, 0, 0.15);
@@ -15,7 +15,7 @@
 }
 
 .bg-primario{
-    background-color: var(--blue-primary-main);
+    background-color: var(--green-primary-main);
     
 }
 .bg-warning{
@@ -24,8 +24,8 @@
 .bg-success{
 background-color: var(--green-success-main);
 }
-.bg-light-blue{
-background-color: var(--lightBlue-info-main);
+.bg-light-green{
+background-color: var(--lightGreen-info-main);
 }
 
 .bg-grey{
@@ -33,7 +33,7 @@ background-color: var(--lightBlue-info-main);
 }
 
 .fc-primary{
- color: var(--blue-primary-main);
+ color: var(--green-primary-main);
 }
 .fc-secondary{
     color: var(--white-secondary-main);

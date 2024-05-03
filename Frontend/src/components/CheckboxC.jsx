@@ -1,19 +1,19 @@
 /* eslint-disable react/prop-types */
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, Grid, Box } from '@mui/material';
 
 
 export default function CheckboxC({setFieldValue, values}){
 
     const secciones = [
-        { label: "Salón", value: "salon", name:"livingRoom" },
-        { label: "Cocina", value: "cocina", name:"kitchen" },
-        { label: "Pasillo", value: "pasillo", name:"hall" },
-        { label: "Habitación 1", value: "habitacion1", name:"room1" },
-        { label: "Habitación 2", value: "habitacion2" , name:"room2" },
+        { label: "Salón", value: "livingRoom", name:"livingRoom" },
+        { label: "Cocina", value: "kitchen", name:"kitchen" },
+        { label: "Pasillo", value: "hall", name:"hall" },
+        { label: "Habitación ", value: "room", name:"room" },
         { label: "Baño", value: "bathRoom", name:"bathRoom" },
-        { label: "Terraza", value: "terraza", name:"terrace" },
-        { label: "Lavandería", value: "lavanderia",name:"laundry" },
-        { label: "Piscina", value: "piscina",name:"pool" }
+        { label: "Terraza", value: "terrace", name:"terrace" },
+        { label: "Lavandería", value: "laundry",name:"laundry" },
+        { label: "Piscina", value: "roof",name:"pool" },
+        { label: "Techo", value: "roof",name:"roof" }
         
       ];
      
@@ -25,21 +25,25 @@ export default function CheckboxC({setFieldValue, values}){
     
       return (
         <FormGroup>
-          {secciones.map((seccion) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={values[seccion.name]}
-                  onChange={handleChange(seccion.name)}
-                  value={seccion.value}
-                />
-              }
-              label={seccion.label}
-              key={seccion.value}
-            />
-          ))}
+          <Grid container spacing={2}> 
+            {secciones.map((seccion) => (
+              <Grid item xs={6} key={seccion.value}> 
+                <Box sx={{ backgroundColor: "#edf5f4", borderRadius: "20px", padding: "8px", display: 'flex', alignItems: 'center', justifyContent:"center" }}> 
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={values[seccion.name]}
+                        onChange={handleChange(seccion.name)}
+                        value={seccion.value}
+                      />
+                    }
+                    label={seccion.label}
+                  />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
         </FormGroup>
       );
-
 
 }

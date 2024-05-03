@@ -3,19 +3,17 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from './components/RequireAurth'
 import  AuthContextProvider  from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
-import InicioProyecto from "./views/proyectos/InicioProyecto";
-import ProyectoNuevo from './views/proyectos/ProyectoNuevo'
-import MisProyectos from './views/proyectos/MisProyectos'
-import Proyecto from './views/proyectos/Proyecto'
-import Pendientes from './views/pendientes/Pendientes'
-import Avances from './views/avances/avances'
-import MaterialYPedidos from './views/matYPedidos/materialYPedidos'
-import Contactos from './views/contactos/Contactos'
-import InicioPersonal  from './views/personal/InicioPersonal'
-import CrearTrabajador from './views/personal/CrearTrabajador'
-import ListaTrabajadores from './views/personal/ListaTrabajadores'
-import Trabajador from './views/personal/Trabajador'
-import Reportes from './views/reportes/Reportes'
+import NewProject from './views/Projects/NewProject'
+import MyProjects from './views/Projects/MyProjects'
+import Project from './views/Projects/Project'
+import Pendings from './views/Pendings/Pendings'
+import Progress from './views/progress/Progress'
+import MaterialAndOrders from './views/matAndOrders/materialAndOrders'
+import Contacts from './views/contacts/Contacts'
+import CreateEmployee from './views/staff/CreateEmployee'
+import StaffList from './views/staff/StaffList'
+import Employee from './views/staff/Employee'
+import Reports from './views/reports/Reports'
 import Layout from './components/Layout'
 import LoginForm  from './views/login/LoginForm'
 import Register from './views/register/Register'
@@ -45,21 +43,19 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<Layout />}>
             <Route element={<RequireAuth />}>
-              <Route path="/inicio-proyecto" element={<InicioProyecto />} />
-              <Route path="/proyecto-nuevo" element={<ProyectoNuevo />} />
-              <Route path="/mis-proyectos" element={<MisProyectos />} />
-              <Route path="/proyecto" element={<Proyecto />} />
-              <Route path="/pendientes" element={<Pendientes />} />
-              <Route path="/avances" element={<Avances />} />
-              <Route path="/material" element={<MaterialYPedidos />} />
-              <Route path="/contactos" element={<Contactos />} />
-              <Route path="/inicio-personal" element={<InicioPersonal />} />
-              <Route path="/crear-trabajador" element={<CrearTrabajador />} />
+              <Route path="/new-project" element={<NewProject />} />
+              <Route path="/my-Projects" element={<MyProjects />} />
+              <Route path="/project" element={<Project/>} />
+              <Route path="/pendings" element={<Pendings />} />
+              <Route path="/progress" element={<Progress />} />
+              <Route path="/material" element={<MaterialAndOrders />} />
+              <Route path="/contacts" element={<Contacts />} />
+              <Route path="/staff-list" element={<StaffList />} />
+              <Route path="/create-employee" element={<CreateEmployee />} />
               <Route  element = <CreatePdfContextProvider/>>  
-              <Route path="/lista-trabajadores" element={<ListaTrabajadores />} />
-              <Route path="/trabajador" element={<Trabajador />} />
+              <Route path="/employee" element={<Employee/>} />
               </Route>
-              <Route path="/reportes" element={<Reportes />} />
+              <Route path="/reports" element={<Reports />} />
             </Route>
           </Route>
         </Routes>
@@ -71,17 +67,3 @@ export default function App() {
 
 
 
-
-
-{/*
-
-
-  {/*const [theme, setTheme] = useState('light');  
-
-const toggleTheme = () => {
-  setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));}
-
-  return (
-    <>
-   
-      /*<Button onClick={toggleTheme}>Toggle Theme</Button>*/}
