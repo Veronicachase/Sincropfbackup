@@ -6,7 +6,9 @@ export default function UsePageTitle() {
     "/login": "",
     "/new-project": "Nuevo Proyecto",
     "/my-projects": "Mis Proyectos",
-    "/project" : "Proyecto",
+    "/project-info"  : "Información del Proyecto",
+    "/project-section-tasks":"Tareas",
+    "/project-create-task":"Crear tarea",
     "/pendings" : "Mis pendientes",
     "/progress": "Avances de Proyecto",
     "/material": "Material y pedidos",
@@ -19,4 +21,5 @@ export default function UsePageTitle() {
 
   return pathDir[location.pathname] || "PÁGINA NO ENCONTRADA";
 }
+
 

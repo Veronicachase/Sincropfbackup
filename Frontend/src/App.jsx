@@ -3,9 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from './components/RequireAurth'
 import  AuthContextProvider  from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
-import NewProject from './views/Projects/NewProject'
-import MyProjects from './views/Projects/MyProjects'
-import Project from './views/Projects/Project'
+import NewProject from './views/projects/NewProject'
+import MyProjects from './views/projects/MyProjects'
+import ProjectInfo from './views/projects/ProjectInfo'
 import Pendings from './views/Pendings/Pendings'
 import Progress from './views/progress/Progress'
 import MaterialAndOrders from './views/matAndOrders/materialAndOrders'
@@ -18,6 +18,8 @@ import Layout from './components/Layout'
 import LoginForm  from './views/login/LoginForm'
 import Register from './views/register/Register'
 import Home from './views/home/Home'
+import ProjectSectionTasks from "./views/projects/ProjectSectionTasks"
+import ProjectCreateTask from "./views/projects/ProjectCreateTask"
 import ForgotPassword from './views/forgotPassword/ForgotPassword'
 
 //import BritishFlag from '../../assets/images/BritishFlag.png';
@@ -45,7 +47,9 @@ export default function App() {
             <Route element={<RequireAuth />}>
               <Route path="/new-project" element={<NewProject />} />
               <Route path="/my-Projects" element={<MyProjects />} />
-              <Route path="/project" element={<Project/>} />
+              <Route path="/project-info" element={< ProjectInfo/>} />
+              <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />
+              <Route path="/project-create-task" element={< ProjectCreateTask/>} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />
               <Route path="/material" element={<MaterialAndOrders />} />

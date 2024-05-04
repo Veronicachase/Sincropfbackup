@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from "@mui/material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
 import FooterPlus from "../../components/FooterPlus"
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import IconColors from '../../components/IconColors';
 import { Link, useNavigate } from "react-router-dom";
 
 export default function MyProjects() {
@@ -35,25 +37,30 @@ export default function MyProjects() {
 
   return (
     <> 
-      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>  
-        <Typography variant="h5" component="h5">
-          Agregar proyecto
-        </Typography>
-        <Link to="/new-project">
-          <AddCircleIcon sx={{ fontSize: '50px', color: '#021F59', marginLeft: '10px' }} />
-        </Link>
-      </Box>
-
+    
       <Box>
         {projects ? (
           projects.map((project) => (
             <Box 
-              key={project.proyectId} 
-              sx={{ padding: 2, borderBottom: '1px solid #ccc', cursor: 'pointer' }}
+              key={project.projectId} 
+              sx={{ display:"flex", padding: 2, borderBottom: '1px solid #ccc', cursor: 'pointer', backgroundColor:"#EDF5F4" }}
               onClick={() => handleClickProject(project.proyectId)}
             >
-              <Typography variant="subtitle1">{project.proyectName}</Typography>
+
+             <IconColors/>
+
+            <Box> 
+              <Typography variant="subtitle1">{project.projectName}</Typography>
               <Typography variant="body2">{project.startDate}</Typography>
+              </Box>
+              <Box sx={{display:"flex"}}> 
+              <EditIcon /> 
+              <Link to="/project/:projectId"></Link>
+              <Typography variant="caption">Editar</Typography>
+              <ArrowForwardIosIcon/>
+              <Link to="/project/:projectId"></Link> 
+              <Typography variant="caption">ver</Typography>
+              </Box>
             </Box>
           ))
         ) : error ? (
@@ -66,3 +73,13 @@ export default function MyProjects() {
     </>
   );
 }
+
+{/*<Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>  
+        <Typography variant="h5" component="h5">
+          Agregar proyecto
+        </Typography>
+        <Link to="/new-project">
+          <AddCircleIcon sx={{ fontSize: '50px', color: '#021F59', marginLeft: '10px' }} />
+        </Link>
+
+</Box>*/}

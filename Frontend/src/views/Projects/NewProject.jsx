@@ -1,46 +1,52 @@
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { initialValues } from "../../forms/Proyectos/CrearProyectoInitialValues";
-import { crearProyectoFormSchema } from "../../forms/Proyectos/CrearProyectoFormSchema";
+import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
 import CustomTextField from "../../ui/CustomTextField";
+import { handleFileUpload } from "../../api/handleFileUpload";
+import UploadImageCamera from "../../components/UploadImageCamera";
 import {
   ProjectTextField,
   projectTextField2,
 } from "../../configs/projectTextField";
 import MapView from "../../components/MapView";
 import CheckboxC from "../../components/CheckboxC";
-import { handleFileUpload } from "../../handlers/handleFileUpload";
+import MyButton from "../../components/MyButton";
+import { Grid, Box, Typography } from "@mui/material";
 import Select from "../../ui/Select";
 import "../../assets/styles/estilosGenerales.css";
 import "./newProject.css";
-import MyButton from "../../components/MyButton";
-import { Grid, Box, Typography } from "@mui/material";
 // eslint-disable-next-line no-unused-vars
-import { handleSubmitProject } from "../../handlers/handlerSubmitProject";
+import { handleSubmitProject } from "../../api/handlerSubmitProject";
 
 function NewProject() {
-  const navigate = useNavigate();
+ const navigate = useNavigate();
 
   return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={crearProyectoFormSchema}
-      onSubmit={(values, actions) => {
-        console.log("Formulario enviado");
-        <handleSubmitProject />;
+    initialValues={initialValues}
+    validationSchema={NewProjectFormSchema}
+    onSubmit={(values, actions) => {
+      console.log("Formulario enviado");
+      handleSubmitProject(values).then(() => {
         if (values.files && values.files.length > 0) {
-          Array.from(values.files).forEach((file) => {
-            handleFileUpload(file).then((response) => {
-              console.log("Archivo subido", response);
-            });
+          Array.from(values.files).forEach(file => {
+            handleFileUpload(file);
           });
         }
+      
+      }).then(() => {  
         console.log(values);
         actions.setSubmitting(false);
         actions.resetForm();
         alert("Proyecto creado correctamente");
         navigate("/my-projects");
-      }}
+      }).catch(error => {  
+        console.error("Error en el proceso: ", error);
+        actions.setSubmitting(false);
+      });
+    }}
+  
     >
       {({ isSubmitting, setFieldValue, values, errors }) => (
         <Form>
@@ -88,13 +94,24 @@ function NewProject() {
                       value={values[field.name]}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      sx={{ backgroundColor: "#edf5f4"}}
-                      InputProps={{
-                        style: {
-                          borderRadius: '17px' 
-                        }
+                      sx={{
+                        backgroundColor: "#edf5f4",
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            border: "none",
+                          },
+                          "&:hover fieldset": {
+                            border: "none",
+                          },
+                          "&.Mui-focused fieldset": {
+                            border: "none",
+                          },
+                        },
                       }}
-                    
+                      InputLabelProps={{
+                        className: "my-custom-label"
+                      }}
                     />
                   </Grid>
                 ))}
@@ -114,7 +131,6 @@ function NewProject() {
                     setFieldValue("typeOfWork", event.target.value)
                   }
                   label="Tipo de Trabajo"
-                
                 >
                   <option value="">Selecciona un tipo</option>
                   <option value="construction">Construcción</option>
@@ -134,7 +150,7 @@ function NewProject() {
                   onChange={(event) =>
                     setFieldValue("constructionType", event.target.value)
                   }
-                  label="Tipo de Construcción" 
+                  label="Tipo de Construcción"
                 >
                   <option value="">Selecciona un tipo</option>
                   <option value="chalet">Chalet</option>
@@ -160,12 +176,20 @@ function NewProject() {
                       label={field.label}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      InputProps={{
-                        style: {
-                          borderRadius: '17px',
-                          backgroundColor:"#edf5f4",
-                          color:"#000"
-                        }
+                      sx={{
+                        backgroundColor: "#edf5f4",
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            border: "none",
+                          },
+                          "&:hover fieldset": {
+                            border: "none",
+                          },
+                          "&.Mui-focused fieldset": {
+                            border: "none",
+                          },
+                        },
                       }}
                     />
                   </Grid>
@@ -173,19 +197,22 @@ function NewProject() {
               </Grid>
 
               <Grid item xs={11} sm={5}>
-              <Typography variant="body" sx={{ paddingBottom: "1em", display: "block", textAlign:"left" }}>Escoger las secciones a trabajar</Typography>
+                <Typography
+                  variant="body"
+                  sx={{
+                    paddingBottom: "1em",
+                    display: "block",
+                    textAlign: "left",
+                  }}
+                >
+                  Escoger las secciones a trabajar
+                </Typography>
                 <CheckboxC setFieldValue={setFieldValue} values={values} />
               </Grid>
 
-              <Grid item xs={10} sm={10}>
-                <input
-                  accept="image/*, .pdf"
-                  type="file"
-                  onChange={(event) => {
-                    // eslint-disable-next-line no-unused-vars
-                    setFieldValue("files", event.currentTarget.files);
-                  }}
-                />
+              <Grid item xs={11} sm={5}>
+                <Typography variant="body">Agregar una imagen</Typography>
+                <UploadImageCamera />
               </Grid>
 
               <Grid item xs={8}>

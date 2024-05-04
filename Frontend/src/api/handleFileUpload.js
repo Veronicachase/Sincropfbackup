@@ -8,7 +8,7 @@ export const handleFileUpload = async (event) => {
   const formData = new FormData();
   formData.append("file", file);
   try {
-    const response = await fetch("http://localhost:3000/proyectos", {
+    const response = await fetch("http://localhost:3000/projects/files", {
       method: "POST",
       body: formData,
     });
@@ -18,3 +18,5 @@ export const handleFileUpload = async (event) => {
     console.error("Error al subir el archivo", error);
   }
 };
+
+// ver como se envía y se recibe y si va relacionado con el projectId para cuado se busque la imagen

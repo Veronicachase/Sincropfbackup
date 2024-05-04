@@ -1,6 +1,5 @@
 const express = require("express");
-const { addProject } = require("../controllers/projectController");
-const { getProject, deleteProject, updateProject } = require("../services/DAO/projectDao");
+const { addProject,getProject, deleteProject, updateProject  } = require("../controllers/projectController");
 const projectRouter = express.Router();
 
 projectRouter.get("/:projectId",getProject );
