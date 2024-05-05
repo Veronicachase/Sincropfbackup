@@ -10,7 +10,7 @@ employeeDao.getEmployeeByReference = async (employeeId) => {
   try {
     conn = await db.createConnection();
     return await db.query(
-      "SELECT * FROM employee WHERE employeeId = ?",
+      "SELECT * FROM employees WHERE employeeId = ?",
       employeeId,
       "select",
       conn
@@ -40,7 +40,7 @@ employeeDao.addEmployee = async (employeeData) => {
     employeeObj = await removeUndefinedKeys(employeeObj);
    
     return await db.query(
-      "INSERT INTO employee SET ?",
+      "INSERT INTO employees SET ?",
       employeeObj,
       "insert",
       conn
@@ -68,7 +68,7 @@ employeeDao.updateEmployee = async (employeeId, employeeData) => {
     
     employeeObj = await removeUndefinedKeys(employeeObj);
     return await db.query(
-      "UPDATE employee SET ? WHERE employeeId = ?",
+      "UPDATE employees SET ? WHERE employeeId = ?",
       [employeeObj, employeeId],
       "update",
       conn
@@ -86,7 +86,7 @@ employeeDao.deleteEmployee = async (employeeId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    return await db.query("DELETE FROM employee WHERE employeeId = ?", employeeId, "delete", conn);
+    return await db.query("DELETE FROM employees WHERE employeeId = ?", employeeId, "delete", conn);
   } catch (e) {
     throw new Error(e);
   } finally {

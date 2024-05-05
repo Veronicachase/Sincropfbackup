@@ -72,7 +72,7 @@ const Register = () => {
 
   return (
     <Box
-      display={{ flexGrow: 1, width: "100%" }}
+      display={{ flexGrow: 1, width: "100%", maxwidth:"700px" }}
       flexDirection={"column"}
       margin={"auto"}
     >

@@ -69,7 +69,7 @@ const LoginForm = () => {
 
   return (
     <Box
-      display={{ flexGrow: 1, width: "100%" }}
+      display={{ flexGrow: 1, width: "100%", maxWidth:"700px" }}
       flexDirection={"column"}
       margin={"auto"}
     >
@@ -93,6 +93,10 @@ const LoginForm = () => {
       </Box>
       <img className="logo" src={Logo} alt="Sincro" />
       <Box
+        display="flex"
+        flexDirection="column"
+        margin=" 0 auto"
+        alignItems="center"
         backgroundColor="#f6fbf9"
         borderRadius="49px"
         paddingTop={3}
@@ -103,7 +107,7 @@ const LoginForm = () => {
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Box>
+          <Box sx={{display:"flex", flexDirection:"column"}}>
             <TextField
               type="email"
               label="Ingrese su email"
