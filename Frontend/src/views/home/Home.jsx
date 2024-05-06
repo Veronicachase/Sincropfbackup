@@ -11,7 +11,7 @@ import SummarizeIcon from "@mui/icons-material/Summarize";
 
 const Options = [
   {
-    name: "Proyectos", path: "/mis-proyectos",
+    name: "Proyectos", path: "/my-projects",
     icon: <ArchitectureIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/>,
   },
   { name: "Pendientes", path: "/pendientes", icon: <PendingActionsIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },

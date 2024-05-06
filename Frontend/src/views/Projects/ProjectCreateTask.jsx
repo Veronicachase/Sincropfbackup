@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { getProjectById } from "../../api/getProjectId";
 import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
-import { getEmployees } from "../../api/getEmployees";
+import  getEmployees  from "../../api/getEmployees";
 
 export default function ProjectCreateTask() {
   const navigate = useNavigate();

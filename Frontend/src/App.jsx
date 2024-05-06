@@ -46,7 +46,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route element={<RequireAuth />}>
               <Route path="/new-project" element={<NewProject />} />
-              <Route path="/my-Projects" element={<MyProjects />} />
+              <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />
               <Route path="/project-create-task" element={< ProjectCreateTask/>} />

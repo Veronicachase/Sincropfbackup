@@ -1,6 +1,6 @@
 
 
-export const getEmployees = async () => {
+ const getEmployees = async () => {
   try {
     const response = await fetch("http://localhost:3000/employees");
     if (!response.ok) throw new Error("Network response was not ok");
@@ -11,4 +11,4 @@ export const getEmployees = async () => {
   }
 };
 
-
+export default getEmployees;

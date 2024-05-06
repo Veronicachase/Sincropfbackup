@@ -23,6 +23,7 @@ const Register = () => {
     onSubmit: async (values, actions) => {
       const { confirmPassword, ...userData } = values;
       console.log("Enviando datos al servidor:", userData);
+      
       try {
         const response = await fetch("http://localhost:3000/users", {
           method: "POST",
@@ -72,7 +73,7 @@ const Register = () => {
 
   return (
     <Box
-      display={{ flexGrow: 1, width: "100%", maxwidth:"700px" }}
+      display={{ flexGrow: 1, width: "100%", maxwidth: "700px" }}
       flexDirection={"column"}
       margin={"auto"}
     >
@@ -116,18 +117,21 @@ const Register = () => {
                     ? "input-error"
                     : ""
                 }
-                InputProps={{ style: { borderRadius: 18, backgroundColor:"#fff", marginBottom:".8em" } }}
+                InputProps={{
+                  style: {
+                    borderRadius: 18,
+                    backgroundColor: "#fff",
+                    marginBottom: ".8em",
+                  },
+                }}
               />
             ))}
             <MyButton disabled={formik.isSubmitting}> Registrar</MyButton>
           </Box>
 
           <Typography variant="body2">
-            ¿Ya tienes una cuenta? 
-            <Link
-              to="/login"
-              style={{  color: "inherit" }}
-            >
+            ¿Ya tienes una cuenta?
+            <Link to="/login" style={{ color: "inherit" }}>
               Inicia Sesión
             </Link>
           </Typography>
