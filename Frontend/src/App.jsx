@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from './components/RequireAurth'
 import  AuthContextProvider  from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
-import NewProject from './views/projects/NewProject'
+import CreateNewProject from './views/projects/CreateNewProject'
 import MyProjects from './views/projects/MyProjects'
 import ProjectInfo from './views/projects/ProjectInfo'
 import Pendings from './views/Pendings/Pendings'
@@ -45,7 +45,7 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<Layout />}>
             <Route element={<RequireAuth />}>
-              <Route path="/new-project" element={<NewProject />} />
+              <Route path="/create-new-project" element={<CreateNewProject />} />
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />

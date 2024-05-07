@@ -15,11 +15,11 @@ import MyButton from "../../components/MyButton";
 import { Grid, Box, Typography } from "@mui/material";
 import Select from "../../ui/Select";
 import "../../assets/styles/estilosGenerales.css";
-import "./newProject.css";
+import "./createNewProject.css";
 // eslint-disable-next-line no-unused-vars
 import { handleSubmitProject } from "../../api/handlerSubmitProject";
 
-function NewProject() {
+function CreateNewProject() {
  const navigate = useNavigate();
 
   return (
@@ -230,4 +230,4 @@ function NewProject() {
   );
 }
 
-export default NewProject;
+export default CreateNewProject;

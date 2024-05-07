@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
+// aquí hay que agregar desplegable 
 function ProjectInfo({ projectId }) {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);

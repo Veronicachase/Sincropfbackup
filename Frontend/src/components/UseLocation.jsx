@@ -4,11 +4,12 @@ export default function UsePageTitle() {
   const location = useLocation();
   const pathDir = {
     "/login": "",
-    "/new-project": "Nuevo Proyecto",
+    "/create-new-project": "Nuevo Proyecto",
     "/my-projects": "Mis Proyectos",
     "/project-info"  : "Información del Proyecto",
     "/project-section-tasks":"Tareas",
     "/project-create-task":"Crear tarea",
+    "/project-info-task":"tarea",
     "/pendings" : "Mis pendientes",
     "/progress": "Avances de Proyecto",
     "/material": "Material y pedidos",

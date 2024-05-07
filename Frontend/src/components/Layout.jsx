@@ -1,32 +1,100 @@
-import { Box,  Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import UsePageTitle from "./UseLocation";
 import { Outlet } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import IconButton from '@mui/material/IconButton';
 
 export default function Layout() {
-  const title = UsePageTitle();
+  const title = UsePageTitle(); // Asumo que esto devuelve un array o un elemento iterable
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
 
   return (
-   <Box>
-      <Box  className='bg-primario'
+    <Box>
+      <Box
+        className="bg-primario"
         sx={{
           textAlign: "center",
           width: "100%",
           display: "flex",
           margin: "0 auto",
-          paddingTop:"1em",
-          paddingBottom:"1em",
-         
-        
+          paddingTop: "1em",
+          paddingBottom: "1em",
         }}
       >
-        <Typography sx={{ xs: "h3", sm: "h5" }} variant="h6" color="white" paddingLeft="1em">
+        <Typography
+          sx={{ typography: { xs: 'h3', sm: 'h5' } }} // Corrección en la prop sx
+          variant="h6"
+          color="white"
+          paddingLeft="1em"
+        >
           {title}
         </Typography>
       </Box>
-    
+
       <Outlet />
-     
+
+      <Box
+        className="bg-primario"
+        sx={{
+          textAlign: "center",
+          width: "100%",
+          display: "flex",
+          margin: "0 auto",
+          paddingTop: "1em",
+          paddingBottom: "1em",
+        }}
+      >
+        {title.map((address) => {
+          switch (address) {
+            case "/my-projects":
+              return (
+                <Box>
+                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate("/project-info")}><EditIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate("/create-new-project")}><AddCircleIcon /></IconButton>
+                </Box>
+              );
+            case "/project-info":
+              return (
+                <Box>
+                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                  <EditIcon /> {/* Sin navegación, se asume botón para editar */}
+                  <AddCircleIcon /> {/* Sin navegación, se asume botón para agregar sección */}
+                </Box>
+              );
+            case "/project-section-tasks":
+              return (
+                <Box>
+                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate("/project-create-task")}><AddCircleIcon /></IconButton>
+                </Box>
+              );
+            case "/project-create-task":
+              return (
+                <Box>
+                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                </Box>
+              );
+            case "/project-info-task":
+              return (
+                <Box>
+                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                  <EditIcon /> {/* Sin navegación, se asume botón para editar */}
+                  <IconButton onClick={() => handleNavigate("/project-create-task")}><AddCircleIcon /></IconButton>
+                </Box>
+              );
+            default:
+              console.log("Dirección no definida en el switch");
+          }
+        })}
+      </Box>
     </Box>
   );
 }
