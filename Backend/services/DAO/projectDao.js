@@ -24,16 +24,18 @@ projectDao.addProject = async (projectData) => {
             typeOfWork: projectData.typeOfWork,
             constructionType: projectData.constructionType,
             projectId: projectData.projectId,
-            livingRoom: projectData.livingRoom,
-            kitchen: projectData.kitchen,
-            hall: projectData.hall,
-            room: projectData.room1,
-            bathRoom: projectData.bathRoom,
-            terrace: projectData.terrace,
-            laundry: projectData.laundry,
-            pool:projectData.pool,
-            roof:projectData.roof,
-            addedSection: projectData.addedSection,
+            sections: {
+                livingRoom: projectData.livingRoom,
+                kitchen: projectData.kitchen,
+                hall: projectData.hall,
+                room: projectData.room1,
+                bathRoom: projectData.bathRoom,
+                terrace: projectData.terrace,
+                laundry: projectData.laundry,
+                pool: projectData.pool,
+                roof: projectData.roof,
+                addedSection: projectData.addedSection,
+            },
             hiringCompany: projectData.hiringCompany,
             createTask: projectData.createTask,
             area: projectData.area,
@@ -97,6 +99,23 @@ projectDao.deleteProject = async (projectId) => {
         if (conn) await conn.end();
     }
 };
+
+projectDao.updateSection = async (projectId, sections) => {
+    let conn = null;
+    try {
+        conn = await db.createConnection();
+        const sectionData = JSON.stringify(sections); 
+        await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [sectionData, projectId], conn);
+    } catch (e) {
+        console.error('Error al actualizar la sección:', e.message);
+        throw e;
+    } finally {
+        if (conn) await conn.end();
+    }
+};
+
+
+
 
 module.exports = projectDao;
 

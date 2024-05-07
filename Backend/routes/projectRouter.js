@@ -6,6 +6,8 @@ projectRouter.get("/:projectId",getProject );
 projectRouter.post("/", addProject);
 projectRouter.delete("/:projectId", deleteProject);
 projectRouter.patch("/:projectId", updateProject);
+projectRouter.patch("/:projectId/sections/:sectionKey", updateSection);
+projectRouter.delete("/:projectId/sections/:sectionKey", deleteSection);
 
 module.exports = projectRouter;
 

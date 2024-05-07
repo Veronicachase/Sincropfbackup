@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 
 export default function Layout() {
-  const title = UsePageTitle(); // Asumo que esto devuelve un array o un elemento iterable
+  const title = UsePageTitle();
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
@@ -29,7 +29,7 @@ export default function Layout() {
         }}
       >
         <Typography
-          sx={{ typography: { xs: 'h3', sm: 'h5' } }} // Corrección en la prop sx
+          sx={{ typography: { xs: "h3", sm: "h5" } }}
           variant="h6"
           color="white"
           paddingLeft="1em"
@@ -37,9 +37,9 @@ export default function Layout() {
           {title}
         </Typography>
       </Box>
-
+  
       <Outlet />
-
+  
       <Box
         className="bg-primario"
         sx={{
@@ -51,50 +51,69 @@ export default function Layout() {
           paddingBottom: "1em",
         }}
       >
-        {title.map((address) => {
-          switch (address) {
+        
+        {(() => {
+          switch (location.pathname) {
             case "/my-projects":
               return (
-                <Box>
-                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
-                  <IconButton onClick={() => handleNavigate("/project-info")}><EditIcon /></IconButton>
-                  <IconButton onClick={() => handleNavigate("/create-new-project")}><AddCircleIcon /></IconButton>
+                <Box sx={{display:"flex", justifyContent:"space-around"}}>
+                  <IconButton onClick={() => handleNavigate(-1)}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleNavigate("/project-info")}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleNavigate("/create-new-project")}>
+                    <AddCircleIcon />
+                  </IconButton>
                 </Box>
               );
             case "/project-info":
               return (
                 <Box>
-                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
-                  <EditIcon /> {/* Sin navegación, se asume botón para editar */}
-                  <AddCircleIcon /> {/* Sin navegación, se asume botón para agregar sección */}
+                  <IconButton onClick={() => handleNavigate(-1)}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                  <EditIcon /> {/* función para editar proyecto */}
+                  <AddCircleIcon /> {/* función para agregar sección */}
                 </Box>
               );
             case "/project-section-tasks":
               return (
                 <Box>
-                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
-                  <IconButton onClick={() => handleNavigate("/project-create-task")}><AddCircleIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate(-1)}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleNavigate("/project-create-task")}>
+                    <AddCircleIcon />
+                  </IconButton>
                 </Box>
               );
             case "/project-create-task":
               return (
                 <Box>
-                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate(-1)}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
                 </Box>
               );
             case "/project-info-task":
               return (
                 <Box>
-                  <IconButton onClick={() => handleNavigate(-1)}><ArrowBackIosIcon /></IconButton>
-                  <EditIcon /> {/* Sin navegación, se asume botón para editar */}
-                  <IconButton onClick={() => handleNavigate("/project-create-task")}><AddCircleIcon /></IconButton>
+                  <IconButton onClick={() => handleNavigate(-1)}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                  <EditIcon /> {/* Función para editar */}
+                  <IconButton onClick={() => handleNavigate("/project-create-task")}>
+                    <AddCircleIcon />
+                  </IconButton>
                 </Box>
               );
             default:
               console.log("Dirección no definida en el switch");
           }
-        })}
+        })()}
       </Box>
     </Box>
   );
-}
+}  

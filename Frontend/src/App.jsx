@@ -21,6 +21,7 @@ import Home from './views/home/Home'
 import ProjectSectionTasks from "./views/projects/ProjectSectionTasks"
 import ProjectCreateTask from "./views/projects/ProjectCreateTask"
 import ForgotPassword from './views/forgotPassword/ForgotPassword'
+import ProjectInfoTask from "./views/projects/ProjectInfoTask";
 
 //import BritishFlag from '../../assets/images/BritishFlag.png';
 
@@ -50,6 +51,7 @@ export default function App() {
               <Route path="/project-info" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />
               <Route path="/project-create-task" element={< ProjectCreateTask/>} />
+              <Route path="/project-info-task" element={< ProjectInfoTask/>} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />
               <Route path="/material" element={<MaterialAndOrders />} />

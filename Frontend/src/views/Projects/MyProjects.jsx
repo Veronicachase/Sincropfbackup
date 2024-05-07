@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import FooterPlus from "../../components/FooterPlus"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import IconColors from '../../components/IconColors';
 import { Link, useNavigate } from "react-router-dom";
@@ -69,7 +68,7 @@ export default function MyProjects() {
           <CircularProgress />
         )}
       </Box>
-      <FooterPlus/>
+     
     </>
   );
 }

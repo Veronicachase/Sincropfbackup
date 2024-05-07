@@ -49,6 +49,42 @@ const deleteProject = async (req, res) => {
     }
 };
 
+// projectController.js
+
+const deleteSection = async (req, res) => {
+    const { projectId, sectionKey } = req.params;
+    try {
+        const project = await projectDao.getProject(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+        const sections = JSON.parse(project.sections);
+        delete sections[sectionKey];
+        await projectDao.updateSection(projectId, sections);
+        res.json({ message: "Sección eliminada exitosamente" });
+    } catch (error) {
+        console.error("Error al eliminar la sección:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const updateSection = async (req, res) => {
+    const { projectId, sectionKey } = req.params;
+    const sectionData = req.body; 
+    try {
+        const project = await projectDao.getProject(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+        const sections = JSON.parse(project.sections);
+        sections[sectionKey] = sectionData; 
+        await projectDao.updateSection(projectId, sections);
+        res.json({ message: "Sección actualizada exitosamente" });
+    } catch (error) {
+        console.error("Error al actualizar la sección:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 

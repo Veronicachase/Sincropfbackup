@@ -9,7 +9,7 @@ export default function UsePageTitle() {
     "/project-info"  : "Información del Proyecto",
     "/project-section-tasks":"Tareas",
     "/project-create-task":"Crear tarea",
-    "/project-info-task":"tarea",
+    "/project-info-task":"Tarea",
     "/pendings" : "Mis pendientes",
     "/progress": "Avances de Proyecto",
     "/material": "Material y pedidos",
