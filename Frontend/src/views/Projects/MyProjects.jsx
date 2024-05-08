@@ -3,9 +3,10 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import IconColors from '../../components/IconColors';
+import {getAllProjects} from "../../api/getAllProjects"
 import { Link, useNavigate } from "react-router-dom";
 
-export default function MyProjects() {
+export default  function MyProjects() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -14,14 +15,8 @@ export default function MyProjects() {
     const fetchProjects = async () => {
       try {
         
-        const response = await fetch('http://localhost:3000/projects'); 
-        const projectsData = await response.json();
-        if (response.ok) {
-          setProjects(projectsData);
-        } else {
-          console.error("Error al obtener los datos de proyecto", projectsData);
-          setError("Error en proyectos");
-        }
+        const projectsData = await getAllProjects();
+        setProjects(projectsData);
       } catch (error) {
         console.error("Error de conexión:", error);
         setError("No se puede conectar al servidor");

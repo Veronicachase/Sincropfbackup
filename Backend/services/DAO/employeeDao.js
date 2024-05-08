@@ -22,6 +22,25 @@ employeeDao.getEmployeeByReference = async (employeeId) => {
   }
 };
 
+projectDao.getAllEmployees = async () => {
+  let conn = null;
+  try {
+      conn = await db.createConnection();
+      const results = await db.query("SELECT * FROM employees ", conn);
+      if (results.length) {
+          return results;
+      }
+      return null;
+  } catch (e) {
+      console.error(e.message);
+      throw e;
+  } finally {
+      if (conn) await conn.end();
+  }
+};
+
+
+
 employeeDao.addEmployee = async (employeeData) => {
  
   let conn = null;

@@ -20,7 +20,7 @@ import "./createNewProject.css";
 import { handleSubmitProject } from "../../api/handlerSubmitProject";
 
 /* Aquí creo todos los campos requeridos para mi proyecto,  */
-
+// hay que cambiar el tamaño del titulo cuando está en modo cell
 
 function CreateNewProject() {
  const navigate = useNavigate();

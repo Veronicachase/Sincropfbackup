@@ -29,7 +29,7 @@ export default function Layout() {
         }}
       >
         <Typography
-          sx={{ typography: { xs: "h3", sm: "h5" } }}
+          sx={{ typography: { xs: "h6", sm: "h5" } }}
           variant="h6"
           color="white"
           paddingLeft="1em"

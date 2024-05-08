@@ -12,6 +12,21 @@ const getEmployee = async (req, res) => {
   }
 };
 
+
+const getAllEmployees = async (req, res) => {
+  try {
+      const employees = await projectDao.getAllEmployees();
+      if (employees) {
+          res.json(employees);
+      } else {
+          res.status(404).json({ message: "No hay Trabajadores creados" });
+      }
+  } catch (error) {
+      console.error("Error al obtener trabajadores:", error.message);
+      res.status(500).json({ error: error.message });
+  }
+};
+
 const addEmployee = async (req, res) => {
   const { authorization } = req.headers;
   if (!authorization) return res.sendStatus(401); 
@@ -62,4 +77,4 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-module.exports = { getEmployee, addEmployee, updateEmployee, deleteEmployee };
+module.exports = { getEmployee,getAllEmployees, addEmployee, updateEmployee, deleteEmployee };
