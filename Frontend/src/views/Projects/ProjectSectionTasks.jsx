@@ -8,6 +8,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import deleteTaskById from "../../api/deleteTaskById"
 import deleteSectionById from "../../api/deleteSeccionById"
+/* Aquí debo mostrar las tareas de la sección escogida, si no hay tareas, 
+mostrar solo el icono de crear tarea ( cada tarea debe incluir edit y delete) */
+
 
 export default function ProjectSectionTasks() {
   const navigate = useNavigate();

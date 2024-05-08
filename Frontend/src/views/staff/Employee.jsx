@@ -5,6 +5,8 @@ import * as yup from 'yup';
 import  getEmployees from "../../api/getEmployees";
 import CurrentDate from "../../components/CurrentDate";
 
+/** esta es la ficha de un trabajador en específico, debe tener opción de editar */
+
  function Employee() {
     const [employees, setEmployees] = useState([]);
 

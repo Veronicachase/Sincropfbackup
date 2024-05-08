@@ -19,6 +19,9 @@ import "./createNewProject.css";
 // eslint-disable-next-line no-unused-vars
 import { handleSubmitProject } from "../../api/handlerSubmitProject";
 
+/* Aquí creo todos los campos requeridos para mi proyecto,  */
+
+
 function CreateNewProject() {
  const navigate = useNavigate();
 

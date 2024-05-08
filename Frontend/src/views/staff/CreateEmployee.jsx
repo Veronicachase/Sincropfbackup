@@ -10,6 +10,7 @@ import MyButton from "../../components/MyButton.jsx";
 import {ToggleButtonGroup} from "@mui/material";
 import {ToggleButton} from "@mui/material";
 
+/* Aquí se crea a un trabajador */
 /* Falta arreglar botones, confirmar formato de fecha, y darle estilos a hoja, confirmar si los botones guardan la info */
 
 

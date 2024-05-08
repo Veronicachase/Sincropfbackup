@@ -104,7 +104,7 @@ projectDao.updateSection = async (projectId, sections) => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        const sectionData = JSON.stringify(sections); 
+        const sectionData = JSON.stringify(sections);
         await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [sectionData, projectId], conn);
     } catch (e) {
         console.error('Error al actualizar la sección:', e.message);
@@ -113,6 +113,29 @@ projectDao.updateSection = async (projectId, sections) => {
         if (conn) await conn.end();
     }
 };
+
+projectDao.addSection = async (projectId, newSection) => {
+    let conn = null;
+    try {
+        conn = await db.createConnection();
+        const results = await db.query("SELECT sections FROM projects WHERE projectId = ?", [projectId], conn);
+        if (results.length) {
+            let sectionkeys = JSON.parse(results[0].sections);
+            sections = { ...sectionkeys, ...newSection }; 
+            const updatedSections = JSON.stringify(sections);
+            await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [updatedSections, projectId], conn);
+        } else {
+            throw new Error('Proyecto no encontrado');
+        }
+    } catch (e) {
+        console.error('Error al agregar sección:', e.message);
+        throw e;
+    } finally {
+        if (conn) await conn.end();
+    }
+};
+
+
 
 
 

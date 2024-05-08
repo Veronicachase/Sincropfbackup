@@ -5,6 +5,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import IconColors from '../../components/IconColors';
 import { Link, useNavigate } from "react-router-dom";
 
+/* Aqui muestro los proyectos que tengo activos y si no existe ningún proyecto
+solo me muestra la opción de crear uno nuevo. (con opción de llevarme al proyecto y editar el proyecto) */
+
 export default function MyProjects() {
   const [projects, setProjects] = useState(null);
   const [error, setError] = useState('');

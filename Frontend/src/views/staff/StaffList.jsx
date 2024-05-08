@@ -4,6 +4,7 @@ import { Box, Typography, Select, MenuItem, FormControl, InputLabel } from "@mui
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { useNavigate} from "react-router-dom"
 
+/* Aquí va la lista de todos los trabajadores con un filtro para escoger por nombre, posición o por tarea */
 // aquí falta arreglar el filtro que quedó muy arriba
 // crear un navigate para que cuando clique en un nombre me lleve a la página del trabajador
 
