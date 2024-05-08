@@ -7,13 +7,15 @@ import { Box, Typography, IconButton, Collapse } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { useParams } from "react-router-dom";
 
 /* En esta página debo mostrar en un dropdown todos los datos generales del proyecto
 además de las secciones escogidas y creadas previamente, cuando se clica en una sección 
 esta debe llevar a su lista de tareas correspondiente. opción de editar y agregar sección */
 
-function ProjectInfo({ projectId }) {
-  const navigate = useNavigate(); // hook para la navegación
+function ProjectInfo() {
+  const { projectId } = useParams();
+  const navigate = useNavigate(); 
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showGeneralInfo, setShowGeneralInfo] = useState(false);
@@ -45,8 +47,9 @@ function ProjectInfo({ projectId }) {
   }
 
   return (
-    <div>
-      <Typography variant="h4">
+    
+    <Box sx={{textAlign:"left", marginLeft:"2em"}}>
+      <Typography variant="h5">
         {project.projectName} - {project.constructionType}
       </Typography>
       <IconButton onClick={toggleGeneralInfo}>
@@ -54,22 +57,22 @@ function ProjectInfo({ projectId }) {
         {showGeneralInfo ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </IconButton>
       <Collapse in={showGeneralInfo}>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Nombre del proyecto:</strong> {project.projectName}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Identificador:</strong> {project.identifier}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Contratante:</strong> {project.hiringCompany}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Dirección:</strong> {project.address}
             {project.block}
@@ -79,33 +82,33 @@ function ProjectInfo({ projectId }) {
             {project.addressDescription}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Descripción:</strong> {project.projectDescription}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Fecha de inicio:</strong> {project.startDate}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Fecha de entrega:</strong> {project.endDate}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Status:</strong> {project.status}
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           <Typography variant="body2">
             <strong>Mapa:</strong> {project.map} aqui falta detalle para traer
             el mapa
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
           {" "}
           <Typography>aqui van la imagenes cambiar map por file</Typography>
           <Box> {project.map} </Box>
@@ -118,7 +121,7 @@ function ProjectInfo({ projectId }) {
             isActive && (
               <Box
                 key={sectionKey}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}
+                sx={{ display: "flex", alignItems: "center", marginBottom: 1, margin: " 1em auto ",  justifyContent:"center" }}
               >
                 <IconColors status={project.status} />
                 <Typography variant="h6" sx={{ flexGrow: 1, marginLeft: 2 }}>
@@ -130,7 +133,7 @@ function ProjectInfo({ projectId }) {
               </Box>
             )
         )}
-    </div>
+    </Box>
   );
 }
 

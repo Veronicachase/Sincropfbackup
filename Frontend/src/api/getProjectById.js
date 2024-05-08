@@ -1,3 +1,4 @@
+
 export const getProjectById = async (projectId) => {
     try {
       const response = await fetch(`http://localhost:3000/projects/${projectId}`, {

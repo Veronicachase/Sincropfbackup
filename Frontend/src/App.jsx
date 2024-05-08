@@ -1,6 +1,6 @@
 
 import { Routes, Route } from "react-router-dom";
-import RequireAuth from './components/RequireAurth'
+//import RequireAuth from './components/RequireAurth'
 import  AuthContextProvider  from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
 import CreateNewProject from './views/projects/CreateNewProject'
@@ -45,10 +45,10 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<Layout />}>
-            <Route element={<RequireAuth />}>
+            {/*<Route element={<RequireAuth />}>*/}
               <Route path="/create-new-project" element={<CreateNewProject />} />
               <Route path="/my-projects" element={<MyProjects />} />
-              <Route path="/project-info" element={< ProjectInfo/>} />
+              <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />
               <Route path="/project-create-task" element={< ProjectCreateTask/>} />
               <Route path="/project-info-task" element={< ProjectInfoTask/>} />
@@ -60,7 +60,7 @@ export default function App() {
               <Route path="/create-employee" element={<CreateEmployee />} />
               <Route  element = <CreatePdfContextProvider/>>  
               <Route path="/employee" element={<Employee/>} />
-              </Route>
+              {/*</Route>*/}
               <Route path="/reports" element={<Reports />} />
             </Route>
           </Route>

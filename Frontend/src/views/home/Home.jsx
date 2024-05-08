@@ -14,12 +14,12 @@ const Options = [
     name: "Proyectos", path: "/my-projects",
     icon: <ArchitectureIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/>,
   },
-  { name: "Pendientes", path: "/pendientes", icon: <PendingActionsIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
-  { name: "Avances", path: "/avances", icon: <StackedLineChartIcon  sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
+  { name: "Pendientes", path: "/pendings", icon: <PendingActionsIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Avances", path: "/progress", icon: <StackedLineChartIcon  sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
   { name: "Material y Pedidos", path: "/material", icon: <AllInboxIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
-  { name: "Contactos", path: "/contactos", icon: <ContactPhoneIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
-  { name: "Personal", path: "/personal", icon: <BadgeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
-  { name: "Reportes", path: "/reportes", icon: <SummarizeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Contactos", path: "/contacts", icon: <ContactPhoneIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
+  { name: "Personal", path: "/staff-list", icon: <BadgeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}}/> },
+  { name: "Reportes", path: "/reports", icon: <SummarizeIcon sx={{color:"#fff", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px"}} /> },
 ];
 
 export default function HomeOptions() {

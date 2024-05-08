@@ -6,7 +6,7 @@ export default function UsePageTitle() {
     "/login": "",
     "/create-new-project": "Nuevo Proyecto",
     "/my-projects": "Mis Proyectos",
-    "/project-info"  : "Información del Proyecto",
+    "/project-info/:projectId"  : "Información del Proyecto",//esto creo que no va así
     "/project-section-tasks":"Tareas",
     "/project-create-task":"Crear tarea",
     "/project-info-task":"Tarea",
