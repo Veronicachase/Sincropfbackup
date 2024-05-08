@@ -2,17 +2,16 @@
 
 import { Formik, Form } from "formik";
 import { initialValues } from "../../forms/Trabajadores/crearTrabajador/InitialValues.js";
-import { CrearTrabajadorFormSchema} from "../../forms/Trabajadores/crearTrabajador/CrearTrabajadorFormSchema.js"
+import { CrearTrabajadorFormSchema } from "../../forms/Trabajadores/crearTrabajador/CrearTrabajadorFormSchema.js";
 import { Grid, Box } from "@mui/material";
 import CustomTextField from "../../ui/CustomTextField.jsx";
 import "../../assets/styles/estilosGenerales.css";
 import MyButton from "../../components/MyButton.jsx";
-import {ToggleButtonGroup} from "@mui/material";
-import {ToggleButton} from "@mui/material";
+import { ToggleButtonGroup } from "@mui/material";
+import { ToggleButton } from "@mui/material";
 
 /* Aquí se crea a un trabajador */
 /* Falta arreglar botones, confirmar formato de fecha, y darle estilos a hoja, confirmar si los botones guardan la info */
-
 
 function CrearTrabajador() {
   const backGr = { background: "rgba(179, 224, 253, 0.17)" };
@@ -92,16 +91,28 @@ function CrearTrabajador() {
                   sx={backGr}
                 />
               </Grid>
-              <Grid>  
-              <p>Equipo Reglamentario Entregado</p>  
-              <ToggleButtonGroup sx={{gap:"2em", marginTop:"2em"}}> 
-              
-              <ToggleButton sx={{backgroundColor:"#8BB443", color:"white"}}  value= " SI" >SI</ToggleButton>
-              <ToggleButton sx={{backgroundColor:"#F25244", color:"white"}}  value= "" >NO</ToggleButton>
-              <ToggleButton sx={{backgroundColor:"#F2CB05", color:"white"}}  value= " incompleto" >Incompleto</ToggleButton>
-              
-              </ToggleButtonGroup>
-            
+              <Grid>
+                <p>Equipo Reglamentario Entregado</p>
+                <ToggleButtonGroup sx={{ gap: "2em", marginTop: "2em" }}>
+                  <ToggleButton
+                    sx={{ backgroundColor: "#8BB443", color: "white" }}
+                    value=" SI"
+                  >
+                    SI
+                  </ToggleButton>
+                  <ToggleButton
+                    sx={{ backgroundColor: "#F25244", color: "white" }}
+                    value=""
+                  >
+                    NO
+                  </ToggleButton>
+                  <ToggleButton
+                    sx={{ backgroundColor: "#F2CB05", color: "white" }}
+                    value=" incompleto"
+                  >
+                    Incompleto
+                  </ToggleButton>
+                </ToggleButtonGroup>
               </Grid>
               <Grid item xs={10}>
                 <CustomTextField
@@ -116,7 +127,10 @@ function CrearTrabajador() {
                 text="Crear Trabajador"
                 type="submit"
                 disabled={isSubmitting}
-              />
+              >
+                {" "}
+                Crear Trabajador
+              </MyButton>
               <Grid item xs={12}></Grid>
             </Grid>
           </Box>

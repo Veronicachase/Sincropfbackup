@@ -26,6 +26,20 @@ const getProject = async (req, res) => {
     }
 };
 
+const getAllProjects = async (req, res) => {
+    try {
+        const projects = await projectDao.getAllProjects();
+        if (projects) {
+            res.json(projects);
+        } else {
+            res.status(404).json({ message: "No hay proyectos creados" });
+        }
+    } catch (error) {
+        console.error("Error al obtener tus proyectos:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const updateProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
@@ -49,7 +63,7 @@ const deleteProject = async (req, res) => {
     }
 };
 
-// projectController.js
+/*  controladores para Section */
 
 const deleteSection = async (req, res) => {
     const { projectId, sectionKey } = req.params;
@@ -85,8 +99,19 @@ const updateSection = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+const addSection = async (req, res) => {
+    const { projectId } = req.params;
+    const newSectionData = req.body; 
+    try {
+        await projectDao.addSection(projectId, newSectionData);
+        res.status(201).json({ message: "Sección agregada exitosamente" });
+    } catch (error) {
+        console.error("Error al agregar la sección:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 
 
-module.exports = { addProject,deleteProject, updateProject, getProject };
+module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection };

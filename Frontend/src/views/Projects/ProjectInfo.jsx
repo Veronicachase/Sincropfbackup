@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';  // Importa useNavigate
-import { getProjectById } from '../../api/getProjectId';
+import  {getProjectById}  from '../../api/getProjectById';
 import IconColors from "../../components/IconColors";
 import { Box, Typography, IconButton, Collapse } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';

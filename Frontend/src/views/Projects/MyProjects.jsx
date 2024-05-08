@@ -5,23 +5,21 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import IconColors from '../../components/IconColors';
 import { Link, useNavigate } from "react-router-dom";
 
-/* Aqui muestro los proyectos que tengo activos y si no existe ningún proyecto
-solo me muestra la opción de crear uno nuevo. (con opción de llevarme al proyecto y editar el proyecto) */
-
 export default function MyProjects() {
-  const [projects, setProjects] = useState(null);
+  const [projects, setProjects] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("http://localhost:3000/projects/:projectId");
-        const data = await response.json();
+        
+        const response = await fetch('http://localhost:3000/projects'); 
+        const projectsData = await response.json();
         if (response.ok) {
-          setProjects(data);
+          setProjects(projectsData);
         } else {
-          console.error("Error al obtener los datos de proyecto", data);
+          console.error("Error al obtener los datos de proyecto", projectsData);
           setError("Error en proyectos");
         }
       } catch (error) {
@@ -39,29 +37,28 @@ export default function MyProjects() {
 
   return (
     <> 
-    
       <Box>
-        {projects ? (
+        {projects.length > 0 ? (
           projects.map((project) => (
             <Box 
               key={project.projectId} 
-              sx={{ display:"flex", padding: 2, borderBottom: '1px solid #ccc', cursor: 'pointer', backgroundColor:"#EDF5F4" }}
-              onClick={() => handleClickProject(project.proyectId)}
+              sx={{ display: "flex", padding: 2, borderBottom: '1px solid #ccc', cursor: 'pointer', backgroundColor: "#EDF5F4" }}
+              onClick={() => handleClickProject(project.projectId)}
             >
-
-             <IconColors/>
-
-            <Box> 
-              <Typography variant="subtitle1">{project.projectName}</Typography>
-              <Typography variant="body2">{project.startDate}</Typography>
+              <IconColors/>
+              <Box> 
+                <Typography variant="subtitle1">{project.projectName}</Typography>
+                <Typography variant="body2">{project.startDate}</Typography>
               </Box>
-              <Box sx={{display:"flex"}}> 
-              <EditIcon /> 
-              <Link to="/project/:projectId"></Link>
-              <Typography variant="caption">Editar</Typography>
-              <ArrowForwardIosIcon/>
-              <Link to="/project/:projectId"></Link> 
-              <Typography variant="caption">ver</Typography>
+              <Box sx={{ display: "flex" }}> 
+                <EditIcon /> 
+                <Link to={`/project/${project.projectId}`}>
+                  <Typography variant="caption">Editar</Typography>
+                </Link>
+                <ArrowForwardIosIcon/>
+                <Link to={`/project/${project.projectId}`}>
+                  <Typography variant="caption">Ver</Typography>
+                </Link>
               </Box>
             </Box>
           ))
@@ -71,17 +68,6 @@ export default function MyProjects() {
           <CircularProgress />
         )}
       </Box>
-     
     </>
   );
 }
-
-{/*<Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>  
-        <Typography variant="h5" component="h5">
-          Agregar proyecto
-        </Typography>
-        <Link to="/new-project">
-          <AddCircleIcon sx={{ fontSize: '50px', color: '#021F59', marginLeft: '10px' }} />
-        </Link>
-
-</Box>*/}

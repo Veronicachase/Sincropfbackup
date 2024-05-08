@@ -16,12 +16,13 @@ const app = express();
 const port = process.env.PORT;
 
 //middlewares de express
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.text());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); 
-app.use(cors());
+
 app.use(
   fileUpload({
     createParentPath: true, // Crea la carpeta donde almacenamos las imágenes si no ha sido creada.

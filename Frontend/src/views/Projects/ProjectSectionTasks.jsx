@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom'; 
-import getProjectById from "../../api/getProjectById"
-import getTaskById from "../../api/getTaskById";
+import {getProjectById} from "../../api/getProjectById"
+import {getTaskById} from "../../api/getTaskById"
 import IconColors from "../../components/IconColors";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';

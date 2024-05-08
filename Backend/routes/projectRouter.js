@@ -1,8 +1,9 @@
 const express = require("express");
-const { addProject,getProject, deleteProject, updateProject  } = require("../controllers/projectController");
+const { addProject,getProject,getAllProjects, deleteProject, updateProject, updateSection, deleteSection, addSection  } = require("../controllers/projectController");
 const projectRouter = express.Router();
 
 projectRouter.get("/:projectId",getProject );
+projectRouter.get("/",getAllProjects );
 projectRouter.post("/", addProject);
 projectRouter.delete("/:projectId", deleteProject);
 projectRouter.patch("/:projectId", updateProject);
@@ -12,4 +13,4 @@ projectRouter.delete("/:projectId/sections/:sectionKey", deleteSection);
 projectRouter.post("/:projectId/sections", addSection); 
 module.exports = projectRouter;
 
-/* falta crea los controladores de estas ultimas rutas e importarlos aquí.  */
+/**Aquí falta ingresar getAllProjects del controlador */

@@ -199,7 +199,7 @@ function CreateNewProject() {
                 ))}
               </Grid>
 
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={11}>
                 <Typography
                   variant="body"
                   sx={{

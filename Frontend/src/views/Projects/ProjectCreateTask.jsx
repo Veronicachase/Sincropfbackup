@@ -19,7 +19,7 @@ import * as yup from "yup";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getProjectById } from "../../api/getProjectId";
+import { getProjectById } from "../../api/getProjectById";
 import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import getEmployees from "../../api/getEmployees";

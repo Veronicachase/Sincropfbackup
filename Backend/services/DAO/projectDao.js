@@ -72,6 +72,24 @@ projectDao.getProject = async (projectId) => {
     }
 };
 
+projectDao.getAllProjects = async () => {
+    let conn = null;
+    try {
+        conn = await db.createConnection();
+        const results = await db.query("SELECT * FROM projects ", conn);
+        if (results.length) {
+            return results;
+        }
+        return null;
+    } catch (e) {
+        console.error(e.message);
+        throw e;
+    } finally {
+        if (conn) await conn.end();
+    }
+};
+
+
 projectDao.updateProject = async (projectId, data) => {
     let conn = null;
     try {
