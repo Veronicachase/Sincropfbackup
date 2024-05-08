@@ -15,9 +15,11 @@ const getEmployee = async (req, res) => {
 
 const getAllEmployees = async (req, res) => {
   try {
-      const employees = await projectDao.getAllEmployees();
+      const employees = await employeeDao.getAllEmployees();
+      console.log(employees)
       if (employees) {
           res.json(employees);
+          
       } else {
           res.status(404).json({ message: "No hay Trabajadores creados" });
       }
@@ -40,7 +42,7 @@ const addEmployee = async (req, res) => {
       date: new Date().toISOString().slice(0, 19).replace('T', ' '),
       name: payload.name, 
       position: req.body.position,
-      project: req.body.project,
+      employee: req.body.name,
       mandatoryEquipment: req.body.mandatoryEquipment,
       comments: req.body.comments,
     };

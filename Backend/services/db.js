@@ -21,13 +21,25 @@ db.createConnection = async () => {
   }
 };
 
-// 
+db.query2 = async (conn) => {
+  const sqlQuery = "SELECT * FROM projects";  
+  try {
+    const [result] = await conn.query(sqlQuery);
+    return JSON.parse(JSON.stringify(result)); 
+  } catch (error) {
+    console.error("Query or database error: ", error);
+    throw new Error(error.message);
+  }
+};
+
+
+//  case "select":
+//return JSON.parse(JSON.stringify(result));
 db.query = async (sqlQuery, params, type, conn) => {
   try {
     const [result] = await conn.query(sqlQuery, params);
     switch (type) {
-      case "select":
-        return JSON.parse(JSON.stringify(result));
+     
       case "insert":
         return parseInt(result.insertId);
       case "update":

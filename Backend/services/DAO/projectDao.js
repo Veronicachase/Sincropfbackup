@@ -76,7 +76,7 @@ projectDao.getAllProjects = async () => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        const results = await db.query("SELECT * FROM projects ", conn);
+        const results = await db.query2("SELECT * FROM projects ", conn);
         if (results.length) {
             return results;
         }
