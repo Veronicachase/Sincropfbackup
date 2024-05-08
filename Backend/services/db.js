@@ -1,4 +1,3 @@
-
 const mysql = require("mysql2/promise");
 let db = {};
 
@@ -21,25 +20,23 @@ db.createConnection = async () => {
   }
 };
 
-db.query2 = async (conn) => {
-  const sqlQuery = "SELECT * FROM projects";  
+db.query2 = async (sqlQuery, conn) => {
   try {
     const [result] = await conn.query(sqlQuery);
-    return JSON.parse(JSON.stringify(result)); 
+    return JSON.parse(JSON.stringify(result));
   } catch (error) {
-    console.error("Query or database error: ", error);
+    console.error("Error en la query o en la conexión: ", error);
     throw new Error(error.message);
   }
 };
 
 
-//  case "select":
-//return JSON.parse(JSON.stringify(result));
 db.query = async (sqlQuery, params, type, conn) => {
   try {
     const [result] = await conn.query(sqlQuery, params);
     switch (type) {
-     
+      case "select":
+        return JSON.parse(JSON.stringify(result));
       case "insert":
         return parseInt(result.insertId);
       case "update":
@@ -59,5 +56,3 @@ db.query = async (sqlQuery, params, type, conn) => {
   }
 };
 module.exports = db;
-
-

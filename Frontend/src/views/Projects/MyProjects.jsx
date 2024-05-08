@@ -27,7 +27,7 @@ export default  function MyProjects() {
   }, []);
 
   const handleClickProject = (projectId) => {
-    navigate(`/projects/${projectId}`);
+    navigate(`/project-info/${projectId}`);
   };
 
   return (
@@ -37,24 +37,34 @@ export default  function MyProjects() {
           projects.map((project) => (
             <Box 
               key={project.projectId} 
-              sx={{ display: "flex", padding: 2, borderBottom: '1px solid #ccc', cursor: 'pointer', backgroundColor: "#EDF5F4" }}
+              sx={{ display: "flex", 
+              padding: 2, 
+              borderBottom: '1px solid #ccc', 
+              cursor: 'pointer', 
+              backgroundColor: "#EDF5F4",
+              justifyContent:"space-between" 
+               }}
               onClick={() => handleClickProject(project.projectId)}
             >
               <IconColors/>
-              <Box> 
+              <Box sx={{textAlign:"left"}}> 
                 <Typography variant="subtitle1">{project.projectName}</Typography>
                 <Typography variant="body2">{project.startDate}</Typography>
               </Box>
-              <Box sx={{ display: "flex" }}> 
-                <EditIcon /> 
-                <Link to={`/project/${project.projectId}`}>
+              <Box sx={{display:"flex", justifyContent:"space-between"}}> 
+              <Box sx={{ display: "flex", flexDirection:"column", marginRight:"2em" }}> 
+                <EditIcon  /> 
+                <Link to={`/project-info/${project.projectId}`}>
                   <Typography variant="caption">Editar</Typography>
                 </Link>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection:"column" }}>
                 <ArrowForwardIosIcon/>
-                <Link to={`/project/${project.projectId}`}>
+                <Link to={`/project-info/${project.projectId}`}>
                   <Typography variant="caption">Ver</Typography>
                 </Link>
               </Box>
+            </Box>
             </Box>
           ))
         ) : error ? (

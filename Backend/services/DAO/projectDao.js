@@ -43,7 +43,7 @@ projectDao.addProject = async (projectData) => {
             taskDescription: projectData.taskDescription,
         };
         projectObj = await removeUndefinedKeys(projectObj);
-        await db.query("INSERT INTO projects SET ?", projectObj, conn);
+        await db.query("INSERT INTO projects SET ?",   projectObj,"insert", conn);
         return projectObj.projectId; 
     } catch (e) {
         console.error(e.message);
@@ -59,7 +59,7 @@ projectDao.getProject = async (projectId) => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        const results = await db.query("SELECT * FROM projects WHERE projectId = ?", [projectId], conn);
+        const results = await db.query("SELECT * FROM projects WHERE projectId = ?", [projectId],"select", conn);
         if (results.length) {
             return results[0];
         }
@@ -96,7 +96,7 @@ projectDao.updateProject = async (projectId, data) => {
       
         conn = await db.createConnection();
         const cleanData=removeUndefinedKeys(data)
-        await db.query("UPDATE projects SET ? WHERE projectId = ?", [data, projectId], conn);
+        await db.query("UPDATE projects SET ? WHERE projectId = ?", [data, projectId],"update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;
@@ -109,7 +109,7 @@ projectDao.deleteProject = async (projectId) => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        await db.query("DELETE FROM projects WHERE projectId = ?", [projectId], conn);
+        await db.query("DELETE FROM projects WHERE projectId = ?",[projectId],"delete" ,  conn);
     } catch (e) {
         console.error(e.message);
         throw e;
@@ -123,7 +123,7 @@ projectDao.updateSection = async (projectId, sections) => {
     try {
         conn = await db.createConnection();
         const sectionData = JSON.stringify(sections);
-        await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [sectionData, projectId], conn);
+        await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [sectionData, projectId],"update", conn);
     } catch (e) {
         console.error('Error al actualizar la sección:', e.message);
         throw e;
@@ -136,12 +136,12 @@ projectDao.addSection = async (projectId, newSection) => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        const results = await db.query("SELECT sections FROM projects WHERE projectId = ?", [projectId], conn);
+        const results = await db.query("SELECT sections FROM projects WHERE projectId = ?", [projectId],"select", conn);
         if (results.length) {
             let sectionkeys = JSON.parse(results[0].sections);
             sections = { ...sectionkeys, ...newSection }; 
             const updatedSections = JSON.stringify(sections);
-            await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [updatedSections, projectId], conn);
+            await db.query("UPDATE projects SET sections = ? WHERE projectId = ?", [updatedSections, projectId],"update", conn);
         } else {
             throw new Error('Proyecto no encontrado');
         }
