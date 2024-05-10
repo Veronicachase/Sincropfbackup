@@ -7,13 +7,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import Espana from "../../assets/images/Espana.png";
 import { useTranslation } from "react-i18next";
-// import  {useAuthContext} from "../../context/AuthContext"
+import  {useAuthContext} from "../../context/AuthContext"
 import "../../assets/styles/estilosGenerales.css";
 import "./loginForm.css";
 
 const LoginForm = () => {
   const { t, i18n } = useTranslation("home");
-
+  const {login} = useAuthContext()
   function changeLanguage() {
     i18n.language === "es"
       ? i18n.changeLanguage("en")
@@ -39,8 +39,11 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
-  async function onSubmit(values, actions) {
-    try {
+  async function onSubmit(values) {
+    console.log(values)
+     login(values.email, values.password)
+     navigate("/home")
+    {/*try {
       const response = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         headers: {
@@ -50,7 +53,7 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
-
+      console.log(data)
       if (response.ok) {
         navigate("/home");
       } else {
@@ -64,7 +67,7 @@ const LoginForm = () => {
       console.error("Error de conexión:", error);
       actions.setFieldError("general", "No se puede conectar al servidor");
       actions.setSubmitting(false);
-    }
+    } */}
   }
 
   return (

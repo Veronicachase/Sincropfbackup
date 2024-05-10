@@ -9,7 +9,7 @@ export default function UsePageTitle() {
     "/project-info/:projectId"  : "Información del Proyecto",//esto creo que no va así
     "/project-section-tasks":"Tareas",
     "/project-create-task":"Crear tarea",
-    "/project-info-task":"Tarea",
+    "/project-info-task/:sectionKey":"Tarea",// aquí también hay que ver lo del id
     "/pendings" : "Mis pendientes",
     "/progress": "Avances de Proyecto",
     "/material": "Material y pedidos",

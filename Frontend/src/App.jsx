@@ -51,7 +51,7 @@ export default function App() {
               <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks" element={< ProjectSectionTasks/>} />
               <Route path="/project-create-task" element={< ProjectCreateTask/>} />
-              <Route path="/project-info-task" element={< ProjectInfoTask/>} />
+              <Route path="/project-info-task/:projectId/:sectionKey" element={< ProjectInfoTask/>} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />
               <Route path="/material" element={<MaterialAndOrders />} />
@@ -60,10 +60,10 @@ export default function App() {
               <Route path="/create-employee" element={<CreateEmployee />} />
               <Route  element = <CreatePdfContextProvider/>>  
               <Route path="/employee" element={<Employee/>} />
-              {/*</Route>*/}
+              </Route>
               <Route path="/reports" element={<Reports />} />
             </Route>
-          </Route>
+         {/* </Route>*/}
         </Routes>
       </AuthContextProvider>
     </>

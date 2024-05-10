@@ -10,7 +10,7 @@ export function useAuthContext() {
 }
 
 export default function AuthContextProvider({ children }) {
-  let userStorage = JSON.parse(localStorage.getItem("user") );
+  let userStorage = JSON.parse(localStorage.getItem("user") )||null;
   const [auth, setAuth] = useState(userStorage);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -33,6 +33,7 @@ export default function AuthContextProvider({ children }) {
         body: JSON.stringify({ email, password })
       });
       const data = await response.json();
+      console.log(data, "soy el resultado de data de auth")
       if (response.ok) {
         setAuth(data); 
         localStorage.setItem("user", JSON.stringify(data)); 

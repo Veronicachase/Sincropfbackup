@@ -37,7 +37,7 @@ app.use(
 app.use("/users", userRouter);
 app.use("/projects", projectRouter);
 app.use("/employees", employeeRouter);
-app.use("/task", taskRouter);
+app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
 
 //servidor

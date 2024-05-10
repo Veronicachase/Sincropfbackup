@@ -1,41 +1,60 @@
 /* eslint-disable react/prop-types */
+import { Formik, Form, Field } from "formik";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { useNavigate } from "react-router-dom";
+import { initialValues as defaultInitialValues } from "../../forms/Proyectos/CrearProyectoInitialValues";
+import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
 import { getProjectById } from "../../api/getProjectById";
-import IconColors from "../../components/IconColors";
-import { Box, Typography, IconButton, Collapse } from "@mui/material";
+import updateProjectById from "../../api/updateProjectById";
+import MapView from "../../components/MapView";
+import { useParams } from "react-router-dom";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Collapse,
+  Box,
+  Typography,
+  
+} from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { useParams } from "react-router-dom";
+import IconColors from "../../components/IconColors";
+//import ProjectInfoBox from "../../components/ProjectInfoBox";
 
-/* En esta página debo mostrar en un dropdown todos los datos generales del proyecto
-además de las secciones escogidas y creadas previamente, cuando se clica en una sección 
-esta debe llevar a su lista de tareas correspondiente. opción de editar y agregar sección */
+// falta diseño, confrimar funcionamiento de update y ver mapa e imagenes. 
 
-function ProjectInfo() {
-  const { projectId } = useParams();
-  const navigate = useNavigate(); 
+
+export default function ProjectInfo() {
+  const { projectId, sectionKey } = useParams();
+  const [formValues, setFormValues] = useState(defaultInitialValues);
   const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showGeneralInfo, setShowGeneralInfo] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const projectData = await getProjectById(projectId);
-        setProject(projectData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener el proyecto:", error);
-      }
-    };
-
-    fetchProject();
+    setLoading(true);
+    if (projectId) {
+      getProjectById(projectId)
+        .then((projectData) => {
+          if (projectData) {setFormValues({ ...defaultInitialValues, ...projectData});
+          setProject(projectData);
+          setLoading(false); 
+        } else{console.log("Error al recuperar los datos del proyecto");
+        setLoading(false);  }
+          
+        })
+        .catch((error) => {
+          console.error("Error al cargar datos del proyecto:", error);
+          setLoading(false);
+        });
+    }
   }, [projectId]);
 
-  const toggleGeneralInfo = () => {
-    setShowGeneralInfo(!showGeneralInfo);
+  const toggleForm = () => {
+    setShowForm(!showForm);
   };
 
   if (loading) {
@@ -46,95 +65,94 @@ function ProjectInfo() {
     return <p>No se encontró el proyecto</p>;
   }
 
+  const handleSubmit = async (values) => {
+    try {
+      await updateProjectById(projectId, values);
+      console.log("estos son los values que necesito ver",values)
+      alert("Datos actualizados");
+    } catch (error) {
+      alert("Error al editar. Por favor, intenta de nuevo.");
+    }
+  };
+
   return (
-    
-    <Box sx={{textAlign:"left", marginLeft:"2em"}}>
-      <Typography variant="h5">
-        {project.projectName} - {project.constructionType}
-      </Typography>
-      <IconButton onClick={toggleGeneralInfo}>
-        <Typography variant="h5">Información General del Proyecto</Typography>
-        {showGeneralInfo ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-      </IconButton>
-      <Collapse in={showGeneralInfo}>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Nombre del proyecto:</strong> {project.projectName}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Identificador:</strong> {project.identifier}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Contratante:</strong> {project.hiringCompany}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Dirección:</strong> {project.address}
-            {project.block}
-            {project.unit}
-            {project.zipCode}
-            {project.province}
-            {project.addressDescription}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Descripción:</strong> {project.projectDescription}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Fecha de inicio:</strong> {project.startDate}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Fecha de entrega:</strong> {project.endDate}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Status:</strong> {project.status}
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          <Typography variant="body2">
-            <strong>Mapa:</strong> {project.map} aqui falta detalle para traer
-            el mapa
-          </Typography>
-        </Box>
-        <Box sx={{ borderBottom: '1px solid #ccc', marginBottom:"1em"}}>
-          {" "}
-          <Typography>aqui van la imagenes cambiar map por file</Typography>
-          <Box> {project.map} </Box>
-        </Box>
-      </Collapse>
-      <Typography variant="h5">Secciones</Typography>
-      {project.sections &&
-        Object.entries(project.sections).map(
-          ([sectionKey, isActive]) =>
-            isActive && (
-              <Box
-                key={sectionKey}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 1, margin: " 1em auto ",  justifyContent:"center" }}
-              >
-                <IconColors status={project.status} />
-                <Typography variant="h6" sx={{ flexGrow: 1, marginLeft: 2 }}>
-                  {sectionKey}
-                </Typography>
-                <IconButton onClick={() => navigate("/project-info-task")}>
-                  <ArrowForwardIosIcon />
-                </IconButton>
-              </Box>
-            )
-        )}
-    </Box>
+    <>  
+      <Box sx={{ textAlign: "left", marginLeft: "2em" }}>
+        <Typography variant="h5">
+          {project.projectName} - {project.constructionType}
+        </Typography>
+        <IconButton onClick={toggleForm}>
+          <Typography variant="h5">Editar Información del Proyecto</Typography>
+          {showForm ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        </IconButton>
+        <Collapse in={showForm}>
+          <Formik
+            initialValues={formValues}
+            enableReinitialize={true}
+            validationSchema={NewProjectFormSchema}
+            onSubmit={handleSubmit}
+          >
+            {formik => (
+              <Form>
+                {Object.entries(formik.values).filter(([key]) => !['projectId', 'filesId', 'employeeId', 'userId','taskDescription','sections','area','addedSection', 'createTask','portal'].includes(key)).map(([key]) => (
+                  <>
+                  <Grid key={key} item xs={12} md={6}>
+                    <Box sx={{border:"1px solid #ccc",
+                     marginBottom:".5em", 
+                     paddingTop:"10px",
+                     paddingBottom:"10px",
+                    borderRadius:"5px"}}> 
+                    <label htmlFor={key}>{key.replace(/([A-Z])/g, ' $1').trim()}: </label>
+                    <Field id={key} name={key} as="input" />
+                    </Box>
+                  </Grid>
+                  {key === 'map' && (
+                    <MapView 
+                      setFieldValue={(lat, lng) => {
+                        formik.setFieldValue('latitude', lat);
+                        formik.setFieldValue('longitude', lng);
+                      }} 
+                    />
+                  )}
+                </>
+
+                ))}
+                <Button  type="submit">Guardar Cambios</Button>
+                <pre>{JSON.stringify(formik.errors, null, 2)}</pre>
+              </Form>
+            )}
+          </Formik>
+        </Collapse>
+
+        {/* Visualización de secciones activas fuera del Collapse */}
+        <Typography variant="h5" sx={{ marginTop: 2 }}>Secciones Activas del Proyecto</Typography>
+        {project.sections &&
+          Object.entries(project.sections).map(
+            ([sectionKey, isActive]) =>
+              isActive && (
+                <Box
+                  key={sectionKey}
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 1,
+                    justifyContent: "space-between",
+                    border: "1px solid #ccc",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    
+                  }}
+                >
+                <IconColors/>
+                  <Typography variant="h6">{sectionKey.replace(/([a-z])([A-Z])/g, '$1 $2')}</Typography>
+                  <IconButton onClick={() => navigate(`/project-info-task/${projectId}/${sectionKey}`)}>
+                    <ArrowForwardIosIcon />
+                  </IconButton>
+                </Box>
+              )
+          )}
+      </Box>
+    </>
   );
 }
-
-export default ProjectInfo;

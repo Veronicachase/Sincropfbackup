@@ -4,14 +4,14 @@ const moment = require("moment");
 const {removeUndefinedKeys} = require("../../utils/removeUndefinedkeys")
 const taskDao = {};
 
-taskDao.addTask = async (taskData) => {
+/*taskDao.addTask = async (taskData) => {
     let conn = null;
     try {
         conn = await db.createConnection();
         let taskObj = {
 
-        Task:taskData.task,
-        EmployeeName:"conectar y traer de tabla de employees",
+        taskName:taskData.taskName,
+        employeeId:"conectar y traer de tabla de employees",
         taskDescription: taskData.taskDescription,
         startDate: moment().format("YYYY-MM-DD HH:mm:ss"),
         endDate: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -20,14 +20,38 @@ taskDao.addTask = async (taskData) => {
 
         taskObj = await removeUndefinedKeys(taskObj);
         await db.query("INSERT INTO tasks SET ?", taskObj, conn);
-        return taskObj.taskId; 
+        return taskObj.insertId; 
     } catch (e) {
         console.error(e.message);
         throw e;
     } finally {
         if (conn) await conn.end();
     }
+};*/
+
+
+taskDao.getTasksBySection = async (projectId, sectionKey) => {
+    let conn = null;
+    try {
+        conn = await db.createConnection();
+        const sql = `
+            SELECT t.*
+            FROM tasks t
+            JOIN projects p ON t.projectId = p.id
+            WHERE JSON_EXTRACT(p.sections, '$.${sectionKey}') = true AND p.id = ?
+        `;
+        const results = await db.query(sql, [projectId], conn);
+        return results; 
+    } catch (e) {
+        console.error("Error al obtener tareas por sección:", e.message);
+        throw e;  
+    } finally {
+        if (conn) {
+        await conn.end();
+        }
+    }
 };
+
 
 
 

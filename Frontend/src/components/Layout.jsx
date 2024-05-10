@@ -56,7 +56,7 @@ export default function Layout() {
           switch (location.pathname) {
             case "/my-projects":
               return (
-                <Box sx={{display:"flex", justifyContent:"space-around"}}>
+                <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}}>
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
@@ -70,17 +70,17 @@ export default function Layout() {
               );
             case "/project-info":
               return (
-                <Box>
+                <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}}>
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
-                  <EditIcon /> {/* función para editar proyecto */}
-                  <AddCircleIcon /> {/* función para agregar sección */}
+                  <EditIcon /> {/* aqui tengo que crear una función para editar proyecto */}
+                  <AddCircleIcon /> {/* y aqui otra para función para agregar sección */}
                 </Box>
               );
             case "/project-section-tasks":
               return (
-                <Box>
+                <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}}>
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
@@ -91,7 +91,7 @@ export default function Layout() {
               );
             case "/project-create-task":
               return (
-                <Box>
+                <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}}>
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
@@ -99,11 +99,11 @@ export default function Layout() {
               );
             case "/project-info-task":
               return (
-                <Box>
+                <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}} >
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
-                  <EditIcon /> {/* Función para editar */}
+                  <EditIcon /> {/* lo mismo aquí ----Función para editar */}
                   <IconButton onClick={() => handleNavigate("/project-create-task")}>
                     <AddCircleIcon />
                   </IconButton>

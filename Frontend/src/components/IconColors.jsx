@@ -7,11 +7,11 @@ export default function IconColors({status}){
 
     let color;
     if (status==="iniciado") {
-     color:"#F2CB05";
+     color="#F2CB05";
     } else if (status==="terminado") {
-     color:"#8BB443";
+     color="#8BB443";
     } else {
-     color:"#F25244"
+     color="#F25244"
     }
    return(
 <Box>
