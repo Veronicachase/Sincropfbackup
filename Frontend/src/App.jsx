@@ -9,7 +9,7 @@ import ProjectInfo from './views/projects/ProjectInfo'
 import Pendings from './views/Pendings/Pendings'
 import Progress from './views/progress/Progress'
 import MaterialAndOrders from './views/matAndOrders/materialAndOrders'
-import Contacts from './views/contacts/Contacts'
+import Contacts from './views/contacts/CreateContact'
 import CreateEmployee from './views/staff/CreateEmployee'
 import StaffList from './views/staff/StaffList'
 import Employee from './views/staff/Employee'
@@ -22,6 +22,7 @@ import ProjectSectionTasks from "./views/projects/ProjectSectionTasks"
 import ProjectCreateTask from "./views/projects/ProjectCreateTask"
 import ForgotPassword from './views/forgotPassword/ForgotPassword'
 import ProjectInfoTasks from "./views/projects/ProjectInfoTask";
+import CreateContact from "./views/contacts/CreateContact"
 
 //import BritishFlag from '../../assets/images/BritishFlag.png';
 
@@ -56,6 +57,7 @@ export default function App() {
               <Route path="/progress" element={<Progress />} />
               <Route path="/material" element={<MaterialAndOrders />} />
               <Route path="/contacts" element={<Contacts />} />
+              <Route path="/create-contact" element={<CreateContact />} />
               <Route path="/staff-list" element={<StaffList />} />
               <Route path="/create-employee" element={<CreateEmployee />} />
               <Route  element = <CreatePdfContextProvider/>>  
