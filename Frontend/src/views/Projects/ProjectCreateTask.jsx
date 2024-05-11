@@ -23,16 +23,18 @@ import { getProjectById } from "../../api/getProjectById";
 import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import getEmployees from "../../api/getEmployees";
+import { useParams } from 'react-router-dom';
 
 export default function ProjectCreateTask() {
+  const { projectId, employeeId } = useParams();
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
 
   useEffect(() => {
-    getProjectById().then(setProjectData);
-    getEmployees().then(setEmployees);
-  }, []);
+    getProjectById(projectId).then(setProjectData);
+    getEmployees(employeeId).then(setEmployees);
+  }, [projectId, employeeId]);
 
   if (!projectData) {
     return <div>Loading...</div>;
@@ -54,11 +56,13 @@ export default function ProjectCreateTask() {
           files: [],
         }}
         validationSchema={yup.object({
-          task: yup.string().required("Task name is required"),
-          taskDescription: yup.string(),
-          assignedEmployee: yup
-            .string()
-            .required("Assigning an employee is required"),
+          taskName:yup.string(),
+          employeeName:yup.string(),
+          taskDescription:yup.string(),
+          startDate: yup.date(),
+          endDate: yup.date(),
+          files:yup.string()
+          
         })}
         onSubmit={(values, actions) => {
           handleSubmitTask(values)
@@ -89,17 +93,17 @@ export default function ProjectCreateTask() {
                 <Grid item xs={12}>
                   <Field
                     as={TextField}
-                    name="task"
+                    name="taskName"
                     label="Task Name"
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Select
-                    name="assignedEmployee"
-                    value={values.assignedEmployee}
+                    name="employeeName"
+                    value={values.employeeName}
                     onChange={(event) =>
-                      setFieldValue("assignedEmployee", event.target.value)
+                      setFieldValue("employeeName", event.target.value)
                     }
                     fullWidth
                     displayEmpty
@@ -108,8 +112,8 @@ export default function ProjectCreateTask() {
                       <em>None</em>
                     </MenuItem>
                     {employees.map((employee) => (
-                      <MenuItem key={employee.id} value={employee.id}>
-                        {employee.name}
+                      <MenuItem key={employee.employeeId} value={employee.employeeId}>
+                        {employee.employeeName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -123,6 +127,24 @@ export default function ProjectCreateTask() {
                     fullWidth
                   />
                 </Grid>
+                <Grid item xs={6}>
+                <Field
+                  as={TextField}
+                  name="startDate"
+                  label="Fecha de inicio"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+              <Field
+                as={TextField}
+                name="endDate"
+                label="Fecha de entrega"
+                fullWidth
+              />
+            </Grid>
+
+
                 <Grid item xs={12}>
                
                   <FormLabel>Add an Image</FormLabel>

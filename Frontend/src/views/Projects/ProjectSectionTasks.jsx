@@ -2,28 +2,37 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom'; 
 import {getProjectById} from "../../api/getProjectById"
-import {getTaskById} from "../../api/getTaskById"
 import IconColors from "../../components/IconColors";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import deleteTaskById from "../../api/deleteTaskById"
-import deleteSectionById from "../../api/deleteSeccionById"
+import deleteSectionById from "../../api/deleteSeccionById";
+import { useParams } from 'react-router-dom';
+import {getTaskBySection} from "../../api/getTaskBySection"
+
 /* Aquí debo mostrar las tareas de la sección escogida, si no hay tareas, 
 mostrar solo el icono de crear tarea ( cada tarea debe incluir edit y delete) */
 
 
 export default function ProjectSectionTasks() {
+  const { projectId, sectionKey } = useParams();
   const navigate = useNavigate();
   const [projectData, setProjectData] = useState(null); 
   const [taskData, setTaskData] = useState([]);
-
+ 
   useEffect(() => {
-    getProjectById().then(setProjectData); 
-    getTaskById().then(setTaskData); 
-  }, []);
+    if (projectId) {
+    getProjectById(projectId).then(setProjectData); 
+    getTaskBySection (projectId,sectionKey).then(setTaskData); 
+    
+    }
+  }, [projectId, sectionKey]);
 
   if (!projectData) { 
-    return <div>Loading...</div>; 
+    return <div>No hay tareas creadas...</div>; 
+  }
+  if (taskData && taskData.length === 0) { 
+    return <div>No hay tareas para esta sección.</div>; 
   }
 
   return (

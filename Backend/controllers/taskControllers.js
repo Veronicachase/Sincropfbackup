@@ -26,10 +26,26 @@ const getTask = async (req, res) => {
     }
 };
 
+const getAllTasks = async (req, res) => {
+    try {
+        const task = await taskDao.getAllTasks();
+        if (task) {
+            res.json(task);
+        } else {
+            res.status(404).json({ message: "No hay tareas creadas" });
+        }
+    } catch (error) {
+        console.error("Error al obtener tus tareas:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const getTasksBySection = async (req, res) => {
     try {
         const {projectId, sectionKey} = req.params;
+        console.log("Recibiendo projectId:", projectId, "Recibiendo sectionKey:", sectionKey); /// esto no me trae nada
         const tasks = await taskDao.getTasksBySection(projectId, sectionKey);
+
         if (tasks && tasks.length > 0) {
             res.json(tasks);
         } else {
@@ -70,4 +86,4 @@ const deleteTask = async (req, res) => {
 
 
 
-module.exports = { addTask,deleteTask, updateTask, getTask, getTasksBySection };
+module.exports = { addTask,deleteTask, updateTask, getTask, getTasksBySection, getAllTasks };

@@ -95,7 +95,7 @@ export default function ProjectInfo() {
             {formik => (
               <Form>
                 {Object.entries(formik.values).filter(([key]) => !['projectId', 'filesId', 'employeeId', 'userId','taskDescription','sections','area','addedSection', 'createTask','portal'].includes(key)).map(([key]) => (
-                  <>
+                  <Box  key={key}  > 
                   <Grid key={key} item xs={12} md={6}>
                     <Box sx={{border:"1px solid #ccc",
                      marginBottom:".5em", 
@@ -114,7 +114,7 @@ export default function ProjectInfo() {
                       }} 
                     />
                   )}
-                </>
+                  </Box>
 
                 ))}
                 <Button  type="submit">Guardar Cambios</Button>

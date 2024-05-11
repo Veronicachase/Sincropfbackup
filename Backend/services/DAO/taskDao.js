@@ -29,6 +29,23 @@ const taskDao = {};
     }
 };*/
 
+taskDao.getAllTasks = async () => {
+    let conn =null;
+    try {
+        conn = await db.createConnection();
+        const results = await db.query2("SELECT * FROM tasks ", conn);
+        if (results.length) {
+            return results || [];
+        }
+        return null;
+    } catch (e) {
+        console.error(e.message);
+        throw e;
+    } finally {
+        if (conn) await conn.end();
+    }
+};
+
 
 taskDao.getTasksBySection = async (projectId, sectionKey) => {
     let conn = null;
@@ -51,8 +68,6 @@ taskDao.getTasksBySection = async (projectId, sectionKey) => {
         }
     }
 };
-
-
 
 
 taskDao.getTask = async (taskId) => {

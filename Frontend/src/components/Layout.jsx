@@ -74,7 +74,7 @@ export default function Layout() {
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
                   </IconButton>
-                  <EditIcon /> {/* aqui tengo que crear una función para editar proyecto */}
+  
                   <AddCircleIcon /> {/* y aqui otra para función para agregar sección */}
                 </Box>
               );
@@ -85,7 +85,7 @@ export default function Layout() {
                     <ArrowBackIosIcon />
                   </IconButton>
                   <IconButton onClick={() => handleNavigate("/project-create-task")}>
-                    <AddCircleIcon />
+                    <AddCircleIcon /> {/* aqui va una función para agregar tarea */}
                   </IconButton>
                 </Box>
               );
@@ -94,6 +94,9 @@ export default function Layout() {
                 <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}}>
                   <IconButton onClick={() => handleNavigate(-1)}>
                     <ArrowBackIosIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleNavigate("/project-create-task")}>
+                    <AddCircleIcon /> {/* aqui va una función para agregar tarea */}
                   </IconButton>
                 </Box>
               );
