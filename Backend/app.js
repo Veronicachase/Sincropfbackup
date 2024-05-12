@@ -9,6 +9,7 @@ const employeeRouter = require("./routes/employeeRouter");
 const filesRouter = require("./routes/filesRouter");
 const taskRouter =require("./routes/taskRouter");
 const contactRouter =require("./routes/contactRouter")
+const materialRouter = require("./routes/materialRouter")
 const cors = require('cors');
 
 dotenv.config();
@@ -41,6 +42,7 @@ app.use("/employees", employeeRouter);
 app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
 app.use ("/contacts",contactRouter)
+app.use ("/orders",orderRouter)
 
 //servidor
 app.listen(port, () => {

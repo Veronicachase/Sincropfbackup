@@ -8,7 +8,9 @@ import MyProjects from './views/projects/MyProjects'
 import ProjectInfo from './views/projects/ProjectInfo'
 import Pendings from './views/Pendings/Pendings'
 import Progress from './views/progress/Progress'
-import MaterialAndOrders from './views/matAndOrders/materialAndOrders'
+import CreateOrder from './views/matAndOrders/CreateOrder'
+import OrderList from './views/matAndOrders/OrderList'
+import OrderDetails from './views/matAndOrders/OrderDetails'
 import CreateContact from './views/contacts/CreateContact'
 import AllContacts from './views/contacts/llContacts'
 import ContactDetails from './views/contacts/ContactDetails'
@@ -57,10 +59,12 @@ export default function App() {
               <Route path="/project-info-task/:projectId/:sectionKey" element={<ProjectInfoTasks />} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />
-              <Route path="/material" element={<MaterialAndOrders />} />
+              <Route path="/create-order" element={<CreateOrder />} />
+              <Route path="/order-list" element={<OrderList />} />
+              <Route path="/order-details/:orderId" element={<OrderDetails />} />
               <Route path="/allContacts" element={<AllContacts />} />
               <Route path="/create-contact" element={<CreateContact />} />
-              <Route path="/contact-details" element={<ContactDetails />} />
+              <Route path="/contact-details/:contactId" element={<ContactDetails />} />
               <Route path="/staff-list" element={<StaffList />} />
               <Route path="/create-employee" element={<CreateEmployee />} />
               <Route  element = <CreatePdfContextProvider/>>  
