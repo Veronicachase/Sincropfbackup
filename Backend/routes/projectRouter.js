@@ -13,4 +13,3 @@ projectRouter.delete("/:projectId/sections/:sectionKey", deleteSection);
 projectRouter.post("/:projectId/sections", addSection); 
 module.exports = projectRouter;
 
-/**Aquí falta ingresar getAllProjects del controlador */

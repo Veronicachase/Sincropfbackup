@@ -5,12 +5,11 @@ import { Grid, Box, Typography, Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
 import NewContactFormSchema from '../../forms/Contactos/NewContactSchema';
 
 import { handleSubmitContact } from '../../api'; 
 
-export default function Contactos() {
+export default function CreateContact() {
   const navigate = useNavigate();
   const initialValues = {
     category: "",
@@ -27,7 +26,7 @@ export default function Contactos() {
       initialValues={initialValues}
       validationSchema={NewContactFormSchema}
       onSubmit={(values, actions) => {
-        handleSubmitContact(values).then(() => {
+        handleSubmitContact (values).then(() => {
           console.log(values);
           actions.setSubmitting(false);
           actions.resetForm();

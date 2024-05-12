@@ -18,12 +18,14 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { getProjectById } from "../../api/getProjectById";
 import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import getEmployees from "../../api/getEmployees";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import VoiceInput from "../../components/VoiceInput";
+import IconButton from "@mui/material/IconButton";
+import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 
 export default function ProjectCreateTask() {
   const { projectId, employeeId } = useParams();
@@ -50,19 +52,21 @@ export default function ProjectCreateTask() {
 
       <Formik
         initialValues={{
-          task: "",
+          taskName: "",
+          employeeName: "",
           taskDescription: "",
+          startDate: "",
+          endDate: "",
           assignedEmployee: "",
           files: [],
         }}
         validationSchema={yup.object({
-          taskName:yup.string(),
-          employeeName:yup.string(),
-          taskDescription:yup.string(),
+          taskName: yup.string(),
+          employeeName: yup.string(),
+          taskDescription: yup.string(),
           startDate: yup.date(),
           endDate: yup.date(),
-          files:yup.string()
-          
+          files: yup.string(),
         })}
         onSubmit={(values, actions) => {
           handleSubmitTask(values)
@@ -112,7 +116,10 @@ export default function ProjectCreateTask() {
                       <em>None</em>
                     </MenuItem>
                     {employees.map((employee) => (
-                      <MenuItem key={employee.employeeId} value={employee.employeeId}>
+                      <MenuItem
+                        key={employee.employeeId}
+                        value={employee.employeeId}
+                      >
                         {employee.employeeName}
                       </MenuItem>
                     ))}
@@ -126,29 +133,46 @@ export default function ProjectCreateTask() {
                     multiline
                     fullWidth
                   />
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      name="taskDescription"
+                      label="Task Description"
+                      multiline
+                      fullWidth
+                    />
+                    <VoiceInput
+                      name="taskDescription"
+                      label="Dictar Descripción"
+                    />
+                  </Grid>
                 </Grid>
                 <Grid item xs={6}>
-                <Field
-                  as={TextField}
-                  name="startDate"
-                  label="Fecha de inicio"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-              <Field
-                as={TextField}
-                name="endDate"
-                label="Fecha de entrega"
-                fullWidth
-              />
-            </Grid>
-
+                  <Field
+                    as={TextField}
+                    name="startDate"
+                    label="Fecha de inicio"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    as={TextField}
+                    name="endDate"
+                    label="Fecha de entrega"
+                    fullWidth
+                  />
+                </Grid>
 
                 <Grid item xs={12}>
-               
-                  <FormLabel>Add an Image</FormLabel>
-                 
+                  <input
+                    type="file"
+                    name="files"
+                    onChange={(event) => {
+                      setFieldValue("files", event.currentTarget.files);
+                    }}
+                    multiple
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Button type="submit" disabled={isSubmitting}>

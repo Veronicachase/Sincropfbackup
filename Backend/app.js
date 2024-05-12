@@ -8,6 +8,7 @@ const fileUpload = require("express-fileupload");
 const employeeRouter = require("./routes/employeeRouter");
 const filesRouter = require("./routes/filesRouter");
 const taskRouter =require("./routes/taskRouter");
+const contactRouter =require("./routes/contactRouter")
 const cors = require('cors');
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use("/projects", projectRouter);
 app.use("/employees", employeeRouter);
 app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
+app.use ("/contacts",contactRouter)
 
 //servidor
 app.listen(port, () => {
