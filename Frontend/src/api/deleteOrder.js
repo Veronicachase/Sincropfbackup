@@ -1,4 +1,4 @@
-const deleteOrder = async (orderId) => {
+export const deleteOrder = async (orderId) => {
     try {
       const response = await fetch(`http:localhost:3000/order/${orderId}`, {
         method: 'DELETE',
@@ -18,4 +18,4 @@ const deleteOrder = async (orderId) => {
       alert('Error al eliminar la tarea. Por favor, intenta de nuevo.');
     }
   };
-  export default deleteOrder
+  

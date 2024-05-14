@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { getProjectById } from "../../api/getProjectById";
 import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
-import getEmployees from "../../api/getEmployees";
+import { getEmployees } from "../../api/getEmployees";
 import { useParams } from "react-router-dom";
 import VoiceInput from "../../components/VoiceInput";
 import IconButton from "@mui/material/IconButton";
@@ -176,7 +176,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={12}>
                   <Button type="submit" disabled={isSubmitting}>
-                    Create Task
+                    Crear Tarea
                   </Button>
                 </Grid>
               </Grid>

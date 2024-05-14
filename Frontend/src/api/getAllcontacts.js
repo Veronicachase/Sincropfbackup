@@ -1,4 +1,4 @@
-export const getAllcontacts = async () => {
+export const getAllContacts = async () => {
     try {
       const response = await fetch(`http://localhost:3000/contacts/`, {
         method: "GET",

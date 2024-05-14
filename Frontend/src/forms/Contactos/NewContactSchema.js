@@ -5,7 +5,10 @@ export const NewContactFormSchema = yup.object().shape({
     company:yup.string(),
     address:yup.string(),
     email:yup.string(),
-    phone:yup.phone(),
+    phone: yup.string().matches(
+        /^(\+?\d{1,3}[- ]?)?\d{10}$/, 
+        "Invalid phone number"
+    ),
     comments:yup.string()
 });
 

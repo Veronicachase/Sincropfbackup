@@ -6,7 +6,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import { getContactById, updateContactById } from '../../api';
+import { getContactById,  } from '../../api/getContactById';
+import { updateContactById }from '../../api/updateContactById'
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
 
 const defaultInitialValues = {

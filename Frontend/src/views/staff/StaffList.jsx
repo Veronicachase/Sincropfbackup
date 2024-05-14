@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import  getEmployees  from "../../api/getEmployees";
+import  { getEmployees }  from "../../api/getEmployees";
 import { Box, Typography, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { useNavigate} from "react-router-dom"

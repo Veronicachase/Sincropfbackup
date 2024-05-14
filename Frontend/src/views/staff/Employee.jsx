@@ -2,7 +2,7 @@ import  { useState, useEffect } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
-import  getEmployees from "../../api/getEmployees";
+import  { getEmployees } from "../../api/getEmployees";
 import CurrentDate from "../../components/CurrentDate";
 
 /** esta es la ficha de un trabajador en específico, debe tener opción de editar */

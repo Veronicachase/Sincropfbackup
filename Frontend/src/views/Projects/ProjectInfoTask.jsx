@@ -6,7 +6,7 @@ import { getProjectById } from '../../api/getProjectById';
 import { getTaskById } from '../../api/getTaskById';
 import { updateTaskById } from '../../api/updateTaskById';
 import { getEmployees } from '../../api/getEmployees'; 
-import NewTaskFormSchema from '../../forms/SectionTasks/NewTaskFormSchema';
+import { NewTaskFormSchema } from '../../forms/SectionTasks/NewTaskFormSchema';
 
 import CreatePDFButton from "../../components/CreatePDFButton";
 

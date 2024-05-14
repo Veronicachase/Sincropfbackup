@@ -7,6 +7,6 @@ export const orderFormSchema=yup.object().shape({
     amount:yup.string(),
     details:yup.string(),
     orderDate: yup.date(),
+    status:yup.string().oneOf(["pendiente", "recibido"])
 
 })
-   

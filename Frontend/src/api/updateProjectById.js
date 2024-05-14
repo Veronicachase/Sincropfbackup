@@ -1,4 +1,4 @@
-const updateprojectById = async (projectId, projectData) => {
+export const updateProjectById = async (projectId, projectData) => {
     try {
       const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
         method: 'PATCH',
@@ -21,4 +21,3 @@ const updateprojectById = async (projectId, projectData) => {
     }
   };
   
-  export default updateprojectById;

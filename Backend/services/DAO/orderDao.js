@@ -66,6 +66,27 @@ orderDao.getAllOrders = async () => {
     }
 };
 
+orderDao.getAllOrdersByIdProject = async (projectId) => {
+    let conn = null;
+    try {
+        conn = await db.createConnection();
+        
+        const sql = `SELECT orders.* FROM orders 
+                     JOIN projects ON orders.projectId = projects.projectId 
+                     WHERE projects.projectId = ?`;
+        const results = await db.query2(sql, [projectId], conn);
+
+      
+        return results.length ? results : [];
+    } catch (e) {
+        console.error(e.message);
+        throw e;
+    } finally {
+        if (conn) await conn.end();
+    }
+};
+
+
 
 orderDao.updateOrder = async (orderId, data) => {
     let conn = null;

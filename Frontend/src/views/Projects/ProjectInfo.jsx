@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { initialValues as defaultInitialValues } from "../../forms/Proyectos/CrearProyectoInitialValues";
 import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
 import { getProjectById } from "../../api/getProjectById";
-import updateProjectById from "../../api/updateProjectById";
+import { updateProjectById } from "../../api/updateProjectById";
 import MapView from "../../components/MapView";
 import { useParams } from "react-router-dom";
 import {

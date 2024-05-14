@@ -5,9 +5,8 @@ import { Grid, Box, Typography, Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import NewContactFormSchema from '../../forms/Contactos/NewContactSchema';
-
-import { handleSubmitContact } from '../../api'; 
+import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
+import { handleSubmitContact } from '../../api/handleSubmitContact'; 
 
 export default function CreateContact() {
   const navigate = useNavigate();

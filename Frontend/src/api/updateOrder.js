@@ -1,4 +1,4 @@
-const updateOrderById = async (orderId, orderData) => {
+  export const updateOrder = async (orderId, orderData) => {
     try {
       const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
         method: 'PATCH',
@@ -17,8 +17,7 @@ const updateOrderById = async (orderId, orderData) => {
     } catch (error) {
       console.error('Error al hacer los cambios en pedidos-orden-materiales:', error);
      
-      alert('Error al editar pedidos-orden-materiales . Por favor, intenta de nuevo.');
+      alert('Error al editar . Por favor, intenta de nuevo.');
     }
   };
   
-  export default updateOrderById;

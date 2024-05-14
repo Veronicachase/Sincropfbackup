@@ -6,7 +6,7 @@ import { getAllContacts } from '../../api/getAllContacts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Contactos() {
+export default function Contacts() {
   const [open, setOpen] = useState({});
   const { data } = getAllContacts();
   const navigate = useNavigate();

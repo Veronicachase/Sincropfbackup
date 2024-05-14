@@ -1,15 +1,15 @@
-export const updateContactById = async (contactId, contactData) => {
+export const updateTaskById = async (taskId, taskData) => {
     try {
-      const response = await fetch(`http://localhost:3000/contacts/${contactId}`, {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body:JSON.stringify(contactData)
+        body:JSON.stringify(taskData)
       });
   
       if (!response.ok) {
-        throw new Error('No se han podido actualizar los cambios'); 
+        throw new Error('No se han podido actualizar los cambios en update Task'); 
       }
   
       
@@ -20,3 +20,5 @@ export const updateContactById = async (contactId, contactData) => {
       alert('Error al editar. Por favor, intenta de nuevo.');
     }
   };
+  
+  
