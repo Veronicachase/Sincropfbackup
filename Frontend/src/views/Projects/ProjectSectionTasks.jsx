@@ -8,7 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import deleteTaskById from "../../api/deleteTaskById"
 import deleteSectionById from "../../api/deleteSeccionById";
 import { useParams } from 'react-router-dom';
-import {getTaskBySection} from "../../api/getTaskBySection"
+import { getTaskBySection } from "../../api/getTaskBySection"
 
 /* Aquí debo mostrar las tareas de la sección escogida, si no hay tareas, 
 mostrar solo el icono de crear tarea ( cada tarea debe incluir edit y delete) */

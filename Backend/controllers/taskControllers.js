@@ -11,10 +11,10 @@ const addTask = async (req, res) => {
     }
 };
 
-const getTask = async (req, res) => {
+const getTaskById = async (req, res) => {
     try {
         const taskId = req.params.taskId;
-        const task = await taskDao.getTask(taskId);
+        const task = await taskDao.getTaskById(taskId);
         if (task) {
             res.json(task);
         } else {
@@ -86,4 +86,4 @@ const deleteTask = async (req, res) => {
 
 
 
-module.exports = { addTask,deleteTask, updateTask, getTask, getTasksBySection, getAllTasks };
+module.exports = { addTask,deleteTask, updateTask,  getTasksBySection, getAllTasks, getTaskById  };

@@ -1,4 +1,4 @@
-const contactDao = require("../services/DAO/contactDao");
+const contactDao = require("../services/DAO/contactsDao");
 const path = require("path");
 
 const addContact = async (req, res) => {

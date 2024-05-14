@@ -1,9 +1,8 @@
 const express = require("express");
-const { addTask,getTask, deleteTask, updateTask, getTasksBySection, getAllTasks  } = require("../controllers/taskControllers");
-const { getAllTasks } = require("../services/DAO/taskDao");
+const { addTask,getTaskById, deleteTask, updateTask, getTasksBySection, getAllTasks  } = require("../controllers/taskControllers");
 const taskRouter = express.Router();
 
-taskRouter.get("/:taskId",getTask );
+taskRouter.get("/:taskId",getTaskById );
 taskRouter.post("/", addTask);
 taskRouter.delete("/:taskId", deleteTask);
 taskRouter.patch("/:taskId", updateTask);
