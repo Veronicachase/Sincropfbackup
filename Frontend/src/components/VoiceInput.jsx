@@ -1,47 +1,49 @@
 /* eslint-disable react/prop-types */
 import  { useState } from 'react';
 import { useField, useFormikContext } from 'formik';
+import IconButton from '@mui/material/IconButton';
+import MicIcon from '@mui/icons-material/Mic';
+import { InputAdornment } from '@mui/material';
+import MicOffIcon from '@mui/icons-material/MicOff';
+
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const VoiceInput = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+const VoiceInput = ({ name }) => {
   const { setFieldValue } = useFormikContext();
-  const [isListening, setIsListening] = useState(false);
+  const [field, meta, helpers] = useField(name);
+  const [listening, setListening] = useState(false);
   const recognition = new SpeechRecognition();
+
   recognition.continuous = true;
   recognition.interimResults = true;
-  recognition.lang = 'es-ES'; 
+  recognition.lang = 'es-ES';
 
-  const handleVoice = () => {
-    if (isListening) {
+  recognition.onresult = (event) => {
+    const transcript = Array.from(event.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+    setFieldValue(name, transcript);
+  };
+
+  const toggleListening = () => {
+    if (listening) {
       recognition.stop();
-      setIsListening(false);
     } else {
       recognition.start();
-      setIsListening(true);
-      recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0])
-          .map(result => result.transcript)
-          .join('');
-        setFieldValue(field.name, transcript);
-      };
     }
+    setListening(!listening);
   };
 
   return (
-    <div>
-      <label>{label}</label>
-      <textarea {...field} {...props} />
-      <button type="button" onClick={handleVoice}>
-        {isListening ? 'Detener' : 'Dictar'}
-      </button>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </div>
+    <InputAdornment position="end">
+      <IconButton onClick={toggleListening} color="primary">
+        {listening ? <MicOffIcon /> : <MicIcon />}
+      </IconButton>
+    </InputAdornment>
   );
 };
+
 
 export default VoiceInput;

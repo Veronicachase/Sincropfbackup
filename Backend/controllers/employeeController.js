@@ -1,10 +1,10 @@
 const employeeDao = require("../services/DAO/employeeDao");
 const { jwtVerify } = require("jose");
 
-const getEmployee = async (req, res) => {
+const getEmployeeById = async (req, res) => {
   try {
     const { employeeId } = req.params; 
-    const employee = await employeeDao.getEmployeeByReference(employeeId);
+    const employee = await employeeDao.getEmployeeById(employeeId);
     if (!employee) return res.status(404).send("Trabajador no encontrado");
     return res.status(200).json(employee);
   } catch (e) {
@@ -79,4 +79,4 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-module.exports = { getEmployee,getAllEmployees, addEmployee, updateEmployee, deleteEmployee };
+module.exports = { getEmployeeById,getAllEmployees, addEmployee, updateEmployee, deleteEmployee };

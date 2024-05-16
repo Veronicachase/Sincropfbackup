@@ -4,7 +4,7 @@ const db = require("../db")
 
 const employeeDao = {};
 
-employeeDao.getEmployeeByReference = async (employeeId) => {
+employeeDao.getEmployeeById = async (employeeId) => {
   
   let conn = null;
   try {

@@ -1,55 +1,78 @@
-// aquí intento traer datos del proyecto y sección (como cabecera)
-// luego hacer un form donde se pueda rellenar el nombre de la tarea
-// luego un dropdown donde pueda escoger al trabajador asignado
-// descripción del trabajo
-// agregar fotos (varias fotos)
-// al crear la tarea navigate a la pagina anterior.
+import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 
-import {
-  Box,
-  Grid,
-  Select,
-  MenuItem,
-  TextField,
-  Button,
-  FormLabel,
-} from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProjectById } from "../../api/getProjectById";
-import { handleFileUpload } from "../../api/handleFileUpload";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import { getEmployees } from "../../api/getEmployees";
-import { useParams } from "react-router-dom";
 import VoiceInput from "../../components/VoiceInput";
-import IconButton from "@mui/material/IconButton";
-import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 
 export default function ProjectCreateTask() {
-  const { projectId, employeeId } = useParams();
+  const { projectId } = useParams();
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
 
   useEffect(() => {
-    getProjectById(projectId).then(setProjectData);
-    getEmployees(employeeId).then(setEmployees);
-  }, [projectId, employeeId]);
+    const fetchData = async () => {
+      if (projectId) {
+        try {
+          const projectData = await getProjectById(projectId);
+          setProjectData(projectData);
+        } catch (error) {
+          console.error("Error al obtener los datos del proyecto:", error);
+        }
+      }
+
+      try {
+        const employeeData = await getEmployees();
+        setEmployees(employeeData);
+      } catch (error) {
+        console.error("Error al obtener los datos de los trabajadores:", error);
+      }
+    };
+
+    fetchData();
+  }, [projectId]);
 
   if (!projectData) {
     return <div>Loading...</div>;
   }
 
+  const validationSchema = yup.object({
+    taskName: yup.string().required("El nombre de la tarea es obligatorio"),
+    employeeName: yup.string(),
+    taskDescription: yup.string(),
+    startDate: yup
+      .date()
+
+      .max(
+        yup.ref("endDate"),
+        "La fecha de inicio debe ser antes de la fecha de entrega"
+      ),
+    endDate: yup
+      .date()
+
+      .min(
+        yup.ref("startDate"),
+        "La fecha de entrega debe ser después de la fecha de inicio"
+      ),
+    projectId: yup.string(),
+    sectionKey: yup.string(),
+    status: yup.string(),
+    files: yup.array(),
+  });
+
   return (
     <Box>
-      {projectData.map((item) => (
-        <Box key={item.projectName}>
-          {item.projectName} {item.constructionType} {item.section}
-        </Box>
-      ))}
-
+      <Box sx={{ marginTop: "1em" }}>
+        <div>
+          {projectData.projectName} {projectData.constructionType}{" "}
+          {projectData.section}
+        </div>
+      </Box>
       <Formik
         initialValues={{
           taskName: "",
@@ -57,102 +80,75 @@ export default function ProjectCreateTask() {
           taskDescription: "",
           startDate: "",
           endDate: "",
-          assignedEmployee: "",
+          status: "noIniciado",
+          projectId: projectId,
+          sectionKey: projectData ? projectData.section : "",
           files: [],
         }}
-        validationSchema={yup.object({
-          taskName: yup.string(),
-          employeeName: yup.string(),
-          taskDescription: yup.string(),
-          startDate: yup.date(),
-          endDate: yup.date(),
-          files: yup.string(),
-        })}
+        validationSchema={validationSchema}
         onSubmit={(values, actions) => {
           handleSubmitTask(values)
-            .then(() => {
-              if (values.files && values.files.length > 0) {
-                values.files.forEach((file) => handleFileUpload(file));
-              }
-              navigate("/my-projects");
-            })
+            .then(() =>
+              navigate(
+                `/project-create-task/${values.projectId}/${values.sectionKey}`
+              )
+            )
             .catch((error) => {
               console.error("Error during the process: ", error);
               actions.setSubmitting(false);
             });
         }}
       >
-        {({ isSubmitting, setFieldValue, values }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form>
-            <Box
-              sx={{
-                flexGrow: 1,
-                maxWidth: 800,
-                margin: "2em auto",
-                boxShadow: "shadow-custom",
-                color: "#021F59",
-              }}
-            >
+            <Box sx={{ maxWidth: 800, margin: "2em auto" }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Field
                     as={TextField}
                     name="taskName"
-                    label="Task Name"
+                    label="Nombre de la tarea"
                     fullWidth
+                    required
                   />
                 </Grid>
+
                 <Grid item xs={12}>
-                  <Select
-                    name="employeeName"
-                    value={values.employeeName}
-                    onChange={(event) =>
-                      setFieldValue("employeeName", event.target.value)
-                    }
-                    fullWidth
-                    displayEmpty
-                  >
+                  <Field as={Select} name="employeeName" fullWidth displayEmpty>
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>Selecciona a un trabajador</em>
                     </MenuItem>
                     {employees.map((employee) => (
                       <MenuItem
                         key={employee.employeeId}
                         value={employee.employeeId}
                       >
-                        {employee.employeeName}
+                        {employee.name}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Field>
                 </Grid>
+
                 <Grid item xs={12}>
                   <Field
                     as={TextField}
                     name="taskDescription"
-                    label="Task Description"
+                    label="Descripción de la tarea"
                     multiline
                     fullWidth
+                    InputProps={{
+                      endAdornment: <VoiceInput name="taskDescription" />,
+                    }}
                   />
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      name="taskDescription"
-                      label="Task Description"
-                      multiline
-                      fullWidth
-                    />
-                    <VoiceInput
-                      name="taskDescription"
-                      label="Dictar Descripción"
-                    />
-                  </Grid>
                 </Grid>
                 <Grid item xs={6}>
                   <Field
                     as={TextField}
                     name="startDate"
                     label="Fecha de inicio"
+                    type="date"
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -160,22 +156,27 @@ export default function ProjectCreateTask() {
                     as={TextField}
                     name="endDate"
                     label="Fecha de entrega"
+                    type="date"
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
-
                 <Grid item xs={12}>
                   <input
                     type="file"
                     name="files"
-                    onChange={(event) => {
-                      setFieldValue("files", event.currentTarget.files);
-                    }}
+                    onChange={(e) =>
+                      setFieldValue("files", e.currentTarget.files)
+                    }
                     multiple
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    sx={{ backgroundColor: "#84C7AE", color: "#fff" }}
+                  >
                     Crear Tarea
                   </Button>
                 </Grid>

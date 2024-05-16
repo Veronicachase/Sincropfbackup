@@ -6,6 +6,7 @@ import { initialValues as defaultInitialValues } from "../../forms/Proyectos/Cre
 import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
 import { getProjectById } from "../../api/getProjectById";
 import { updateProjectById } from "../../api/updateProjectById";
+import { getLabel } from "../../components/getLabel";
 import MapView from "../../components/MapView";
 import { useParams } from "react-router-dom";
 import {
@@ -15,7 +16,6 @@ import {
   Collapse,
   Box,
   Typography,
-  
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -23,8 +23,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import IconColors from "../../components/IconColors";
 //import ProjectInfoBox from "../../components/ProjectInfoBox";
 
-// falta diseño, confrimar funcionamiento de update y ver mapa e imagenes. 
-
+// falta diseño, confrimar funcionamiento de update y ver mapa e imagenes.
 
 export default function ProjectInfo() {
   const { projectId, sectionKey } = useParams();
@@ -39,12 +38,14 @@ export default function ProjectInfo() {
     if (projectId) {
       getProjectById(projectId)
         .then((projectData) => {
-          if (projectData) {setFormValues({ ...defaultInitialValues, ...projectData});
-          setProject(projectData);
-          setLoading(false); 
-        } else{console.log("Error al recuperar los datos del proyecto");
-        setLoading(false);  }
-          
+          if (projectData) {
+            setFormValues({ ...defaultInitialValues, ...projectData });
+            setProject(projectData);
+            setLoading(false);
+          } else {
+            console.log("Error al recuperar los datos del proyecto");
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error("Error al cargar datos del proyecto:", error);
@@ -68,7 +69,7 @@ export default function ProjectInfo() {
   const handleSubmit = async (values) => {
     try {
       await updateProjectById(projectId, values);
-      console.log("estos son los values que necesito ver",values)
+      console.log("estos son los values que necesito ver", values);
       alert("Datos actualizados");
     } catch (error) {
       alert("Error al editar. Por favor, intenta de nuevo.");
@@ -76,7 +77,7 @@ export default function ProjectInfo() {
   };
 
   return (
-    <>  
+    <>
       <Box sx={{ textAlign: "left", marginLeft: "2em" }}>
         <Typography variant="h5">
           {project.projectName} - {project.constructionType}
@@ -92,32 +93,62 @@ export default function ProjectInfo() {
             validationSchema={NewProjectFormSchema}
             onSubmit={handleSubmit}
           >
-            {formik => (
+            {(formik) => (
               <Form>
-                {Object.entries(formik.values).filter(([key]) => !['projectId', 'filesId', 'employeeId', 'userId','taskDescription','sections','area','addedSection', 'createTask','portal'].includes(key)).map(([key]) => (
-                  <Box  key={key}  > 
-                  <Grid key={key} item xs={12} md={6}>
-                    <Box sx={{border:"1px solid #ccc",
-                     marginBottom:".5em", 
-                     paddingTop:"10px",
-                     paddingBottom:"10px",
-                    borderRadius:"5px"}}> 
-                    <label htmlFor={key}>{key.replace(/([A-Z])/g, ' $1').trim()}: </label>
-                    <Field id={key} name={key} as="input" />
+                {Object.entries(formik.values)
+                  .filter(
+                    ([key]) =>
+                      ![
+                        "projectId",
+                        "filesId",
+                        "employeeId",
+                        "userId",
+                        "taskDescription",
+                        "sections",
+                        "area",
+                        "addedSection",
+                        "createTask",
+                        "portal",
+                      ].includes(key)
+                  )
+                  .map(([key]) => (
+                    <Box key={key}>
+                      <Grid key={key} item xs={12} md={6}>
+                        <Box
+                          sx={{
+                            border: "1px solid #ccc",
+                            marginBottom: ".5em",
+                            paddingLeft: "1em",
+                            paddingTop: "10px",
+                            paddingBottom: "10px",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          <label htmlFor={key}>
+                          
+                            <strong>
+                              {getLabel(key)}
+                            </strong>{" "}
+                          </label>
+                          <Field
+                            id={key}
+                            name={key}
+                            as="input"
+                            style={{ border: "none" }}
+                          />
+                        </Box>
+                      </Grid>
+                      {key === "map" && (
+                        <MapView
+                          setFieldValue={(lat, lng) => {
+                            formik.setFieldValue("latitude", lat);
+                            formik.setFieldValue("longitude", lng);
+                          }}
+                        />
+                      )}
                     </Box>
-                  </Grid>
-                  {key === 'map' && (
-                    <MapView 
-                      setFieldValue={(lat, lng) => {
-                        formik.setFieldValue('latitude', lat);
-                        formik.setFieldValue('longitude', lng);
-                      }} 
-                    />
-                  )}
-                  </Box>
-
-                ))}
-                <Button  type="submit">Guardar Cambios</Button>
+                  ))}
+                <Button type="submit">Guardar Cambios</Button>
                 <pre>{JSON.stringify(formik.errors, null, 2)}</pre>
               </Form>
             )}
@@ -125,7 +156,9 @@ export default function ProjectInfo() {
         </Collapse>
 
         {/* Visualización de secciones activas fuera del Collapse */}
-        <Typography variant="h5" sx={{ marginTop: 2 }}>Secciones Activas del Proyecto</Typography>
+        <Typography variant="h5" sx={{ marginTop: 2 }}>
+          Secciones Activas del Proyecto
+        </Typography>
         {project.sections &&
           Object.entries(project.sections).map(
             ([sectionKey, isActive]) =>
@@ -141,12 +174,19 @@ export default function ProjectInfo() {
                     border: "1px solid #ccc",
                     borderRadius: "10px",
                     padding: "10px",
-                    
                   }}
                 >
-                <IconColors/>
-                  <Typography variant="h6">{sectionKey.replace(/([a-z])([A-Z])/g, '$1 $2')}</Typography>
-                  <IconButton onClick={() => navigate(`/project-info-task/${projectId}/${sectionKey}`)}>
+                  <IconColors />
+                  <Typography variant="h6">
+                    {sectionKey.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                  </Typography>
+                  <IconButton
+                    onClick={() =>
+                      navigate(
+                        `/project-section-tasks/${projectId}/${sectionKey}`
+                      )
+                    }
+                  >
                     <ArrowForwardIosIcon />
                   </IconButton>
                 </Box>

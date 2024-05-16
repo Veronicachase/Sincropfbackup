@@ -3,7 +3,7 @@ export const handleSubmitTask = async (values) => {
     delete formData.files;
   
     try {
-      const response = await fetch("http://localhost:3000/task", {
+      const response = await fetch("http://localhost:3000/tasks", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

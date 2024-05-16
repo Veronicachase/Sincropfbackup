@@ -1,6 +1,7 @@
 export const initialValues = {
     hiringCompany: "",
     projectName: "",
+    identifier:"",
     addressDescription: "",
     address: "",
     block: "",

@@ -7,7 +7,7 @@ export const ProjectTextField = [
     placeholder: "Empresa Contratante",
   },
   {
-    name: "projectName",
+    name: "identifier",
     type: "text",
     label: "Identificador",
     value:"projectName",
@@ -42,19 +42,21 @@ export const ProjectTextField = [
   },
 
 
-  {
-    name: "endDate",
-    type: "date",
-    label: "Fecha de Entrega",
-    value:"endDate",
-    placeholder: "Fecha de Entrega",
-  },
+ 
   {
     name: "startDate",
     type: "date",
     label: "Fecha de Inicio",
     value:"startDate",
     placeholder: "Fecha de Inicio",
+  },
+
+  {
+    name: "endDate",
+    type: "date",
+    label: "Fecha de Entrega",
+    value:"endDate",
+    placeholder: "Fecha de Entrega",
   },
 ];
 

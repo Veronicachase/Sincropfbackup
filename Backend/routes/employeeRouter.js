@@ -1,17 +1,18 @@
 const express = require("express");
 const {
   addEmployee,
-  getEmployee,
+  getEmployeeById,
   getAllEmployees,
   updateEmployee,
   deleteEmployee,
 } = require("../controllers/employeeController");
 
+
 const employeeRouter = express.Router();
 
 employeeRouter.post("/", addEmployee);
 
-employeeRouter.get("/:employeeId", getEmployee);
+employeeRouter.get("/:employeeId", getEmployeeById);
 
 employeeRouter.get("/", getAllEmployees);
 

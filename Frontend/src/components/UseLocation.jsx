@@ -6,10 +6,10 @@ export default function UsePageTitle() {
     "/login": "",
     "/create-new-project": "Nuevo Proyecto",
     "/my-projects": "Mis Proyectos",
-    "/project-info/:projectId"  : "Información del Proyecto",//esto creo que no va así
+    "/project-info/:projectId"  : "Información del Proyecto",
     "/project-section-tasks":"Tareas",
-    "/project-create-task":"Crear tarea",
-    "/project-info-task/:sectionKey":"Tarea",// aquí también hay que ver lo del id
+    "/project-info-task/${projectId}/${sectionKey}":"Crear tarea",
+    "/project-info-task/:sectionKey":"Tarea",
     "/pendings" : "Mis pendientes",
     "/progress": "Avances de Proyecto",
     "/material": "Material y pedidos",
