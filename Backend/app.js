@@ -8,10 +8,11 @@ const fileUpload = require("express-fileupload");
 const employeeRouter = require("./routes/employeeRouter");
 const filesRouter = require("./routes/filesRouter");
 const taskRouter =require("./routes/taskRouter");
-const contactRouter =require("./routes/contactRouter")
-const orderRouter = require("./routes/OrderRouter")
+const contactRouter =require("./routes/contactRouter");
+const orderRouter = require("./routes/OrderRouter");
+const hoursRouter = require ("./routes/hoursRouter");
 const cors = require('cors');
-
+const cloudinary = require("./public/cloudinary/cloudinary")
 dotenv.config();
 
 const app = express();
@@ -20,10 +21,11 @@ const port = process.env.PORT;
 //middlewares de express
 app.use(cors());
 app.use(logger("dev"));
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
 app.use(express.text());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true,limit: '50mb'  })); 
+
 
 app.use(
   fileUpload({
@@ -43,6 +45,8 @@ app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
 app.use ("/contacts",contactRouter)
 app.use ("/orders",orderRouter)
+app.use ("/hours",hoursRouter)
+
 
 //servidor
 app.listen(port, () => {

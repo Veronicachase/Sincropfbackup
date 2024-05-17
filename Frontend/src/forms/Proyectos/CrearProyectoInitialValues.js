@@ -30,6 +30,7 @@ export const initialValues = {
     area: "",
     projectDescription: "",
     taskDescription: "",
-    status: "noIniciado"
+    status: "noIniciado",
+    image:""
   }
   

@@ -8,16 +8,25 @@ taskDao.addTask = async (taskData) => {
     let conn = null;
     try {
         conn = await db.createConnection();
+      
         let taskObj = {
             taskName: taskData.taskName,
-            employeeId: taskData.employeeId,  
+            employeeId: taskData.employeeId,
             taskDescription: taskData.taskDescription,
             startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
             endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
+            prevImages: JSON.stringify(taskData.prevImages || []),  
+            finalImages: JSON.stringify(taskData.finalImages || [])
         };
 
+        
         taskObj = await removeUndefinedKeys(taskObj);
-        const result = await db.query("INSERT INTO tasks SET ?", taskObj, "insert", conn);
+
+        
+        const sql = "INSERT INTO tasks (taskName, employeeId, taskDescription, startDate, endDate, prevImages, finalImages) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        const values = [taskObj.taskName, taskObj.employeeId, taskObj.taskDescription, taskObj.startDate, taskObj.endDate, taskObj.prevImages, taskObj.finalImages];
+
+        const result = await db.query(sql, values, "insert", conn);
         return result.insertId;
     } catch (e) {
         console.error("Error during task creation: ", e.message);
@@ -26,10 +35,6 @@ taskDao.addTask = async (taskData) => {
         if (conn) await conn.end();
     }
 };
-
-
-
-
 
 taskDao.getAllTasks = async () => {
     let conn =null;
@@ -95,7 +100,8 @@ taskDao.updateTask = async (taskId, data) => {
       
         conn = await db.createConnection();
         const cleanData=removeUndefinedKeys(data)
-        await db.query("UPDATE tasks SET ? WHERE taskId = ?", [data, taskId],"update",  conn);
+        const sql= ("UPDATE tasks SET ? WHERE taskId = ?")
+        await db.query(sql, [data, taskId],"update",  conn);
     } catch (e) {
         console.error(e.message);
         throw e;

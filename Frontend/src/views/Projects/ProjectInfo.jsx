@@ -28,7 +28,7 @@ import IconColors from "../../components/IconColors";
 export default function ProjectInfo() {
   const { projectId, sectionKey } = useParams();
   const [formValues, setFormValues] = useState(defaultInitialValues);
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState("");
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
@@ -77,13 +77,13 @@ export default function ProjectInfo() {
   };
 
   return (
-    <>
-      <Box sx={{ textAlign: "left", marginLeft: "2em" }}>
-        <Typography variant="h5">
+    <Box sx={{margin:"0 auto", width:"100%", flexGrow:1, alignContent:"center"}}>
+      <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop:"1em" }}>
+        <Typography variant="body">
           {project.projectName} - {project.constructionType}
         </Typography>
         <IconButton onClick={toggleForm}>
-          <Typography variant="h5">Editar Información del Proyecto</Typography>
+          <Typography variant="h6">Editar Información del Proyecto</Typography>
           {showForm ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </IconButton>
         <Collapse in={showForm}>
@@ -109,11 +109,12 @@ export default function ProjectInfo() {
                         "addedSection",
                         "createTask",
                         "portal",
+                        "image"
                       ].includes(key)
                   )
                   .map(([key]) => (
-                    <Box key={key}>
-                      <Grid key={key} item xs={12} md={6}>
+                    <Box key={key} >
+                      <Grid key={key} item xs={12} md={12}>
                         <Box
                           sx={{
                             border: "1px solid #ccc",
@@ -134,6 +135,7 @@ export default function ProjectInfo() {
                             id={key}
                             name={key}
                             as="input"
+                            value={formik.values[key] || ''}
                             style={{ border: "none" }}
                           />
                         </Box>
@@ -156,7 +158,9 @@ export default function ProjectInfo() {
         </Collapse>
 
         {/* Visualización de secciones activas fuera del Collapse */}
-        <Typography variant="h5" sx={{ marginTop: 2 }}>
+
+        <Box sx={{width:"90%", margin:"auto" }}> 
+        <Typography variant="h6" sx={{ marginTop: 2 }}>
           Secciones Activas del Proyecto
         </Typography>
         {project.sections &&
@@ -190,9 +194,12 @@ export default function ProjectInfo() {
                     <ArrowForwardIosIcon />
                   </IconButton>
                 </Box>
+                
               )
+              
           )}
+          </Box>
       </Box>
-    </>
+    </Box>
   );
 }

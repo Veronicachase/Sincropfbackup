@@ -54,8 +54,8 @@ export default function App() {
               <Route path="/create-new-project" element={<CreateNewProject />} />
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
-              <Route path="/project-section-tasks/:projectId/:sectionKey" element={< ProjectSectionTasks/>} />
-              <Route path="/project-create-task/:projectId/:sectionKey" element={< ProjectCreateTask/>} />
+              <Route path="/project-section-tasks//:projectId/:sectionKey" element={< ProjectSectionTasks/>} />
+              <Route path="/project-create-task" element={< ProjectCreateTask/>} />
               <Route path="/project-info-task/:projectId/:sectionKey" element={<ProjectInfoTasks />} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />

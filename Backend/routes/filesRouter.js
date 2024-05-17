@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { addFile, getFile, updateFile, deleteFile } = require('../controllers/filesController');
 
-const storage = multer.diskStorage({
+ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/uploads/');
     },
@@ -12,6 +12,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 const filesRouter = express.Router();
 
 filesRouter.get('/:fileId', getFile);
@@ -21,4 +22,4 @@ filesRouter.delete('/:fileId', deleteFile);
 filesRouter.post('/project/:projectId', upload.array('file', 5), addFile); 
 filesRouter.post('/employee/:employeeId', upload.array('file', 5), addFile);
 
-module.exports = filesRouter;
+module.exports = filesRouter, upload;

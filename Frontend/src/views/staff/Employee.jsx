@@ -1,73 +1,205 @@
-import  { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography } from '@mui/material';
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
+} from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
-import  { getEmployees } from "../../api/getEmployees";
-import CurrentDate from "../../components/CurrentDate";
+import { getEmployeeById } from '../../api/getEmployeeById';
+import { getHoursWorked } from '../../api/getHoursWorked';
+import CurrentDate from '../../components/CurrentDate';
+import { calculateTotalHours } from '../../components/CalculatedTotalHours';
 
-/** esta es la ficha de un trabajador en específico, debe tener opción de editar */
+function Employee() {
+  const [employees, setEmployees] = useState([]);
+  const [employeeId, setEmployeeId] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [hoursWorked, setHoursWorked] = useState([]);
 
- function Employee() {
-    const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const fetchedEmployees = await getEmployeeById(employeeId);
+        setEmployees(fetchedEmployees);
+      } catch (error) {
+        console.error("Failed to fetch employees", error);
+        setEmployees([]);
+      }
+    };
+    if (employeeId) {
+      fetchEmployees();
+    }
+  }, [employeeId]);
 
-    useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const fetchedEmployees = await getEmployees();
-                setEmployees(fetchedEmployees);
-            } catch (error) {
-                console.error("Failed to fetch employees", error);
-                setEmployees([]);
-            }
-        };
-        fetchEmployees();
-    }, []);
+  const handleFetchHours = async () => {
+    try {
+      const fetchedHours = await getHoursWorked(employeeId, startDate, endDate);
+      setHoursWorked(fetchedHours);
+    } catch (error) {
+      console.log("Failed to fetch hours worked", error);
+      setHoursWorked([]);
+    }
+  };
 
-    return (
+  return (
+    <Box>
+      <TextField
+        label="ID del Empleado"
+        value={employeeId}
+        onChange={(e) => setEmployeeId(e.target.value)}
+        sx={{ marginBottom: 2 }}
+      />
+      {employees.length > 0 && (
         <>
-            {employees.map((item) => (
-                <Box key={item.employeeId}>
-                    <Typography variant="h4">{item.name}</Typography>
-                    <Typography variant="h5">Información del trabajador</Typography>
-                    <Typography><strong>Posición:</strong> {item.position}</Typography>
-                    <Typography><strong>Obra:</strong> {item.project}</Typography>
-                    <Typography><strong>Equipo entregado:</strong> {item.mandatoryEquipment}</Typography>
-                    <Typography><strong>Comentarios:</strong> {item.comments}</Typography>
-                    
+          {employees.map((employee) => (
+            <Box key={employee.employeeId}>
+              <Typography variant="h4">{employee.name}</Typography>
+              <Typography variant="h5">Información del trabajador</Typography>
+              <Formik
+                initialValues={{
+                  position: employee.position,
+                  project: employee.project,
+                  mandatoryEquipment: employee.mandatoryEquipment,
+                  comments: employee.comments,
+                  regularHour: 0,
+                  regularMinutes: 0,
+                  extraHour: 0,
+                  extraMinutes: 0
+                }}
+                validationSchema={yup.object({
+                  position: yup.string().required(),
+                  project: yup.string().required(),
+                  mandatoryEquipment: yup.string().required(),
+                  comments: yup.string().required(),
+                  regularHour: yup.number().required(),
+                  regularMinutes: yup.number().required(),
+                  extraHour: yup.number().required(),
+                  extraMinutes: yup.number().required(),
+                })}
+                onSubmit={(values) => {
+                  console.log(values);
+                }}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <Box>
+                      <Field as={TextField} name="position" label="Posición" fullWidth margin="normal" />
+                      <Field as={TextField} name="project" label="Obra" fullWidth margin="normal" />
+                      <Field as={TextField} name="mandatoryEquipment" label="Equipo entregado" fullWidth margin="normal" />
+                      <Field as={TextField} name="comments" label="Comentarios" fullWidth margin="normal" />
+                    </Box>
                     <Typography variant="h4">Horas trabajadas</Typography>
                     <Typography><strong>Fecha:</strong> <CurrentDate /></Typography>
                     <Typography>Introducir horas trabajadas</Typography>
-                    <Formik
-                        initialValues={{
-                            regularHour: 0,
-                            regularMinutes: 0,
-                            extraHour: 0,
-                            extraMinutes: 0
-                        }}
-                        validationSchema={yup.object({
-                            regularHour: yup.number().required(),
-                            regularMinutes: yup.number().required(),
-                            extraHour: yup.number().required(),
-                            extraMinutes: yup.number().required(),
-                        })}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
-                    >
-                        {({ isSubmitting }) => (
-                            <Form>
-                                <Field as={TextField} name="regularHour" placeholder="Horas" />
-                                <Field as={TextField} name="regularMinutes" placeholder="Minutos" />
-                                <Field as={TextField} name="extraHour" placeholder="Horas" />
-                                <Field as={TextField} name="extraMinutes" placeholder="Minutos" />
-                                <Button type="submit" disabled={isSubmitting}>Agregar horas</Button>
-                            </Form>
-                        )}
-                    </Formik>
-                </Box>
-            ))}
+                    <Box>
+                      <Field as={TextField} name="regularHour" placeholder="Horas Regulares" margin="normal" />
+                      <Field as={TextField} name="regularMinutes" placeholder="Minutos Regulares" margin="normal" />
+                      <Field as={TextField} name="extraHour" placeholder="Horas Extras" margin="normal" />
+                      <Field as={TextField} name="extraMinutes" placeholder="Minutos Extras" margin="normal" />
+                      <Button type="submit" disabled={isSubmitting} variant="contained" color="primary">Agregar horas</Button>
+                    </Box>
+                  </Form>
+                )}
+              </Formik>
+
+              <Box>
+                <Typography variant="h6">Consultar Horas Trabajadas</Typography>
+                <TextField
+                  label="Fecha de Inicio"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  sx={{ marginRight: 2, marginBottom: 2 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  label="Fecha de Fin"
+                  type="date"
+                  value={endDate}
+                  sx={{ marginRight: 2, marginBottom: 2 }}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <Button variant="contained" color="primary" onClick={handleFetchHours} sx={{ marginLeft: 2 }}>
+                  Consultar
+                </Button>
+                {hoursWorked.length > 0 && (
+                  <HoursTable hoursWorked={hoursWorked} />
+                )}
+              </Box>
+            </Box>
+          ))}
         </>
-    );
+      )}
+    </Box>
+  );
 }
+
+const HoursTable = ({ hoursWorked }) => {
+  const totals = calculateTotalHours(hoursWorked);
+
+  return (
+    <Box>
+      <Typography variant="h6" gutterBottom>
+        Horas Trabajadas
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Fecha</TableCell>
+              <TableCell align="right">Horas Regulares</TableCell>
+              <TableCell align="right">Horas Extras</TableCell>
+              <TableCell align="right">Total</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {hoursWorked.map((entry, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                  {new Date(entry.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })}
+                </TableCell>
+                <TableCell align="right">{entry.regularHours.toFixed(1)}h {entry.regularMinutes}m</TableCell>
+                <TableCell align="right">{(entry.extraHours || 0).toFixed(1)}h {entry.extraMinutes || 0}m</TableCell>
+                <TableCell align="right">
+                  {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) % 60}m
+                </TableCell>
+              </TableRow>
+            ))}
+            <TableRow>
+              <TableCell component="th" scope="row">
+                <strong>Total</strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong>{totals.totalRegularHours.toFixed(1)}h {totals.totalRegularMinutes}m</strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong>{totals.totalExtraHours.toFixed(1)}h {totals.totalExtraMinutes}m</strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong>{totals.totalFinalHours.toFixed(1)}h {totals.totalFinalMinutes}m</strong>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};
 
 export default Employee;

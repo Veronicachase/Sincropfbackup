@@ -6,6 +6,8 @@ export const CreateTaskFormSchema=yup.object().shape({
     taskDescription:yup.string(),
     startDate: yup.date(),
     endDate: yup.date(),
-    files:yup.string()
+    files:yup.string(),
+    prevImages:yup.string(),
+    finalImages:yup.string()
 })
    

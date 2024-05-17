@@ -36,6 +36,7 @@ export const NewProjectFormSchema = yup.object().shape({
     roof: yup.boolean()
   }),
   status: yup.string(),
+  image:yup.string()
 });
 
 

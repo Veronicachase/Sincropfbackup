@@ -6,6 +6,12 @@ export const getTaskBySection = async (projectId, sectionKey) => {
       if (response.ok) {
         const data = await response.json();
         console.log("Tarea obtenida correctamente:", data);
+        if (data.prevImages) {
+          console.log("Imagenes previas:", data.prevImages);
+      }
+      if (data.finalImages) {
+          console.log("Imagenes finales:", data.finalImages);
+      }
         return data;
       } else {
         throw new Error('Ha habido un fallo al obtener el estatus de la tarea: ' + response.status);

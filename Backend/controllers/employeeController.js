@@ -1,8 +1,14 @@
 const employeeDao = require("../services/DAO/employeeDao");
 const { jwtVerify } = require("jose");
 
+
+
+
+
+
 const getEmployeeById = async (req, res) => {
   try {
+ 
     const { employeeId } = req.params; 
     const employee = await employeeDao.getEmployeeById(employeeId);
     if (!employee) return res.status(404).send("Trabajador no encontrado");

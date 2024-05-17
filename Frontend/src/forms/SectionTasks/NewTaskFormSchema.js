@@ -6,6 +6,8 @@ export const NewTaskFormSchema=yup.object().shape({
     taskDescription:yup.string(),
     startDate: yup.date(),
     endDate: yup.date(),
-    status:yup.string().oneOf(["noIniciado", "Iniciado", "Terminado"])
+    status:yup.string().oneOf(["noIniciado", "Iniciado", "Terminado"]),
+    prevImages:yup.string(),
+    finalImages:yup.string()
 })
    

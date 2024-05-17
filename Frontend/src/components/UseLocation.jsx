@@ -1,26 +1,30 @@
 import { useLocation } from "react-router-dom";
+import { matchPath } from "react-router-dom";
 
 export default function UsePageTitle() {
   const location = useLocation();
-  const pathDir = {
-    "/login": "",
-    "/create-new-project": "Nuevo Proyecto",
-    "/my-projects": "Mis Proyectos",
-    "/project-info/:projectId"  : "Información del Proyecto",
-    "/project-section-tasks":"Tareas",
-    "/project-info-task/${projectId}/${sectionKey}":"Crear tarea",
-    "/project-info-task/:sectionKey":"Tarea",
-    "/pendings" : "Mis pendientes",
-    "/progress": "Avances de Proyecto",
-    "/material": "Material y pedidos",
-    "/contacts": "Contactos",
-    "/staff-list": "Lista de trabajadores",
-    "/create-employee": "Crear Trabajador",
-    "/employee" : "Trabajador",
-    "/reports": "Report",
-  };
 
-  return pathDir[location.pathname] || "PÁGINA NO ENCONTRADA";
+  const pathDir = [
+    { path: "/login", title: "" },
+    { path: "/create-new-project", title: "Nuevo Proyecto" },
+    { path: "/my-projects", title: "Mis Proyectos" },
+    { path: "/project-info/:projectId", title: "Información del Proyecto" },
+    { path: "/project-section-tasks", title: "Tareas" },
+    { path: "/project-info-task/:projectId/:sectionKey", title: "Crear tarea" },
+    { path: "/project-info-task/:sectionKey", title: "Tarea" },
+    { path: "/pendings", title: "Mis pendientes" },
+    { path: "/progress", title: "Avances de Proyecto" },
+    { path: "/material", title: "Material y pedidos" },
+    { path: "/contacts", title: "Contactos" },
+    { path: "/staff-list", title: "Lista de trabajadores" },
+    { path: "/create-employee", title: "Crear Trabajador" },
+    { path: "/employee", title: "Trabajador" },
+    { path: "/reports", title: "Report" },
+  ];
+
+  const title = pathDir.find(item =>
+    matchPath({ path: item.path, end: false }, location.pathname)
+  );
+
+  return title ? title.title : "PÁGINA NO ENCONTRADA";
 }
-
-

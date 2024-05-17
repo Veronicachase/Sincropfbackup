@@ -6,6 +6,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import IconButton from "@mui/material/IconButton";
+import { HamburgerMenu } from "../components/HamburguerMenu"
 
 export default function Layout() {
   const title = UsePageTitle();
@@ -23,11 +24,13 @@ export default function Layout() {
           textAlign: "center",
           width: "100%",
           display: "flex",
+          justifyContent:"space-between",
           margin: "0 auto",
           paddingTop: "1em",
           paddingBottom: "1em",
         }}
       >
+      <Box> 
         <Typography
           sx={{ typography: { xs: "h6", sm: "h5" } }}
           variant="h6"
@@ -37,9 +40,12 @@ export default function Layout() {
           {title}
         </Typography>
       </Box>
-  
+
+      <Box> <HamburgerMenu  />  </Box>
+      
+      </Box>
       <Outlet />
-  
+     
       <Box
         className="bg-primario"
         sx={{
@@ -113,7 +119,16 @@ export default function Layout() {
                 </Box>
               );
             default:
-              console.log("Dirección no definida en el switch");
+              <Box sx={{display:"flex", justifyContent:"space-around", position:"absolute", bottom:0}} >
+              <IconButton onClick={() => handleNavigate(-1)}>
+                <ArrowBackIosIcon />
+              </IconButton>
+              
+            </Box>
+
+                console.log("Dirección no definida en el switch");
+                 
+              
           }
         })()}
       </Box>
