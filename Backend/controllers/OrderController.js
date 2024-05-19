@@ -54,14 +54,16 @@ const updateOrder = async (req, res) => {
 
 const deleteOrder = async (req, res) => {
     try {
-        const orderId = req.params.orderId;
-        await orderDao.deleteOrder(orderId);
-        res.json({ message: "Pedido eliminado exitosamente" });
+      const { orderId } = req.params;
+      const result = await orderDao.deleteOrder(orderId);
+      if (result.affectedRows === 0) {
+        return res.status(404).send("Pedido no encontrado");
+      }
+      return res.status(200).send("Pedido eliminado correctamente");
     } catch (error) {
-        console.error("Error al eliminar el pedido:", error.message);
-        res.status(500).json({ error: error.message });
+      return res.status(500).send("Error al eliminar el pedido");
     }
-};
+  };
 
 
 

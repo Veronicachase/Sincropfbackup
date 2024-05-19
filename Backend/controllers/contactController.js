@@ -26,9 +26,9 @@ const getContact = async (req, res) => {
     }
 };
 
-const getAllcontacts = async (req, res) => {
+const getAllContacts = async (req, res) => {
     try {
-        const contacts = await contactDao.getAllcontacts();
+        const contacts = await contactDao.getAllContacts();
         if (contacts) {
             res.json(contacts);
         } else {
@@ -65,4 +65,4 @@ const deleteContact = async (req, res) => {
 
 
 
-module.exports = { addContact,deleteContact, updateContact, getContact,getAllcontacts };
+module.exports = { addContact,deleteContact, updateContact, getContact,getAllContacts };

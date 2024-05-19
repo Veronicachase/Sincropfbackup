@@ -11,6 +11,7 @@ const taskRouter =require("./routes/taskRouter");
 const contactRouter =require("./routes/contactRouter");
 const orderRouter = require("./routes/OrderRouter");
 const hoursRouter = require ("./routes/hoursRouter");
+const pendingRouter = require ("./routes/pendingRouter");
 const cors = require('cors');
 const cloudinary = require("./public/cloudinary/cloudinary")
 dotenv.config();
@@ -43,9 +44,10 @@ app.use("/projects", projectRouter);
 app.use("/employees", employeeRouter);
 app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
-app.use ("/contacts",contactRouter)
+app.use ("/allContacts",contactRouter)
 app.use ("/orders",orderRouter)
 app.use ("/hours",hoursRouter)
+app.use ("/pendings",pendingRouter)
 
 
 //servidor

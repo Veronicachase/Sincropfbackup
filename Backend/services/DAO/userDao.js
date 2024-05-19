@@ -33,7 +33,7 @@ userDao.addUser = async (userData) => {
       surname: userData.surname,
       email: userData.email,
       password: md5(userData.password),
-      updateDate: moment().format("YYYY-MM-DD HH:mm:ss"),
+      updateDate: moment().format("YYYY-MM-DD"),
     };
     return await db.query("INSERT INTO users SET ?", userObj, "insert", conn);
   } catch (e) {
@@ -86,7 +86,7 @@ userDao.updateUser = async (id, userData) => {
       surname: userData.surname,
       email: userData.email,
       password: userData.password ? md5(userData.password) : undefined,
-      updateDate: moment().format("YYYY-MM-DD HH:mm:ss"),
+      updateDate: moment().format("YYYY-MM-DD"),
     };
     // Eliminamos los campos que no se van a modificar (no llegan por el body)
     userObj = await removeUndefinedKeys(userObj);

@@ -13,8 +13,8 @@ taskDao.addTask = async (taskData) => {
             taskName: taskData.taskName,
             employeeId: taskData.employeeId,
             taskDescription: taskData.taskDescription,
-            startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
-            endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
+            startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
+            endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             prevImages: JSON.stringify(taskData.prevImages || []),  
             finalImages: JSON.stringify(taskData.finalImages || [])
         };

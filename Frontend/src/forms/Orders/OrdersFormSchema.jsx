@@ -9,19 +9,18 @@ import * as yup from 'yup';
   TypeOfWork: yup.string().oneOf(["construction", "finishings", "installations", "pool", "SolarPanels", "other"]),
   status: yup.string(),
   date: yup.date(),
-  sections: yup.object().shape({
-    livingRoom: yup.boolean(),
-    kitchen: yup.boolean(),
-    hall: yup.boolean(),
-    room: yup.boolean(),
-    bathRoom: yup.boolean(),
-    terrace: yup.boolean(),
-    laundry: yup.boolean(),
-    pool: yup.boolean(),
-    roof: yup.boolean()
-  }),
+  section: yup.object().shape({}).test(
+    'is-valid-sections',
+    'sections must be an object with boolean values',
+    value => {
+      if (typeof value !== 'object' || value === null) {
+        return false;
+      }
+      return Object.values(value).every(val => val === true);
+    }
+  ),
+});
 
-})
 
 
 

@@ -15,7 +15,7 @@ export default function UsePageTitle() {
     { path: "/pendings", title: "Mis pendientes" },
     { path: "/progress", title: "Avances de Proyecto" },
     { path: "/material", title: "Material y pedidos" },
-    { path: "/contacts", title: "Contactos" },
+    { path: "/allContacts", title: "Contactos" },
     { path: "/staff-list", title: "Lista de trabajadores" },
     { path: "/create-employee", title: "Crear Trabajador" },
     { path: "/employee", title: "Trabajador" },

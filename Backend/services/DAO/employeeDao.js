@@ -48,7 +48,7 @@ employeeDao.addEmployee = async (employeeData) => {
     conn = await db.createConnection();
     
     let employeeObj = {
-      date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      date: moment().format("YYYY-MM-DD"),
       name: employeeData.name,
       position: employeeData.position,
       project: employeeData.project,
@@ -77,7 +77,7 @@ employeeDao.updateEmployee = async (employeeId, employeeData) => {
     conn = await db.createConnection();
    
       let employeeObj = {
-        date: moment().format("YYYY-MM-DD HH:mm:ss"),
+        date: moment().format("YYYY-MM-DD"),
         name: employeeData.name,
         position: employeeData.position,
         project: employeeData.project,

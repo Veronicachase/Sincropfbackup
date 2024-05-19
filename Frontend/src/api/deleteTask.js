@@ -1,4 +1,4 @@
-const deleteTask = async (taskId) => {
+export const deleteTask = async (taskId) => {
     try {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: 'DELETE',
@@ -16,4 +16,4 @@ const deleteTask = async (taskId) => {
       alert('Error al eliminar la tarea. Por favor, intenta de nuevo.');
     }
   };
-  export default deleteTask
+  

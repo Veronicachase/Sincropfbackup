@@ -47,9 +47,10 @@ export default  function MyProjects() {
               onClick={() => handleClickProject(project.projectId)}
             >
               <IconColors/>
-              <Box sx={{textAlign:"left"}}> 
+              <Box sx={{textAlign:"left", display:"flex", gap:3, alignItems:"center"}}> 
+              <Typography variant="body2">{project.startDate}</Typography>
                 <Typography variant="subtitle1">{project.projectName}</Typography>
-                <Typography variant="body2">{project.startDate}</Typography>
+                
               </Box>
               <Box sx={{display:"flex", justifyContent:"space-between"}}> 
               <Box sx={{ display: "flex", flexDirection:"column", marginRight:"2em" }}> 

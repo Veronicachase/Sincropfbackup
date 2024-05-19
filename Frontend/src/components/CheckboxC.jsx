@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Checkbox, FormControlLabel, FormGroup, Grid, Box } from '@mui/material';
 
 export default function CheckboxC({ setFieldValue, values }) {
@@ -16,6 +16,7 @@ export default function CheckboxC({ setFieldValue, values }) {
 
   const handleChange = (name) => (event) => {
     const newSections = { ...values.sections, [name]: event.target.checked };
+    
     setFieldValue('sections', newSections);
   };
 
@@ -28,7 +29,7 @@ export default function CheckboxC({ setFieldValue, values }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={values.sections[seccion.name]}
+                    checked={values.sections[seccion.name] || false}
                     onChange={handleChange(seccion.name)}
                   />
                 }
@@ -41,3 +42,9 @@ export default function CheckboxC({ setFieldValue, values }) {
     </FormGroup>
   );
 }
+CheckboxC.propTypes = {
+  setFieldValue: PropTypes.func.isRequired,
+  values: PropTypes.shape({
+    sections: PropTypes.object.isRequired,
+  }).isRequired,
+};

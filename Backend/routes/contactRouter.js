@@ -1,9 +1,9 @@
 const express = require("express");
-const { addContact,getContact,getAllcontacts, deleteContact, updateContact } = require("../controllers/contactController");
+const { addContact,getContact,getAllContacts, deleteContact, updateContact } = require("../controllers/contactController");
 const contactRouter = express.Router();
 
 contactRouter.get("/:contactId",getContact );
-contactRouter.get("/",getAllcontacts );
+contactRouter.get("/",getAllContacts );
 contactRouter.post("/", addContact);
 contactRouter.delete("/:contactId", deleteContact);
 contactRouter.patch("/:contactId", updateContact);

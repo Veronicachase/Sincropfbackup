@@ -28,6 +28,7 @@ import ForgotPassword from './views/forgotPassword/ForgotPassword'
 import ProjectInfoTasks from "./views/projects/ProjectInfoTask";
 
 
+
 //import BritishFlag from '../../assets/images/BritishFlag.png';
 
 import { Navigate } from "react-router-dom";
@@ -54,8 +55,9 @@ export default function App() {
               <Route path="/create-new-project" element={<CreateNewProject />} />
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
-              <Route path="/project-section-tasks//:projectId/:sectionKey" element={< ProjectSectionTasks/>} />
+              <Route path="/project-section-tasks/:projectId/:sectionKey" element={<ProjectSectionTasks />} />
               <Route path="/project-create-task" element={< ProjectCreateTask/>} />
+              <Route path="/project-create-task/:projectId/:sectionKey" element={< ProjectCreateTask/>} />
               <Route path="/project-info-task/:projectId/:sectionKey" element={<ProjectInfoTasks />} />
               <Route path="/pendings" element={<Pendings />} />
               <Route path="/progress" element={<Progress />} />
@@ -67,8 +69,8 @@ export default function App() {
               <Route path="/contact-details/:contactId" element={<ContactDetails />} />
               <Route path="/staff-list" element={<StaffList />} />
               <Route path="/create-employee" element={<CreateEmployee />} />
-              <Route  element = <CreatePdfContextProvider/>>  
-              <Route path="/employee" element={<Employee/>} />
+              <Route  element = <CreatePdfContextProvider/>> 
+              <Route path="/employee/:employeeId" element={<Employee/>} />
               </Route>
               <Route path="/reports" element={<Reports />} />
             </Route>

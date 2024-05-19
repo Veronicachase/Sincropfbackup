@@ -5,10 +5,10 @@ export const getAllOrders = async () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log("Pedidos cargadas correctamente:", data);
+        console.log("Pedidos cargados correctamente:", data);
         return data;
       } else {
-        throw new Error('Fallo en cargar las pedidos: ' + response.status);
+        throw new Error('Fallo en cargar los pedidos: ' + response.status);
       }
     } catch (error) {
       console.error("Error al obtener tus pedidos:", error);
