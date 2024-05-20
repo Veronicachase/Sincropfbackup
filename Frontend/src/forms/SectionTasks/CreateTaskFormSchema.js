@@ -1,13 +1,25 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 
-export const CreateTaskFormSchema=yup.object().shape({
-    task:yup.string(),
-    employeeName:yup.string(),
-    taskDescription:yup.string(),
-    startDate: yup.date(),
-    endDate: yup.date(),
-    files:yup.string(),
-    prevImages:yup.string(),
-    finalImages:yup.string()
-})
-   
+export const CreateTaskFormSchema = yup.object().shape({
+  taskName: yup.string().required("El nombre de la tarea es obligatorio"),
+  employeeId: yup.number(),
+  employeeName: yup.string(),
+  projectId: yup.number(),
+  sectionKey: yup.string(),
+  taskDescription: yup.string(),
+  startDate: yup
+    .date()
+    .max(
+      yup.ref("endDate"),
+      "La fecha de inicio debe ser antes de la fecha de entrega"
+    ),
+  endDate: yup
+    .date()
+    .min(
+      yup.ref("startDate"),
+      "La fecha de entrega debe ser después de la fecha de inicio"
+    ),
+  status: yup.string().oneOf(["noIniciado", "Iniciado", "Terminado"]),
+  prevImages: yup.array().of(yup.string().url()),
+  finalImages: yup.array().of(yup.string().url()),
+});

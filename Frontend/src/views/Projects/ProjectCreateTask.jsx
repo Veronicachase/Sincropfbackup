@@ -1,7 +1,7 @@
 import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 
 import { Formik, Form, Field } from "formik";
-import * as yup from "yup";
+import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema"
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProjectById } from "../../api/getProjectById";
@@ -42,30 +42,7 @@ export default function ProjectCreateTask() {
     return <div>Loading...</div>;
   }
 
-  const validationSchema = yup.object({
-    taskName: yup.string().required("El nombre de la tarea es obligatorio"),
-    employeeName: yup.string(),
-    taskDescription: yup.string(),
-    startDate: yup
-      .date()
-
-      .max(
-        yup.ref("endDate"),
-        "La fecha de inicio debe ser antes de la fecha de entrega"
-      ),
-    endDate: yup
-      .date()
-
-      .min(
-        yup.ref("startDate"),
-        "La fecha de entrega debe ser después de la fecha de inicio"
-      ),
-    projectId: yup.string(),
-    sectionKey: yup.string(),
-    status: yup.string(),
-    files: yup.array(),
-  });
-
+  
   return (
     <Box>
       <Box sx={{ marginTop: "1em" }}>
@@ -76,18 +53,20 @@ export default function ProjectCreateTask() {
       </Box>
       <Formik
         initialValues={{
+
           taskName: "",
+          employeeId:"",
           employeeName: "",
           taskDescription: "",
-          employeeId:"",
+          projectId: projectId,
+          sectionKey: projectData ? projectData.section : "",
           startDate: "",
           endDate: "",
           status: "noIniciado",
-          projectId: projectId,
-          sectionKey: projectData ? projectData.section : "",
-          files: [],
+          prevImages: [],
+          finalImages:[]
         }}
-        validationSchema={validationSchema}
+        validationSchema={CreateTaskFormSchema}
         onSubmit={(values, actions) => {
           handleSubmitTask(values)
             .then(() =>

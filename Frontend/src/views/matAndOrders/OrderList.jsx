@@ -8,7 +8,6 @@ import SimpleSnackbar from "../../components/SnackBar";
 import AlertDialog from "../../components/AlertDialog";
 import IconColorsOrder from "../../components/IconColorsOrder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import EditIcon from "@mui/icons-material/Edit";
@@ -213,7 +212,7 @@ function OrderList() {
                    
                   }}
                 >
-                  Agregar Tarea <AddCircleIcon />
+                  Agregar pedido <AddCircleIcon />
                 </Button>
               </Box>
                 <Button
