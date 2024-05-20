@@ -10,7 +10,7 @@ export default function UsePageTitle() {
     { path: "/my-projects", title: "Mis Proyectos" },
     { path: "/project-info/:projectId", title: "Información del Proyecto" },
     { path: "/project-section-tasks", title: "Tareas" },
-    { path: "/project-info-task/:projectId/:sectionKey", title: "Crear tarea" },
+    { path: "/project-create-task/:projectId/:sectionKey", title: "Crear tarea" },
     { path: "/project-info-task/:sectionKey", title: "Tarea" },
     { path: "/pendings", title: "Mis pendientes" },
     { path: "/progress", title: "Avances de Proyecto" },
@@ -19,7 +19,7 @@ export default function UsePageTitle() {
     { path: "/staff-list", title: "Lista de trabajadores" },
     { path: "/create-employee", title: "Crear Trabajador" },
     { path: "/employee", title: "Trabajador" },
-    { path: "/reports", title: "Report" },
+    { path: "/reports", title: "Reporte" },
   ];
 
   const title = pathDir.find(item =>

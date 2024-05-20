@@ -11,10 +11,10 @@ const addContact = async (req, res) => {
     }
 };
 
-const getContact = async (req, res) => {
+const getContactById = async (req, res) => {
     try {
         const contactId = req.params.contactId;
-        const contact = await contactDao.getContact(contactId);
+        const contact = await contactDao.getContactById(contactId);
         if (contact) {
             res.json(contact);
         } else {
@@ -65,4 +65,4 @@ const deleteContact = async (req, res) => {
 
 
 
-module.exports = { addContact,deleteContact, updateContact, getContact,getAllContacts };
+module.exports = { addContact,deleteContact, updateContact, getContactById,getAllContacts };

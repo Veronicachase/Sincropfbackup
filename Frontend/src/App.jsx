@@ -7,7 +7,7 @@ import CreateNewProject from './views/projects/CreateNewProject'
 import MyProjects from './views/projects/MyProjects'
 import ProjectInfo from './views/projects/ProjectInfo'
 import Pendings from './views/Pendings/Pendings'
-import Progress from './views/progress/Progress'
+//import Progress from './views/progress/Progress'
 import CreateOrder from './views/matAndOrders/CreateOrder'
 import OrderList from './views/matAndOrders/OrderList'
 import OrderDetails from './views/matAndOrders/OrderDetails'
@@ -25,7 +25,7 @@ import Home from './views/home/Home'
 import ProjectSectionTasks from "./views/projects/ProjectSectionTasks"
 import ProjectCreateTask from "./views/projects/ProjectCreateTask"
 import ForgotPassword from './views/forgotPassword/ForgotPassword'
-import ProjectInfoTasks from "./views/projects/ProjectInfoTask";
+import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 
 
 
@@ -56,11 +56,12 @@ export default function App() {
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
               <Route path="/project-section-tasks/:projectId/:sectionKey" element={<ProjectSectionTasks />} />
-              <Route path="/project-create-task" element={< ProjectCreateTask/>} />
+              {/*<Route path="/project-create-task" element={< ProjectCreateTask/>} />*/}
               <Route path="/project-create-task/:projectId/:sectionKey" element={< ProjectCreateTask/>} />
-              <Route path="/project-info-task/:projectId/:sectionKey" element={<ProjectInfoTasks />} />
+  {/*<Route path="/project-info-task/:projectId/:sectionKey" element={<ProjectInfoTasks />} />*/}
+              <Route path="/edit-task/:taskId" element={<TaskInfoAndEdit />} />
               <Route path="/pendings" element={<Pendings />} />
-              <Route path="/progress" element={<Progress />} />
+              {/*<Route path="/progress" element={<Progress />} />*/}
               <Route path="/create-order" element={<CreateOrder />} />
               <Route path="/order-list" element={<OrderList />} />
               <Route path="/order-details/:orderId" element={<OrderDetails />} />

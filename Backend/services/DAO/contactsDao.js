@@ -28,7 +28,7 @@ contactDao.addContact = async (contactData) => {
   }
 };
 
-contactDao.getContact = async (contactId) => {
+contactDao.getContactById = async (contactId) => {
   let conn = null;
   try {
     conn = await db.createConnection();

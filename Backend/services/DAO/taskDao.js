@@ -12,6 +12,10 @@ taskDao.addTask = async (taskData) => {
         let taskObj = {
             taskName: taskData.taskName,
             employeeId: taskData.employeeId,
+            employeeName:taskData.employeeName,
+            projectId:taskData.projectId,
+            status:taskData.status,
+            section:taskData.sectionKey,
             taskDescription: taskData.taskDescription,
             startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),

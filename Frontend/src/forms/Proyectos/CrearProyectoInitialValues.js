@@ -25,7 +25,6 @@ export const initialValues = {
     pool: false,
     roof: false
   },
-  addedSection: "",
   createTask: "",
   projectDescription: "",
   status: "noIniciado",

@@ -28,6 +28,7 @@ export default function ProjectCreateTask() {
 
       try {
         const employeeData = await getEmployees();
+        console.log(employeeData)
         setEmployees(employeeData);
       } catch (error) {
         console.error("Error al obtener los datos de los trabajadores:", error);
@@ -78,6 +79,7 @@ export default function ProjectCreateTask() {
           taskName: "",
           employeeName: "",
           taskDescription: "",
+          employeeId:"",
           startDate: "",
           endDate: "",
           status: "noIniciado",

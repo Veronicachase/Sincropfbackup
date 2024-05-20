@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
-import { Box, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import { getContactById,  } from '../../api/getContactById';
-import { updateContactById }from '../../api/updateContactById'
+import { getContactById } from '../../api/getContactById';
+import { updateContactById } from '../../api/updateContactById';
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
 
 const defaultInitialValues = {
@@ -17,37 +17,38 @@ const defaultInitialValues = {
   address: "",
   email: "",
   phone: "",
-  comments: ""
+  comments: "",
+  mobile: ""
 };
 
 export default function ContactDetails() {
   const { contactId } = useParams();
-  const [contact, setContact] = useState("");
+  const [contact, setContact] = useState({});
   const [formValues, setFormValues] = useState(defaultInitialValues);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    if (contactId) {
-      getContactById(contactId)
-        .then((contactData) => {
-          if (contactData) {
-            setFormValues({ ...defaultInitialValues, ...contactData });
-            setContact(contactData);
-          } else {
-            console.log("Error al recuperar los datos del contacto");
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error al cargar datos del contacto:", error);
-          setLoading(false);
-        });
-    }
+    const fetchContacts = async () => {
+      setLoading(true);
+      try {
+        if (contactId) {
+          const contactById = await getContactById(contactId);
+          setContact(contactById);
+          setFormValues({ ...defaultInitialValues, ...contactById });
+        } else {
+          console.log("Error al recuperar los datos del contacto");
+        }
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchContacts();
   }, [contactId]);
 
   if (loading) return <p>Cargando datos de contacto...</p>;
-  if (!contact) return <p>No se encontró el contacto</p>;
+  if (!contact.contactId) return <p>No se encontró el contacto</p>;
 
   const handleSubmit = async (values) => {
     try {
@@ -71,29 +72,43 @@ export default function ContactDetails() {
       >
         {formik => (
           <Form>
-            <Grid>
-              <Field as={TextField} name="phone" />
-              <a href={`tel:${formik.values.phone}`}><PhoneIcon /></a>
+            <Grid sx={{marginBottom:"2em",marginTop:"2em"}} >
+              <Field as={TextField} name="phone" label="Teléfono" />
+              {formik.values.phone && <a href={`tel:${formik.values.phone}`}><PhoneIcon sx={{color:"#84C7AE"}} /></a>}
             </Grid>
-            <Grid>
-              <Field as={TextField} name="mobil" />
-              <a href={`https://wa.me/${formik.values.mobil}`}><WhatsAppIcon /></a>
+            <Grid sx={{marginBottom:"2em"}}>
+              <Field as={TextField} name="mobile" label="Móvil" />
+              {formik.values.mobile && <a href={`https://wa.me/${formik.values.mobile}`}><WhatsAppIcon sx={{color:"#84C7AE"}} /></a>}
             </Grid>
-            <Grid>
-              <Field as={TextField} name="email" />
-              <a href={`mailto:${formik.values.email}`}><EmailIcon /></a>
+            <Grid sx={{marginBottom:"2em"}}>
+              <Field as={TextField} name="email" label="Email" />
+              {formik.values.email && <a href={`mailto:${formik.values.email}`}><EmailIcon  sx={{color:"#84C7AE"}}/></a>}
             </Grid>
-            <Grid>
-              <Typography variant='body'>{formik.values.address}</Typography>
-              <Field as={TextField} name="address" />
-              <a href={`https://maps.google.com/?q=${formik.values.address}`}><FmdGoodIcon /></a>
+            <Grid sx={{marginBottom:"2em"}}>
+              <Field as={TextField} name="address" label="Dirección" />
+              {formik.values.address && <a href={`https://maps.google.com/?q=${formik.values.address} `}><FmdGoodIcon sx={{color:"#84C7AE"}}  /></a>}
             </Grid>
-            <Grid>
-              <Field as={TextField} name="comments" />
+            <Grid sx={{marginBottom:"2em"}}>
+              <Field as={TextField} name="comments" label="Comentarios" />
             </Grid>
+
+            <Button sx={{color:"#fff", backgroundColor:"#84C7AE", marginBottom:"2em"}}  type='submit'> Guardar Cambios </Button>
           </Form>
         )}
       </Formik>
     </Box>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 export const getTaskById = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:3000/task/${taskId}`, {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "GET",
       });
       if (response.ok) {

@@ -33,15 +33,16 @@ projectDao.addProject = async (projectData) => {
                 terrace: projectData.terrace,
                 laundry: projectData.laundry,
                 pool: projectData.pool,
-                roof: projectData.roof,
-                addedSection: projectData.addedSection,
+                roof: projectData.roof,   
             },
+            
             hiringCompany: projectData.hiringCompany,
             createTask: projectData.createTask,
             area: projectData.area,
             projectDescription: projectData.projectDescription,
             taskDescription: projectData.taskDescription,
         };
+        console.log(projectObj)
         projectObj = await removeUndefinedKeys(projectObj);
         await db.query("INSERT INTO projects SET ?",   projectObj,"insert", conn);
         return projectObj.projectId; 
@@ -51,8 +52,9 @@ projectDao.addProject = async (projectData) => {
     } finally {
         if (conn) await conn.end();
     }
+   
 };
-
+ 
 
 
 projectDao.getProject = async (projectId) => {

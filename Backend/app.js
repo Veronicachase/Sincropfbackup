@@ -44,7 +44,7 @@ app.use("/projects", projectRouter);
 app.use("/employees", employeeRouter);
 app.use("/tasks", taskRouter);
 app.use ("/files",filesRouter)
-app.use ("/allContacts",contactRouter)
+app.use ("/contacts",contactRouter)
 app.use ("/orders",orderRouter)
 app.use ("/hours",hoursRouter)
 app.use ("/pendings",pendingRouter)

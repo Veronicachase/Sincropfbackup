@@ -20,7 +20,7 @@ export default function Contacts() {
         const allContacts = await getAllContacts();
         console.log("Contactos obtenidos:", allContacts);
 
-        // Agrupar contactos por categoría
+        // aquí los agrupo por categoría para que pueda desplagarlos por cada una
         const groupedContacts = allContacts.reduce((acc, contact) => {
           const category = contact.category.trim();
           if (!acc[category]) {
@@ -58,12 +58,14 @@ export default function Contacts() {
           <Collapse in={open[category]} timeout="auto" unmountOnExit>
             <List>
               {data[category].map((contactItem) => (
+                
                 <ListItem key={contactItem.contactId} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <ListItemText primary={contactItem.contactName} />
-                  <IconButton onClick={() => navigate(`/contact-details/${contactItem.contactId}`)}>
-                    <ArrowForwardIosIcon />
+                  <IconButton  onClick={() => navigate(`/contact-details/${contactItem.contactId}`)}>
+                    <ArrowForwardIosIcon  />
                   </IconButton>
                 </ListItem>
+               
               ))}
             </List>
           </Collapse>
