@@ -15,10 +15,11 @@ taskDao.addTask = async (taskData) => {
             employeeName: taskData.employeeName,
             projectId: taskData.projectId,
             status: taskData.status,
-            sectionKey: taskData.sectionKey,
+            sectionKey: taskData.section.sectionKey || '',
             taskDescription: taskData.taskDescription,
             startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
+            pdf: JSON.stringify(taskData.prevImages || []), 
             prevImages: JSON.stringify(taskData.prevImages || []),  
             finalImages: JSON.stringify(taskData.finalImages || [])
         };
@@ -28,10 +29,9 @@ taskDao.addTask = async (taskData) => {
         taskObj = await removeUndefinedKeys(taskObj);
 
         
-        const sql = "INSERT INTO tasks (taskName, employeeId, taskDescription, startDate, endDate, prevImages, finalImages) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        const values = [taskObj.taskName, taskObj.employeeId, taskObj.taskDescription, taskObj.startDate, taskObj.endDate, taskObj.prevImages, taskObj.finalImages];
+        const sql = "INSERT INTO tasks SET ?";
 
-        const result = await db.query(sql, values, "insert", conn);
+        const result = await db.query(sql, taskObj, "insert", conn);
         return result.insertId;
     } catch (e) {
         console.error("Error during task creation: ", e.message);
@@ -102,11 +102,26 @@ taskDao.getTaskById = async (taskId) => {
 taskDao.updateTask = async (taskId, data) => {
     let conn = null;
     try {
-      
+        if (data.sections) {
+            data.sections = JSON.stringify(data.sections);
+        }
+        if (data.pdf) {
+            data.pdf = JSON.stringify(data.pdf);
+        }
+        if (data.prevImages) {
+            data.prevImages = JSON.stringify(data.prevImages);
+        }
+        if (data.finalImages) {
+            data.finalImages = JSON.stringify(data.finalImages);
+        }
+
+        if (data.sectionKey === undefined) {
+            data.sectionKey = '';
+        }
         conn = await db.createConnection();
-        const cleanData=removeUndefinedKeys(data)
-        const sql= ("UPDATE tasks SET ? WHERE taskId = ?")
-        await db.query(sql, [data, taskId],"update",  conn);
+        const cleanData = await removeUndefinedKeys(data);
+        const sql = "UPDATE tasks SET ? WHERE taskId = ?";
+        await db.query(sql, [cleanData, parseInt(taskId)], "update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;
@@ -114,6 +129,7 @@ taskDao.updateTask = async (taskId, data) => {
         if (conn) await conn.end();
     }
 };
+
 
 taskDao.deleteTask = async (taskId) => {
     let conn = null;

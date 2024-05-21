@@ -1,4 +1,3 @@
-
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +11,10 @@ import Select from "../../ui/Select";
 import "../../assets/styles/estilosGenerales.css";
 import "./createNewProject.css";
 import { handleSubmitProject } from "../../api/handlerSubmitProject";
-import { ProjectTextField, ProjectTextField2} from "../../configs/projectTextField"
-
+import {
+  ProjectTextField,
+  ProjectTextField2,
+} from "../../configs/projectTextField";
 
 function CreateNewProject() {
   const navigate = useNavigate();
@@ -40,10 +41,9 @@ function CreateNewProject() {
         initialValues={initialValues}
         validationSchema={NewProjectFormSchema}
         onSubmit={(values, actions) => {
-          console.log("Formulario enviado");
+          console.log("Formulario enviado", values);
           handleSubmitProject(values)
             .then(() => {
-              console.log(values);
               actions.setSubmitting(false);
               actions.resetForm();
               alert("Proyecto creado correctamente");
@@ -82,7 +82,8 @@ function CreateNewProject() {
                   margin={"auto"}
                 >
                   {ProjectTextField.map((field) => {
-                    const gridSize = field.name === "addressDrescription" ? 12 : 6; 
+                    const gridSize =
+                      field.name === "addressDrescription" ? 12 : 6;
 
                     return (
                       <Grid key={field.name} item xs={12} sm={gridSize}>
@@ -108,14 +109,14 @@ function CreateNewProject() {
                               },
                             },
                             "& .MuiInputBase-input::placeholder": {
-                              color: "rgba(0, 0, 0, 0.6)", 
+                              color: "rgba(0, 0, 0, 0.6)",
                             },
                           }}
                           InputLabelProps={{
                             className: "my-custom-label",
                             sx: {
                               right: 0,
-                              fontSize: "0.875rem", 
+                              fontSize: "0.875rem",
                             },
                           }}
                         />
@@ -142,7 +143,9 @@ function CreateNewProject() {
                     <option value="">Selecciona un tipo</option>
                     <option value="construction">Construcción</option>
                     <option value="finishings">Repasos</option>
-                    <option value="installations">Instalación de equipos</option>
+                    <option value="installations">
+                      Instalación de equipos
+                    </option>
                     <option value="pool">Piscinas</option>
                     <option value="SolarPanels">
                       Instalación de paneles solares
@@ -170,7 +173,11 @@ function CreateNewProject() {
 
                 <Grid container spacing={2} marginTop={3} margin={"auto"}>
                   {ProjectTextField2.map((field) => {
-                    const gridSize = field.name === "projectDescription" || field.name === "createTask"   ? 12 : 6; 
+                    const gridSize =
+                      field.name === "projectDescription" ||
+                      field.name === "createTask"
+                        ? 12
+                        : 6;
 
                     return (
                       <Grid key={field.name} item xs={12} sm={gridSize}>
@@ -196,14 +203,14 @@ function CreateNewProject() {
                               },
                             },
                             "& .MuiInputBase-input::placeholder": {
-                              color: "rgba(0, 0, 0, 0.6)", 
+                              color: "rgba(0, 0, 0, 0.6)",
                             },
                           }}
                           InputLabelProps={{
                             className: "my-custom-label",
                             sx: {
-                              right: 0, 
-                              fontSize: "0.875rem", 
+                              right: 0,
+                              fontSize: "0.875rem",
                             },
                           }}
                         />
@@ -227,19 +234,19 @@ function CreateNewProject() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Button 
+                  <Button
                     variant="contained"
                     component="label"
                     sx={{
                       backgroundColor: "#84C7AE",
                       color: "#fff",
                       borderRadius: "10px",
-                      marginTop:"2em"
+                      marginTop: "2em",
                     }}
                   >
                     Agregar Imagen
                     <input type="file" hidden onChange={handleFileChange} />
-                  </Button >
+                  </Button>
                   {image && (
                     <img
                       src={image}
@@ -255,7 +262,11 @@ function CreateNewProject() {
 
                 <Grid item xs={8}>
                   <Button
-                    sx={{ backgroundColor: "#84C7AE", color: "#fff" , marginBottom:"2em" }}
+                    sx={{
+                      backgroundColor: "#84C7AE",
+                      color: "#fff",
+                      marginBottom: "2em",
+                    }}
                     type="submit"
                     disabled={isSubmitting}
                   >
@@ -264,7 +275,7 @@ function CreateNewProject() {
                 </Grid>
               </Grid>
             </Box>
-           {/*<pre>{JSON.stringify({ values, errors }, null, 2)}</pre>    */} 
+            {/*<pre>{JSON.stringify({ values, errors }, null, 2)}</pre>    */}
           </Form>
         )}
       </Formik>
@@ -273,22 +284,6 @@ function CreateNewProject() {
 }
 
 export default CreateNewProject;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { Formik, Form } from "formik";
 // import { useState } from "react";
@@ -330,7 +325,7 @@ export default CreateNewProject;
 //   };
 
 //   return (
-//     <Box >  
+//     <Box >
 //     <Formik
 //       initialValues={initialValues}
 //       validationSchema={NewProjectFormSchema}
@@ -521,7 +516,6 @@ export default CreateNewProject;
 //                 )}
 //               </Grid>
 
-
 //               <Grid item xs={8}>
 //                 <Button sx={{backgroundColor:"#84C7AE", color:"#fff", marginBottom:"2em"}} type="submit" disabled={isSubmitting}>
 //                   Crear Proyecto
@@ -529,7 +523,7 @@ export default CreateNewProject;
 //               </Grid>
 //             </Grid>
 //           </Box>
-//           {/* <pre>{JSON.stringify({ values, errors }, null, 2)}</pre>  */} 
+//           {/* <pre>{JSON.stringify({ values, errors }, null, 2)}</pre>  */}
 //         </Form>
 //       )}
 //     </Formik>

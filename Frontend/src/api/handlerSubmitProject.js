@@ -1,14 +1,12 @@
-export const handleSubmitProject = async (values) => {
-    const formData = {...values};
-    delete formData.files;
-  
+export const handleSubmitProject = async (values) => {    
+  console.log('se ejecuta el submit');
     try {
       const response = await fetch("http://localhost:3000/projects", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(values),
       });
       if (response.ok) {
         const data = await response.json();

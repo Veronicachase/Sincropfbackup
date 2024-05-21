@@ -1,6 +1,7 @@
 const projectDao = require("../services/DAO/projectDao");
 const path = require("path");
 
+
 const addProject = async (req, res) => {
     try {
         const projectId = await projectDao.addProject(req.body);

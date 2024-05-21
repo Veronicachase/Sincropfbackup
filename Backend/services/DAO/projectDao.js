@@ -7,45 +7,43 @@ const projectDao = {};
 projectDao.addProject = async (projectData) => {
     let conn = null;
     try {
+        console.log(projectData,"projectData")
         conn = await db.createConnection();
         let projectObj = {
-            projectName: projectData.projectName,
+            projectName: "test",
+            identifier:projectData.identifier,
             addressDescription: projectData.addressDescription,
             address: projectData.address,
             block: projectData.block,
-            portal: projectData.portal,
             unit: projectData.unit,
             zipCode: projectData.zipCode,
             province: projectData.province,
             startDate: moment().format("YYYY-MM-DD"),
             endDate: moment().format("YYYY-MM-DD"),
             map: projectData.map,
-            projectDetails: projectData.projectDetails,
+            projectDescription: projectData.projectDescription,
             typeOfWork: projectData.typeOfWork,
             constructionType: projectData.constructionType,
-            projectId: projectData.projectId,
             sections: {
-                livingRoom: projectData.livingRoom,
-                kitchen: projectData.kitchen,
-                hall: projectData.hall,
-                room: projectData.room1,
-                bathRoom: projectData.bathRoom,
-                terrace: projectData.terrace,
-                laundry: projectData.laundry,
-                pool: projectData.pool,
-                roof: projectData.roof,   
+                livingRoom: projectData.sections.livingRoom,
+                kitchen: projectData.sections.kitchen,
+                hall: projectData.sections.hall,
+                room: projectData.sections.room,
+                bathRoom: projectData.sections.bathRoom,
+                terrace: projectData.sections.terrace,
+                laundry: projectData.sections.laundry,
+                pool: projectData.sections.pool,
+                roof: projectData.sections.roof,   
             },
             
             hiringCompany: projectData.hiringCompany,
-            createTask: projectData.createTask,
-            area: projectData.area,
-            projectDescription: projectData.projectDescription,
-            taskDescription: projectData.taskDescription,
+            createTask: projectData.createTask,            
         };
-        console.log(projectObj)
-        projectObj = await removeUndefinedKeys(projectObj);
-        await db.query("INSERT INTO projects SET ?",   projectObj,"insert", conn);
-        return projectObj.projectId; 
+
+        let data = {...projectObj, sections: JSON.stringify(projectObj.sections)}
+        data = await removeUndefinedKeys(data);
+        await db.query("INSERT INTO projects SET ?",   data,"insert", conn);
+        return data.projectId; 
     } catch (e) {
         console.error(e.message);
         throw e;
@@ -60,6 +58,7 @@ projectDao.addProject = async (projectData) => {
 projectDao.getProject = async (projectId) => {
     let conn = null;
     try {
+        
         conn = await db.createConnection();
         const results = await db.query("SELECT * FROM projects WHERE projectId = ?", [projectId],"select", conn);
         if (results.length) {
@@ -95,10 +94,15 @@ projectDao.getAllProjects = async () => {
 projectDao.updateProject = async (projectId, data) => {
     let conn = null;
     try {
-      
+        
+        if (data.sections) {
+            data.sections = JSON.stringify(data.sections);
+        }
+
+        const cleanData = removeUndefinedKeys(data);
         conn = await db.createConnection();
-        const cleanData=removeUndefinedKeys(data)
-        await db.query("UPDATE projects SET ? WHERE projectId = ?", [data, projectId],"update", conn);
+
+        await db.query("UPDATE projects SET ? WHERE projectId = ?", [cleanData, projectId], "update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;

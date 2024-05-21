@@ -2,10 +2,16 @@
   max-width: 1280px;
   box-sizing: border-box;
   text-align: center;
+ 
   
 }
 
 .none{
-
+  
   color: #f0efef;
+}
+
+body{
+
+  background-color:#84C7AE;
 }

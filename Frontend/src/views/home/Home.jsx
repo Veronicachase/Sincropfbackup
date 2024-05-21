@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { MenuOptionsList } from "../../components/MenuOptionsList"
 
@@ -23,15 +23,19 @@ export default function HomeOptions() {
                 sx={{
                 
                   width: "100%",
-                  height: "5em",
+                  height: "8em",
                   boxShadow: "1px 2px 3px #ccc",
                   display: "flex",
                   justifyContent:"center",
-                  backgroundColor:"#84C7AE",
+                  backgroundColor:"#ffffff4d",
                   borderRadius:"5px",
-                  padding: "1em .5em",
+                  padding: "2em .2em",
                   color:"#021F59",
-                  fontWeight:"Bold"
+                  transition: 'transform 0.3s',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                      },
+                 
                 }}
               >
                 <Link
@@ -45,7 +49,7 @@ export default function HomeOptions() {
                     justifyContent: "center",
                   }}
                 >
-                <span style={{ marginLeft: "10px" }}>{option.name}</span>
+                <Typography variant="h5" >{option.name} </Typography>
                   {option.icon }{" "}
                   
                 </Link>

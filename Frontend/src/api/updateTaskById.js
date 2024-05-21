@@ -9,6 +9,7 @@ export const updateTaskById = async (taskId, taskData) => {
       });
   
       if (!response.ok) {
+        const errorData = await response.json();
         throw new Error('No se han podido actualizar los cambios en update Task'); 
       }
   

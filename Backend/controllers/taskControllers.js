@@ -3,13 +3,26 @@ const path = require("path");
 
 const addTask = async (req, res) => {
     try {
-        const taskId = await taskDao.addTask(req.body);
-        res.status(201).json({ message: "Tarea creada exitosamente", taskId });
+      const { files } = req;
+      const taskData = { ...req.body };
+  
+      if (files) {
+        if (files.prevImages) {
+          taskData.prevImages = files.prevImages.map(file => file.path);
+        }
+        if (files.finalImages) {
+          taskData.finalImages = files.finalImages.map(file => file.path);
+        }
+      }
+  
+      const taskId = await taskDao.addTask(taskData);
+      res.status(201).json({ message: "Tarea creada exitosamente", taskId });
     } catch (error) {
-        console.error("Error al agregar la tarea:", error.message);
-        res.status(500).json({ error: error.message });
+      console.error("Error al agregar la tarea:", error.message);
+      res.status(500).json({ error: error.message });
     }
-};
+  };
+  
 
 const getTaskById = async (req, res) => {
     try {
@@ -57,19 +70,28 @@ const getTasksBySection = async (req, res) => {
     }
 };
 
-
-
 const updateTask = async (req, res) => {
     try {
-        const taskId = req.params.taskId;
-        const updatedData = req.body;
-        await taskDao.updateTask(taskId, updatedData);
-        res.json({ message: "Tarea actualizada exitosamente" });
+      const { files } = req;
+      const { taskId } = req.params;
+      const taskData = { ...req.body };
+  
+      if (files) {
+        if (files.prevImages) {
+          taskData.prevImages = files.prevImages.map(file => file.path);
+        }
+        if (files.finalImages) {
+          taskData.finalImages = files.finalImages.map(file => file.path);
+        }
+      }
+  
+      await taskDao.updateTask(taskId, taskData);
+      res.status(200).json({ message: "Tarea actualizada exitosamente" });
     } catch (error) {
-        console.error("Error al actualizar la tarea:", error.message);
-        res.status(500).json({ error: error.message });
+      console.error("Error al actualizar la tarea:", error.message);
+      res.status(500).json({ error: error.message });
     }
-};
+  };
 
 const deleteTask = async (req, res) => {
     try {

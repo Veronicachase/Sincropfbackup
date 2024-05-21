@@ -9,13 +9,13 @@ export const updateProjectById = async (projectId, projectData) => {
       });
   
       if (!response.ok) {
-        throw new Error('No se han podido actualizar los cambios'); 
+        throw new Error('No se han podido actualizar los cambios updateProjectById, revisar mi ProjectData, Si o hay respuespuesta al hacer el fetch. '); 
       }
   
       
-      console.log("Cambios hechos");
+      console.log("Cambios hechos" );
     } catch (error) {
-      console.error('Error al hacer los cambios:', error);
+      console.error('Error al hacer los cambios, fetch updateProjectById, no llega la info :', error);
      
       alert('Error al editar. Por favor, intenta de nuevo.');
     }

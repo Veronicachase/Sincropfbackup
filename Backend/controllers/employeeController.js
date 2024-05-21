@@ -2,10 +2,6 @@ const employeeDao = require("../services/DAO/employeeDao");
 const { jwtVerify } = require("jose");
 
 
-
-
-
-
 const getEmployeeById = async (req, res) => {
   try {
  

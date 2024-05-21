@@ -10,6 +10,7 @@ import { TranslateSectionName } from "../../components/translateSectionName";
 import { getLabel } from "../../components/getLabel";
 import CheckboxC from "../../components/CheckboxC";
 import MapView from "../../components/MapView";
+
 import {
   Button,
   Grid,
@@ -46,11 +47,11 @@ export default function ProjectInfo() {
             setFormValues({ ...defaultInitialValues, ...sanitizedProjectData });
             setProject(sanitizedProjectData);
           } else {
-            console.error("Error al recuperar los datos del proyecto");
+            console.error("Error, si esto se muestra es porque no se pudieron traer los datos del getProjectById Frontend");
           }
         })
         .catch((error) => {
-          console.error("Error al cargar datos del proyecto:", error);
+          console.error("Error si esto se muestra es porque no se pudieron traer los datos del getProjectById Frontend:", error);
         })
         .finally(() => setLoading(false));
     }
@@ -59,13 +60,15 @@ export default function ProjectInfo() {
   const toggleForm = () => {
     setShowForm(!showForm);
   };
+// Tengo que agregar updateprojectBysection, pero se me olvidó por qué. 
+
 
   const handleSubmit = async (values) => {
     try {
       await updateProjectById(projectId, values);
       alert("Datos actualizados");
     } catch (error) {
-      alert("Error al editar. Por favor, intenta de nuevo.");
+      alert("Error al editar. Por favor, intenta de nuevo. Esto viene del handleSubmit y si esto para revisar updateProjectById");
     }
   };
 
