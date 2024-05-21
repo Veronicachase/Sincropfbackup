@@ -10,6 +10,7 @@ import { TranslateSectionName } from "../../components/translateSectionName";
 import { getLabel } from "../../components/getLabel";
 import CheckboxC from "../../components/CheckboxC";
 import MapView from "../../components/MapView";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import {
   Button,
@@ -81,7 +82,10 @@ export default function ProjectInfo() {
   }
 
   return (
+    <>
+    <Box sx={{ width:"100px"}}> <AddCircleIcon/></Box>
     <Box
+    
       sx={{
         margin: "0 auto",
         width: "100%",
@@ -90,6 +94,7 @@ export default function ProjectInfo() {
         backgroundColor: "#EDF5F4",
       }}
     >
+    
       <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop: "1em" }}>
         <Typography variant="body1">
           {project.projectName} - {project.constructionType}
@@ -271,8 +276,12 @@ export default function ProjectInfo() {
                 )
             )}
         </Box>
+     
       </Box>
+      
     </Box>
+    </>
+    
   );
 }
 

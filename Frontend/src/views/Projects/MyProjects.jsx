@@ -5,6 +5,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import IconColors from '../../components/IconColors';
 import {getAllProjects} from "../../api/getAllProjects"
 import { Link, useNavigate } from "react-router-dom";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SideMenu from '../../components/SideMenu';
 
 export default  function MyProjects() {
   const [projects, setProjects] = useState([]);
@@ -32,6 +34,12 @@ export default  function MyProjects() {
 
   return (
     <> 
+    <Box sx={{ display:"flex", width:"100px", backgroundColor:"#ffffff4d", padding:"1em 2em", marginBottom:"1em", borderRadius:"5px"}}> 
+    <Typography>Agregar Proyecto</Typography>
+    <AddCircleIcon sx={{color:"#fff", fontSize:"40px", padding:".2em"}}/>
+    </Box>
+      <Box>  
+<sideMenu
       <Box>
         {projects.length > 0 ? (
           projects.map((project) => (
@@ -39,9 +47,11 @@ export default  function MyProjects() {
               key={project.projectId} 
               sx={{ display: "flex", 
               padding: 2, 
-              borderBottom: '1px solid #ccc', 
+              border: '1px solid #9e9b9bdc', 
               cursor: 'pointer', 
-              backgroundColor: "#EDF5F4",
+              marginBottom:".5em",
+              borderRadius:"5px",
+              backgroundColor: "#ffffff4d",
               justifyContent:"space-between" 
                }}
               onClick={() => handleClickProject(project.projectId)}
@@ -73,6 +83,7 @@ export default  function MyProjects() {
         ) : (
           <CircularProgress />
         )}
+      </Box>
       </Box>
     </>
   );
