@@ -1,5 +1,5 @@
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProjectById } from "../../api/getProjectById";
@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteTask } from "../../api/deleteTask";
 import { getTaskBySection } from "../../api/getTaskBySection";
+import { SectionsAndTask } from "../../components/SectionsAndTasks"
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 
@@ -52,15 +53,28 @@ export default function ProjectSectionTasks() {
   }
 
   return (
-    <Box>
-      <Box sx={{ marginBottom: "2em" }}>
+    <>  
+    <Box marginBottom={5}  >
+   <Button variant="outlined" sx={{border:"1px solid #fff"}} onClick={() => navigate(`/project-create-task/${projectId}/${sectionKey}`)} > 
+   <Typography variant="body" color={"#000"} paddingRight={1} >Agregar tarea </Typography>
+   <AddCircleIcon sx={{color:"#fff"}} />
+  </Button>
+    </Box>   
+    <Box display={"flex"} justifyContent={"space-evenly"}  > 
+    
+    <Box
+     padding={"2em"} borderRadius={"10px"} ><SectionsAndTask />  </Box>   
+    <Box backgroundColor="#ffffff4d" padding={"2em"} borderRadius={"10px"}>
+      <Box  marginBottom= "2em">
         <Typography variant="body">{projectData.projectName}</Typography>
         <Typography variant="body" sx={{ mx: 1 }}>
           {projectData.constructionType}
         </Typography>
+        <Typography variant="body">Tareas: </Typography>
         <Typography variant="h6">
           Sección: {sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1)}
         </Typography>
+        
       </Box>
 
       <Box>
@@ -108,10 +122,13 @@ export default function ProjectSectionTasks() {
         ))}
       </Box>
       <IconButton onClick={() => navigate(`/project-create-task/${projectId}/${sectionKey}`)}>
-        <AddCircleIcon />
+       
       </IconButton>
     </Box>
+    </Box>
+    </>
   );
+  
 }
 
 

@@ -9,6 +9,7 @@ export default function UsePageTitle() {
     { path: "/create-new-project", title: "Nuevo Proyecto" },
     { path: "/my-projects", title: "Mis Proyectos" },
     { path: "/project-info/:projectId", title: "Información del Proyecto" },
+    { path: "/project-edit-info/:projectId", title: "Editar Proyecto" },
     { path: "/project-section-tasks", title: "Tareas por sección" },
     { path: "/project-create-task/:projectId/:sectionKey", title: "Crear tarea" },
     { path: "/project-info-task/:sectionKey", title: "Tarea" },

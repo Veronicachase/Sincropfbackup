@@ -24,8 +24,9 @@ import Register from './views/register/Register'
 import Home from './views/home/Home'
 import ProjectSectionTasks from "./views/projects/ProjectSectionTasks"
 import ProjectCreateTask from "./views/projects/ProjectCreateTask"
+import ProjectEditInfo from "./views/projects/ProjectEditInfo"
 import ForgotPassword from './views/forgotPassword/ForgotPassword'
-import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
+import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit"
 
 
 
@@ -55,6 +56,7 @@ export default function App() {
               <Route path="/create-new-project" element={<CreateNewProject />} />
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/project-info/:projectId" element={< ProjectInfo/>} />
+              <Route path="/project-edit-info/:projectId" element={< ProjectEditInfo/>} />
               <Route path="/project-section-tasks/:projectId/:sectionKey" element={<ProjectSectionTasks />} />
               {/*<Route path="/project-create-task" element={< ProjectCreateTask/>} />*/}
               <Route path="/project-create-task/:projectId/:sectionKey" element={< ProjectCreateTask/>} />

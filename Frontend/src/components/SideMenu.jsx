@@ -29,14 +29,14 @@ export default function SideMenu() {
         </IconButton>
         <List>
           {MenuOptionsList.map((option, index) => (
-            <ListItem button component={Link} to={option.path} key={index}>
+            <ListItem component={Link} to={option.path} key={index}>
               <ListItemIcon>{option.icon}</ListItemIcon>
               {!collapsed && <ListItemText primary={option.name} />}
             </ListItem>
           ))}
         </List>
       </Box>
-      <Box flexGrow={1} p={3}>
+      <Box  p={2}>
        
       </Box>
     </Box>
