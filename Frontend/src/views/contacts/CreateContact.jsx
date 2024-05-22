@@ -60,6 +60,7 @@ export default function CreateContact() {
                   value={values.category}
                   onChange={event => setFieldValue("category", event.target.value)}
                   displayEmpty
+                  sx={{backgroundColor:"#ffffff4d"}}
                 >
                   <MenuItem value=""><em>Selecciona una categoría</em></MenuItem>
                   <MenuItem value="client">Cliente</MenuItem>
@@ -71,22 +72,22 @@ export default function CreateContact() {
                 </Select>
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Empresa" name="company" fullWidth />
+                <Field as={TextField} label="Empresa" name="company" fullWidth  sx={{backgroundColor:"#ffffff4d"}}/>
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Dirección" name="address" fullWidth />
+                <Field as={TextField} label="Dirección" name="address" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Email" name="email" fullWidth placeholder="Ejemplo: juan@gmail.com" />
+                <Field as={TextField} label="Email" name="email" fullWidth placeholder="Ejemplo: juan@gmail.com" sx={{backgroundColor:"#ffffff4d"}} />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Teléfono" name="phone" fullWidth />
+                <Field as={TextField} label="Teléfono" name="phone" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Comentarios" name="comments" fullWidth multiline rows={3} />
+                <Field as={TextField} label="Comentarios" name="comments" fullWidth multiline rows={3} sx={{backgroundColor:"#ffffff4d"}}/>
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+                <Button type="submit" variant="outlined" disabled={isSubmitting} sx={{border:"1px solid #fff", color:"#fff"}}>
                   Crear Contacto
                 </Button>
               </Grid>

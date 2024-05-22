@@ -18,12 +18,13 @@ export default function UsePageTitle() {
     { path: "/progress", title: "Avances de Proyecto" },
     { path: "/order-list", title: "Pedidos de Material" },
     { path: "/allContacts", title: "Contactos" },
+    { path: "/create-contact", title: "Crear contacto nuevo" },
     { path: "/staff-list", title: "Lista de trabajadores" },
     { path: "/create-employee", title: "Crear Trabajador" },
-    { path: "/employee", title: "Trabajador" },
+    { path: "/employee", title: "Detalles del trabajador" },
     { path: "/reports", title: "Reporte" },
   ];
-
+  
   const title = pathDir.find(item =>
     matchPath({ path: item.path, end: false }, location.pathname)
   );

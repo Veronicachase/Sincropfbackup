@@ -1,12 +1,21 @@
-
-
-import { Box, Typography, IconButton, Collapse, List, ListItem, ListItemText } from '@mui/material';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAllContacts } from '../../api/getAllContacts';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Collapse,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+} from "@mui/material";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAllContacts } from "../../api/getAllContacts";
+import SideMenu from "../../components/SideMenu";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function Contacts() {
   const [open, setOpen] = useState({});
@@ -40,7 +49,7 @@ export default function Contacts() {
   }, []);
 
   const toggleCollapse = (categoryName) => {
-    setOpen(prev => ({ ...prev, [categoryName]: !prev[categoryName] }));
+    setOpen((prev) => ({ ...prev, [categoryName]: !prev[categoryName] }));
   };
 
   if (!data || Object.keys(data).length === 0) {
@@ -48,52 +57,61 @@ export default function Contacts() {
   }
 
   return (
-    <Box>
-      {Object.keys(data).map((category) => (
-        <Box key={category} sx={{ marginBottom: 2 }}>
-          <IconButton onClick={() => toggleCollapse(category)} sx={{ width: '100%', justifyContent: 'space-between' }}>
-            <Typography variant="h6">{category}</Typography>
-            {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-          </IconButton>
-          <Collapse in={open[category]} timeout="auto" unmountOnExit>
-            <List>
-              {data[category].map((contactItem) => (
-                
-                <ListItem key={contactItem.contactId} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <ListItemText primary={contactItem.contactName} />
-                  <IconButton  onClick={() => navigate(`/contact-details/${contactItem.contactId}`)}>
-                    <ArrowForwardIosIcon  />
-                  </IconButton>
-                </ListItem>
-               
-              ))}
-            </List>
-          </Collapse>
-        </Box>
-      ))}
+<>    
+<Box marginBottom={5}  >
+<Button variant="outlined" sx={{border:"1px solid #fff"}} onClick={() => navigate(`/create-contact`)} > 
+<Typography variant="body" color={"#000"} paddingRight={1} >Agregar contacto</Typography>
+<AddCircleIcon sx={{color:"#fff"}} />
+</Button>
+ </Box>  
+
+
+
+    <Box display={"flex"}>
+      <Box>
+        {" "}
+        <SideMenu />{" "}
+      </Box>
+
+      <Box sx={{ width: "100%" }}>
+        {Object.keys(data).map((category) => (
+          <Box
+            key={category}
+            sx={{ marginBottom: 2, width: "60%", border: " 1px solid #fff" }}
+          >
+            <IconButton
+              onClick={() => toggleCollapse(category)}
+              sx={{ width: "100%", justifyContent: "space-between" }}
+            >
+              <Typography variant="h6">{category}</Typography>
+              {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </IconButton>
+            <Collapse in={open[category]} timeout="auto" unmountOnExit>
+              <List>
+                {data[category].map((contactItem) => (
+                  <ListItem
+                    key={contactItem.contactId}
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <ListItemText primary={contactItem.contactName} />
+                    <IconButton
+                      onClick={() =>
+                        navigate(`/contact-details/${contactItem.contactId}`)
+                      }
+                    >
+                      <ArrowForwardIosIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Collapse>
+          </Box>
+        ))}
+      </Box>
     </Box>
+    </>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { Box, Typography, IconButton, Collapse, List, ListItem, ListItemText } from '@mui/material';
 // import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -105,13 +123,13 @@ export default function Contacts() {
 
 // export default function Contacts() {
 //   const [open, setOpen] = useState({});
-//   const [data, setData] = useState([]);  
+//   const [data, setData] = useState([]);
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
 //     const fetchContacts = async () => {
 //       try {
-//         const allContacts = await getAllContacts(); 
+//         const allContacts = await getAllContacts();
 //         setData(allContacts);
 //       } catch (error) {
 //         console.error("Error fetching contacts:", error);
@@ -135,7 +153,7 @@ export default function Contacts() {
 //           </IconButton>
 //           <Collapse in={open[contactCategory.category]} timeout="auto" unmountOnExit>
 //             <List>
-//               {contactCategory.items.map((contactItem) => (  
+//               {contactCategory.items.map((contactItem) => (
 //                 <ListItem key={contactItem.contactId} sx={{ display: 'flex', justifyContent: 'space-between' }}>
 //                   <ListItemText primary={contactItem.contactName} />
 //                   <IconButton onClick={() => navigate(`/contact-details/${contactItem.contactId}`)}>

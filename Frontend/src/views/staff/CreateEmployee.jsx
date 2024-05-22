@@ -3,7 +3,7 @@
 import { Formik, Form } from "formik";
 import { initialValues } from "../../forms/Trabajadores/crearTrabajador/InitialValues.js";
 import { CrearTrabajadorFormSchema } from "../../forms/Trabajadores/crearTrabajador/CrearTrabajadorFormSchema.js";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Button } from "@mui/material";
 import CustomTextField from "../../ui/CustomTextField.jsx";
 import "../../assets/styles/estilosGenerales.css";
 import MyButton from "../../components/MyButton.jsx";
@@ -14,7 +14,7 @@ import { ToggleButton } from "@mui/material";
 /* Falta arreglar botones, confirmar formato de fecha, y darle estilos a hoja, confirmar si los botones guardan la info */
 
 function CrearTrabajador() {
-  const backGr = { background: "rgba(179, 224, 253, 0.17)" };
+  
 
   return (
     <Formik
@@ -50,7 +50,8 @@ function CrearTrabajador() {
                   type="date"
                   label="Fecha"
                   placeholder="Fecha"
-                  sx={backGr}
+                  sx={{backgroundColor:"#ffffff4d"}}
+                 
                 />
               </Grid>
 
@@ -60,7 +61,8 @@ function CrearTrabajador() {
                   type="text"
                   label="Nombre"
                   placeholder="Nombre"
-                  sx={backGr}
+                  sx={{backgroundColor:"#ffffff4d"}}
+                  
                 />
               </Grid>
               <Grid item xs={5} sm={10}>
@@ -69,7 +71,8 @@ function CrearTrabajador() {
                   type="text"
                   label="Apellidos"
                   placeholder="Apellidos"
-                  sx={backGr}
+                  sx={{backgroundColor:"#ffffff4d"}}
+                  
                 />
               </Grid>
               <Grid item xs={10} sm={10}>
@@ -78,7 +81,8 @@ function CrearTrabajador() {
                   type="text"
                   label="Posición"
                   placeholder="Posición"
-                  sx={backGr}
+                  sx={{backgroundColor:"#ffffff4d"}}
+              
                 />
               </Grid>
               <Grid item xs={10} sm={10}>
@@ -87,8 +91,9 @@ function CrearTrabajador() {
                   type="text"
                   label="Obra"
                   placeholder="Obra"
-                  className="bg-light-blue "
-                  sx={backGr}
+                 
+                  sx={{backgroundColor:"#ffffff4d"}}
+                 
                 />
               </Grid>
               <Grid>
@@ -120,17 +125,13 @@ function CrearTrabajador() {
                   type="text"
                   label="Comentarios"
                   placeholder="Comentarios"
-                  sx={backGr}
+                  sx={{backgroundColor:"#ffffff4d"}}
+                 
                 />
               </Grid>
-              <MyButton
-                text="Crear Trabajador"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {" "}
-                Crear Trabajador
-              </MyButton>
+              
+              <Button type="submit" variant="outlined" sx={{marginTop:"2em", color:"#fff", border:"1px solid #fff"}}>Agregar Trabajador</Button>
+             
               <Grid item xs={12}></Grid>
             </Grid>
           </Box>

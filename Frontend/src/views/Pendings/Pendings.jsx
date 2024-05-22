@@ -9,6 +9,7 @@ import { deletePending } from "../../api/deletePending";
 import { getAllOrders } from "../../api/getAllOrders";
 import { getEmployees } from "../../api/getEmployees";
 import { getAllPendings } from "../../api/getAllPendings";
+import  SideMenu  from "../../components/SideMenu"
 import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -113,6 +114,10 @@ export default function Pendings() {
 
   return (
     <>
+   <Box display={"flex"} >  
+   <Box> <SideMenu/>  </Box>
+   
+      <Box> 
       <Box>
         <Formik
           initialValues={{ date: new Date().toISOString().slice(0, 10), details: '' }}
@@ -146,7 +151,7 @@ export default function Pendings() {
           <Typography sx={{ marginBottom: "2em" }} variant="h6">Mis Pendientes creados</Typography>
           {pendings.map((pending) => (
             pending.status !== "terminado" &&
-            <Box key={pending.pendingId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" }}>
+            <Box key={pending.pendingId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{pending.date} - {pending.details}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeletePending(pending.pendingId)}>
                 <DeleteForeverIcon />
@@ -158,7 +163,7 @@ export default function Pendings() {
         <Typography variant="h6" sx={{ marginTop: 2 }}>Tareas Pendientes</Typography>
         <List>
           {tasks.map((task) => (
-            <Box key={task.taskId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" }}>
+            <Box key={task.taskId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <ListItem onClick={() => navigate(`/tasks/${task.taskId}`)}>
                 <ListItemText primary={task.taskName} />
                 <ListItemSecondaryAction>
@@ -177,7 +182,7 @@ export default function Pendings() {
           <Typography sx={{ marginBottom: "2em" }} variant="h6">Reportes no enviados</Typography>
           {reports.map((report) => (
             report.status === false &&
-            <Box key={report.reportId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" }}>
+            <Box key={report.reportId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{report.date} - {report.reportName}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(report.reportId)}>
                 <DeleteForeverIcon />
@@ -189,7 +194,7 @@ export default function Pendings() {
         <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
           <Typography variant="h6">Trabajadores con equipo incompleto</Typography>
           {employees.map((employee) => (
-            <Box key={employee.id} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" }}>
+            <Box key={employee.id} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{employee.name} - {employee.position}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(employee.id)}>
                 <DeleteForeverIcon />
@@ -201,13 +206,15 @@ export default function Pendings() {
         <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
           <Typography variant="h6">Pedidos Pendientes</Typography>
           {pendingOrders.map((order) => (
-            <Box key={order.orderId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" }}>
+            <Box key={order.orderId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{order.productName}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(order.orderId)}>
                 <DeleteForeverIcon />
               </IconButton>
             </Box>
           ))}
+        </Box>
+        </Box>
         </Box>
       </Box>
     </>

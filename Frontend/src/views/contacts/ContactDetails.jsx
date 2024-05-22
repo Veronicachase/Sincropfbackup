@@ -9,6 +9,7 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { getContactById } from '../../api/getContactById';
 import { updateContactById } from '../../api/updateContactById';
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
+import SideMenu from "../../components/SideMenu"
 
 const defaultInitialValues = {
   category: "",
@@ -61,7 +62,9 @@ export default function ContactDetails() {
   };
 
   return (
-    <Box sx={{ textAlign: "left", marginLeft: "2em" }}>
+    <Box display={"flex"}> 
+    <Box> <SideMenu/> </Box>
+    <Box sx={{ textAlign: "left", marginLeft: "2em", width:"100%" }}>
       <Typography variant="h5">{contact.category}</Typography>
       <Typography variant="h5">{contact.contactName}</Typography>
       <Formik
@@ -73,29 +76,30 @@ export default function ContactDetails() {
         {formik => (
           <Form>
             <Grid sx={{marginBottom:"2em",marginTop:"2em"}} >
-              <Field as={TextField} name="phone" label="Teléfono" />
-              {formik.values.phone && <a href={`tel:${formik.values.phone}`}><PhoneIcon sx={{color:"#84C7AE"}} /></a>}
+              <Field as={TextField} name="phone" label="Teléfono"  />
+              {formik.values.phone && <a href={`tel:${formik.values.phone}`}><PhoneIcon sx={{color:"#fff"}} /></a>}
             </Grid>
-            <Grid sx={{marginBottom:"2em"}}>
+            <Grid sx={{marginBottom:"2em"}} >
               <Field as={TextField} name="mobile" label="Móvil" />
-              {formik.values.mobile && <a href={`https://wa.me/${formik.values.mobile}`}><WhatsAppIcon sx={{color:"#84C7AE"}} /></a>}
+              {formik.values.mobile && <a href={`https://wa.me/${formik.values.mobile}`}><WhatsAppIcon sx={{color:"#fff"}} /></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="email" label="Email" />
-              {formik.values.email && <a href={`mailto:${formik.values.email}`}><EmailIcon  sx={{color:"#84C7AE"}}/></a>}
+              {formik.values.email && <a href={`mailto:${formik.values.email}`}><EmailIcon  sx={{color:"#fff"}}/></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="address" label="Dirección" />
-              {formik.values.address && <a href={`https://maps.google.com/?q=${formik.values.address} `}><FmdGoodIcon sx={{color:"#84C7AE"}}  /></a>}
+              {formik.values.address && <a href={`https://maps.google.com/?q=${formik.values.address} `}><FmdGoodIcon sx={{color:"#fff"}}  /></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="comments" label="Comentarios" />
             </Grid>
 
-            <Button sx={{color:"#fff", backgroundColor:"#84C7AE", marginBottom:"2em"}}  type='submit'> Guardar Cambios </Button>
+            <Button sx={{color:"#fff", border:" 1px solid #fff", marginBottom:"2em"}}  type='submit'> Guardar Cambios </Button>
           </Form>
         )}
       </Formik>
+    </Box>
     </Box>
   );
 }

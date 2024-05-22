@@ -317,10 +317,11 @@ export default function ProjectEditInfo() {
             </FormControl>
             </Box>
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={handleAddSection}
               startIcon={<AddCircleIcon />}
-              sx={{ marginTop: "2em", backgroundColor:"#fff", color:"#000", marginBottom:"2em" }}
+              
+              sx={{ marginTop: "2em", border:"1px solid #fff", color:"#000", marginBottom:"2em" }}
             >
               Agregar Sección
             </Button>

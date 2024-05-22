@@ -15,6 +15,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SendIcon from "@mui/icons-material/Send";
 import OrderDetailsModal from "../../components/orderDetailModal"
+import SideMenu from "../../components/SideMenu"
 
 function OrderList() {
   const [orders, setOrders] = useState([]);
@@ -117,12 +118,15 @@ function OrderList() {
   if (loading) return <p>Cargando datos de contacto...</p>;
 
   return (
+<Box display={"flex"}> 
+<Box> <SideMenu/> </Box>
+
     <Box sx={{ marginTop: "2em" }}>
       {projects.length > 0 ? (
         projects.map((project) => (
           <Box
             key={project.projectId}
-            sx={{ margin: "2em", border: "1px solid #f0efef" }}
+            sx={{ margin: "2em", border: "1px solid #f0efef", borderRadius:"5px" }}
           >
             <Box sx={{ display: "flex", padding: "1em", gap: 2 }}>
               <Typography variant="h6">
@@ -246,6 +250,7 @@ function OrderList() {
         onClose={handleModalClose}
         order={selectedOrder}
       />
+    </Box>
     </Box>
   );
 }
