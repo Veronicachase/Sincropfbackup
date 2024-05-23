@@ -1,4 +1,7 @@
-export const handleSubmitTask = async (values) => {
+
+export const handleSubmitTask = async (values, sectionKey) => {
+  console.log('Valores en js: ', values)
+  console.log('SectionKey', sectionKey)
   const formData = new FormData();
   Object.keys(values).forEach(key => {
     if (key === 'prevImages') {
@@ -9,11 +12,12 @@ export const handleSubmitTask = async (values) => {
       formData.append(key, values[key]);
     }
   });
+  console.log('Form Data', formData)
 
   try {
-    const response = await fetch("http://localhost:3000/tasks", {
+    const response = await fetch(`http://localhost:3000/tasks/${sectionKey}`, {
       method: "POST",
-      body: formData,
+      body: JSON.stringify(values),
     });
     if (response.ok) {
       const data = await response.json();

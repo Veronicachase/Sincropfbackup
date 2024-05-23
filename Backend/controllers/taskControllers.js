@@ -3,8 +3,10 @@ const path = require("path");
 
 const addTask = async (req, res) => {
     try {
+      const sectionKey = req.params.sectionKey;
       const { files } = req;
-      const taskData = { ...req.body };
+      const taskData =  req.body ;
+      console.log('Body', req.body)
   
       if (files) {
         if (files.prevImages) {
@@ -15,7 +17,7 @@ const addTask = async (req, res) => {
         }
       }
   
-      const taskId = await taskDao.addTask(taskData);
+      const taskId = await taskDao.addTask(sectionKey, taskData);
       res.status(201).json({ message: "Tarea creada exitosamente", taskId });
     } catch (error) {
       console.error("Error al agregar la tarea:", error.message);

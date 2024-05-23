@@ -19,6 +19,8 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import { getEmployeeById } from "../../api/getEmployeeById";
 import { getHoursWorked } from "../../api/getHoursWorked";
+import { updateEmployeeById } from "../../api/updateEmployeeById";
+import { updateHours } from "../../api/updateHours";
 import CurrentDate from "../../components/CurrentDate";
 import { calculateTotalHours } from "../../components/CalculatedTotalHours";
 
@@ -33,7 +35,6 @@ export default function Employee() {
     const fetchEmployee = async () => {
       try {
         const fetchedEmployee = await getEmployeeById(employeeId);
-        console.log(fetchedEmployee); 
         setEmployee(fetchedEmployee);
       } catch (error) {
         console.error("Fallo al obtener el trabajador, página employee fetch/useEffect", error);
@@ -62,71 +63,116 @@ export default function Employee() {
     <Box>
       <Typography variant="h4">{employee.name}</Typography>
       <Typography variant="h5">Información del trabajador</Typography>
+      
       <Formik
         initialValues={{
+          name:employee.name,
           position: employee.position,
           project: employee.project,
           mandatoryEquipment: employee.mandatoryEquipment,
           comments: employee.comments,
+        }}
+        validationSchema={yup.object({
+          name:yup.string().required(),
+          position: yup.string().required(),
+          project: yup.string().required(),
+          mandatoryEquipment: yup.string().required(),
+          comments: yup.string().required(),
+        })}
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            await updateEmployeeById(employeeId, {
+              name:values.name,
+              position: values.position,
+              project: values.project,
+              mandatoryEquipment: values.mandatoryEquipment,
+              comments: values.comments,
+            });
+            alert("Información del trabajador actualizada exitosamente.");
+          } catch (error) {
+            console.error("Failed to update employee information", error);
+            alert("Error al actualizar la información del trabajador.");
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Box>
+              <Field
+                as={TextField}
+                name="position"
+                label="Posición"
+                fullWidth
+                margin="normal"
+              />
+              <Field
+                as={TextField}
+                name="project"
+                label="Obra"
+                fullWidth
+                margin="normal"
+              />
+              <Field
+                as={TextField}
+                name="mandatoryEquipment"
+                label="Equipo entregado"
+                fullWidth
+                margin="normal"
+              />
+              <Field
+                as={TextField}
+                name="comments"
+                label="Comentarios"
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="contained"
+                color="primary"
+              >
+                Actualizar Información
+              </Button>
+            </Box>
+          </Form>
+        )}
+      </Formik>
+      
+      <Formik
+        initialValues={{
           regularHour: 0,
           regularMinutes: 0,
           extraHour: 0,
           extraMinutes: 0,
         }}
         validationSchema={yup.object({
-          position: yup.string().required(),
-          project: yup.string().required(),
-          mandatoryEquipment: yup.string().required(),
-          comments: yup.string().required(),
           regularHour: yup.number().required(),
           regularMinutes: yup.number().required(),
           extraHour: yup.number().required(),
           extraMinutes: yup.number().required(),
         })}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            await updateHours(employeeId, {
+              regularHours: values.regularHour,
+              regularMinutes: values.regularMinutes,
+              extraHours: values.extraHour,
+              extraMinutes: values.extraMinutes,
+            });
+            alert("Horas trabajadas actualizadas exitosamente.");
+          } catch (error) {
+            console.error("Failed to update hours worked", error);
+            alert("Error al actualizar las horas trabajadas.");
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <Box>
-              <Box>
-                <Field
-                  as={TextField}
-                  name="position"
-                  label="Posición"
-                  fullWidth
-                  margin="normal"
-                />
-              </Box>
-              <Box>
-                <Field
-                  as={TextField}
-                  name="project"
-                  label="Obra"
-                  fullWidth
-                  margin="normal"
-                />
-              </Box>
-              <Box>
-                <Field
-                  as={TextField}
-                  name="mandatoryEquipment"
-                  label="Equipo entregado"
-                  fullWidth
-                  margin="normal"
-                />
-              </Box>
-              <Box>
-                <Field
-                  as={TextField}
-                  name="comments"
-                  label="Comentarios"
-                  fullWidth
-                  margin="normal"
-                />
-              </Box>
-            </Box>
             <Typography variant="h4">Horas trabajadas</Typography>
             <Typography>
               <strong>Fecha:</strong> <CurrentDate />
@@ -136,24 +182,28 @@ export default function Employee() {
               <Field
                 as={TextField}
                 name="regularHour"
+                label="Horas regulares"
                 placeholder="Horas Regulares"
                 margin="normal"
               />
               <Field
                 as={TextField}
                 name="regularMinutes"
+                label="Minutos regulares"
                 placeholder="Minutos Regulares"
                 margin="normal"
               />
               <Field
                 as={TextField}
                 name="extraHour"
+                label="Horas extra"
                 placeholder="Horas Extras"
                 margin="normal"
               />
               <Field
                 as={TextField}
                 name="extraMinutes"
+                label="Minutos Extra"
                 placeholder="Minutos Extras"
                 margin="normal"
               />
@@ -169,7 +219,7 @@ export default function Employee() {
           </Form>
         )}
       </Formik>
-
+      
       <Box>
         <Typography variant="h6">Consultar Horas Trabajadas</Typography>
         <TextField
@@ -289,10 +339,24 @@ HoursTable.propTypes = {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import { useState, useEffect } from "react";
 // import { useParams } from "react-router-dom";
 // import PropTypes from "prop-types";
-// import CreatePDFButton from "../../components/CreatePDFButton"
+// import CreatePDFButton from "../../components/CreatePDFButton";
 // import {
 //   Box,
 //   TextField,
@@ -310,6 +374,8 @@ HoursTable.propTypes = {
 // import * as yup from "yup";
 // import { getEmployeeById } from "../../api/getEmployeeById";
 // import { getHoursWorked } from "../../api/getHoursWorked";
+// import { updateHours } from "../../api/updateHours"
+// import { updateEmployeeById } from "../../api/updateEmployeeById"; 
 // import CurrentDate from "../../components/CurrentDate";
 // import { calculateTotalHours } from "../../components/CalculatedTotalHours";
 
@@ -324,7 +390,7 @@ HoursTable.propTypes = {
 //     const fetchEmployee = async () => {
 //       try {
 //         const fetchedEmployee = await getEmployeeById(employeeId);
-//         console.log(fetchEmployee)
+//         console.log(fetchedEmployee); 
 //         setEmployee(fetchedEmployee);
 //       } catch (error) {
 //         console.error("Fallo al obtener el trabajador, página employee fetch/useEffect", error);
@@ -374,8 +440,25 @@ HoursTable.propTypes = {
 //           extraHour: yup.number().required(),
 //           extraMinutes: yup.number().required(),
 //         })}
-//         onSubmit={(values) => {
-//           console.log(values);
+//         onSubmit={async (values, { setSubmitting }) => {
+//           try {
+//             await updateEmployeeById(employeeId, {
+//               position: values.position,
+//               project: values.project,
+//               mandatoryEquipment: values.mandatoryEquipment,
+//               comments: values.comments,
+//               await updateHours(employeeId,{
+
+
+//               })
+//             });
+//             alert("Información del trabajador actualizada exitosamente.");
+//           } catch (error) {
+//             console.error("Failed to update employee information", error);
+//             alert("Error al actualizar la información del trabajador.");
+//           } finally {
+//             setSubmitting(false);
+//           }
 //         }}
 //       >
 //         {({ isSubmitting }) => (
@@ -503,7 +586,6 @@ HoursTable.propTypes = {
 
 //   return (
 //     <Box>
-//     <Box>
 //       <Typography variant="h6" gutterBottom>
 //         Horas Trabajadas
 //       </Typography>
@@ -530,14 +612,11 @@ HoursTable.propTypes = {
 //                   {entry.regularHours.toFixed(1)}h {entry.regularMinutes}m
 //                 </TableCell>
 //                 <TableCell align="right">
-//                   {(entry.extraHours || 0).toFixed(1)}h{" "}
-//                   {entry.extraMinutes || 0}m
+//                   {(entry.extraHours || 0).toFixed(1)}h {entry.extraMinutes || 0}m
 //                 </TableCell>
 //                 <TableCell align="right">
 //                   {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h{" "}
-//                   {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) %
-//                     60}
-//                   m
+//                   {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) % 60}m
 //                 </TableCell>
 //               </TableRow>
 //             ))}
@@ -547,33 +626,30 @@ HoursTable.propTypes = {
 //               </TableCell>
 //               <TableCell align="right">
 //                 <strong>
-//                   {totals.totalRegularHours.toFixed(1)}h{" "}
-//                   {totals.totalRegularMinutes}m
+//                   {totals.totalRegularHours.toFixed(1)}h {totals.totalRegularMinutes}m
 //                 </strong>
 //               </TableCell>
 //               <TableCell align="right">
 //                 <strong>
-//                   {totals.totalExtraHours.toFixed(1)}h{" "}
-//                   {totals.totalExtraMinutes}m
+//                   {totals.totalExtraHours.toFixed(1)}h {totals.totalExtraMinutes}m
 //                 </strong>
 //               </TableCell>
 //               <TableCell align="right">
 //                 <strong>
-//                   {totals.totalFinalHours.toFixed(1)}h{" "}
-//                   {totals.totalFinalMinutes}m
+//                   {totals.totalFinalHours.toFixed(1)}h {totals.totalFinalMinutes}m
 //                 </strong>
 //               </TableCell>
 //             </TableRow>
 //           </TableBody>
 //         </Table>
 //       </TableContainer>
+//       <Button>
+//         <CreatePDFButton />
+//       </Button>
 //     </Box>
-//     <Button>{CreatePDFButton}</Button>
-//      </Box>
 //   );
-
-
 // };
+
 // HoursTable.propTypes = {
 //   hoursWorked: PropTypes.arrayOf(
 //     PropTypes.shape({
@@ -585,3 +661,4 @@ HoursTable.propTypes = {
 //     })
 //   ).isRequired,
 // };
+

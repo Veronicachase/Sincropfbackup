@@ -9,7 +9,8 @@ import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
 
 export default function ProjectCreateTask() {
-  const { projectId } = useParams();
+  const { projectId, sectionKey } = useParams();
+  console.log(sectionKey)
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
@@ -24,7 +25,7 @@ export default function ProjectCreateTask() {
           console.error("Error al obtener los datos del proyecto:", error);
         }
       }
-
+        
       try {
         const employeeData = await getEmployees();
         console.log(employeeData);
@@ -65,14 +66,19 @@ export default function ProjectCreateTask() {
           finalImages: []
         }}
         validationSchema={CreateTaskFormSchema}
-        onSubmit={(values, actions) => {
-          handleSubmitTask(values)
-            .then(() => navigate(`/project-create-task/${values.projectId}/${values.sectionKey}`))
-            .catch((error) => {
-              console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
-              actions.setSubmitting(false);
-            });
-        }}
+        onSubmit={async( values, actions) => {
+        
+          console.log('Data proyect', projectData)
+          console.log('kEY: ', projectData.sections)
+          typeof(key)
+          console.log(values)
+          try{await handleSubmitTask(values, sectionKey)}catch(error){console.log(error)}
+            // .then(() => navigate(-1))
+            // .catch((error) => {
+            //   console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
+            //   actions.setSubmitting(false);
+            // });
+        }} 
       >
         {({ isSubmitting, setFieldValue }) => (
           <Form>
@@ -178,10 +184,13 @@ export default function ProjectCreateTask() {
 
 
 
-// import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 
+
+
+
+// import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 // import { Formik, Form, Field } from "formik";
-// import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema"
+// import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
 // import { useEffect, useState } from "react";
 // import { useNavigate, useParams } from "react-router-dom";
 // import { getProjectById } from "../../api/getProjectById";
@@ -189,11 +198,9 @@ export default function ProjectCreateTask() {
 // import { getEmployees } from "../../api/getEmployees";
 // import VoiceInput from "../../components/VoiceInput";
 
-// // ver donde está el handlesubmit para agregar los datos igual a taskInfoAndEdit
-
-
 // export default function ProjectCreateTask() {
-//   const { projectId } = useParams();
+//   const { projectId, sectionKey } = useParams();
+//   console.log(sectionKey)
 //   const navigate = useNavigate();
 //   const [employees, setEmployees] = useState([]);
 //   const [projectData, setProjectData] = useState(null);
@@ -204,15 +211,14 @@ export default function ProjectCreateTask() {
 //         try {
 //           const projectData = await getProjectById(projectId);
 //           setProjectData(projectData);
-//           console.log("este es lo que me trae projectData",projectData)
 //         } catch (error) {
 //           console.error("Error al obtener los datos del proyecto:", error);
 //         }
 //       }
-
+        
 //       try {
 //         const employeeData = await getEmployees();
-//         console.log("estos son los datos de empleados que me trae el fetch",employeeData)
+//         console.log(employeeData);
 //         setEmployees(employeeData);
 //       } catch (error) {
 //         console.error("Error al obtener los datos de los trabajadores:", error);
@@ -223,10 +229,9 @@ export default function ProjectCreateTask() {
 //   }, [projectId]);
 
 //   if (!projectData) {
-//     return <div>Loading...</div>;
+//     return <>Loading...</>;
 //   }
 
-  
 //   return (
 //     <Box>
 //       <Box sx={{ marginTop: "1em" }}>
@@ -237,9 +242,8 @@ export default function ProjectCreateTask() {
 //       </Box>
 //       <Formik
 //         initialValues={{
-
 //           taskName: "",
-//           employeeId:"",
+//           employeeId: "",
 //           employeeName: "",
 //           taskDescription: "",
 //           projectId: projectId,
@@ -247,19 +251,17 @@ export default function ProjectCreateTask() {
 //           startDate: "",
 //           endDate: "",
 //           status: "noIniciado",
-//           pdf:[],
+//           pdf: [],
 //           prevImages: [],
-//           finalImages:[]
+//           finalImages: []
 //         }}
 //         validationSchema={CreateTaskFormSchema}
 //         onSubmit={(values, actions) => {
-//           handleSubmitTask(values)
+//           console.log('Data proyect', projectData)
+//           console.log('kEY: ', projectData.sections)
 //           console.log(values)
-//             .then(() =>
-//               navigate(
-//                 `/project-create-task/${values.projectId}/${values.sectionKey}`
-//               )
-//             )
+//           handleSubmitTask(values, sectionKey)
+//             .then(() => navigate(`/project-create-task/${values.projectId}/${values.sectionKey}`))
 //             .catch((error) => {
 //               console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
 //               actions.setSubmitting(false);
@@ -332,9 +334,7 @@ export default function ProjectCreateTask() {
 //                   <input
 //                     type="file"
 //                     name="prevImages"
-//                     onChange={(e) =>
-//                       setFieldValue("files", e.currentTarget.files)
-//                     }
+//                     onChange={(e) => setFieldValue("files", e.currentTarget.files)}
 //                     multiple
 //                   />
 //                 </Grid>
@@ -355,3 +355,15 @@ export default function ProjectCreateTask() {
 //     </Box>
 //   );
 // }
+
+
+
+
+
+
+
+
+
+
+
+

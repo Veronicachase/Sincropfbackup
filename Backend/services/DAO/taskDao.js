@@ -4,10 +4,11 @@ const moment = require("moment");
 const {removeUndefinedKeys} = require("../../utils/removeUndefinedkeys")
 const taskDao = {};
 
-taskDao.addTask = async (taskData) => {
+taskDao.addTask = async (sectionKey, taskData) => {
     let conn = null;
     try {
         conn = await db.createConnection();
+        console.log('Task data: ', taskData)
       
         let taskObj = {
             taskName: taskData.taskName,
@@ -15,7 +16,7 @@ taskDao.addTask = async (taskData) => {
             employeeName: taskData.employeeName,
             projectId: taskData.projectId,
             status: taskData.status,
-            sectionKey: taskData.section.sectionKey || '',
+            sectionKey: sectionKey || '',
             taskDescription: taskData.taskDescription,
             startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
             endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),

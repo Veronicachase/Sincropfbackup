@@ -10,7 +10,7 @@ function CurrentDate() {
     return () => clearInterval(timer);
   }, []);
 
-  return <div>{date.toLocaleDateString()}</div>;
+  return <span>{date.toLocaleDateString()}</span>;
 }
 
 export default CurrentDate;

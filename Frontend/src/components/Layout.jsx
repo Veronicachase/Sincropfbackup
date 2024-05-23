@@ -16,7 +16,7 @@ export default function Layout() {
   return (
     <Box>
       <Box
-        className="bg-primario"
+        className="bg-primario"s
         sx={{
           textAlign: "center",
           width: "100%",

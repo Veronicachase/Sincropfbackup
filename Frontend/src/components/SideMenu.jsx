@@ -21,6 +21,7 @@ export default function SideMenu() {
           overflow: "hidden",
           whiteSpace: "nowrap",
           backgroundColor: "#ffffff4d",
+          border:"1px solid #ccc",
           height: "100vh",
         }}
       >
