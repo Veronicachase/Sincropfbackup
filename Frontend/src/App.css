@@ -2,7 +2,7 @@
   max-width: 1280px;
   box-sizing: border-box;
   text-align: center;
- 
+  color: #98a1b4;
   
 }
 
@@ -11,7 +11,7 @@
   color: #f0efef;
 }
 
-/* body{
+body{
 
-  /background-color:#84C7AE;
-} */
+  background-color:#F7F9FB;
+}

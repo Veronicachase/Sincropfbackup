@@ -10,6 +10,8 @@ import { getTaskBySection } from "../../api/getTaskBySection";
 import { SectionsAndTask } from "../../components/SectionsAndTasks";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
+import { AdvancedImage } from "@cloudinary/react";
+import Img from "../../ui/CloudinaryImg";
 
 export default function ProjectSectionTasks() {
   const { projectId, sectionKey } = useParams();
@@ -128,15 +130,16 @@ export default function ProjectSectionTasks() {
                   </Box>
 
                   <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                    {task.prevImages &&
-                      task.prevImages.map((url, index) => (
-                        <img
-                          key={index}
-                          src={url}
-                          alt={`Preview ${index}`}
-                          style={{ maxWidth: "100px", margin: "5px" }}
-                        />
-                      ))}
+                  {task.prevImages && (
+                    task.prevImages.map((url, index) => (
+                      <Img
+                        key={index} 
+                        uploadedImg={url} 
+                        alt={`Preview ${index}`} 
+                        className="prueba"
+                      />
+                    ))
+                  )}
                   </Box>
                   <Box sx={{ display: "flex", flexWrap: "wrap" }}>
                     {task.finalImages &&

@@ -94,15 +94,19 @@ projectDao.getAllProjects = async () => {
 projectDao.updateProject = async (projectId, data) => {
     let conn = null;
     try {
+
+        console.log('Data: ', data)
         
         if (data.sections) {
             data.sections = JSON.stringify(data.sections);
         }
 
-        const cleanData = removeUndefinedKeys(data);
+        console.log('Data antes de remove', data)
+        const cleanData = await removeUndefinedKeys(data);
+        console.log('Clean data', cleanData)
         conn = await db.createConnection();
 
-        await db.query("UPDATE projects SET ? WHERE projectId = ?", [cleanData, projectId], "update", conn);
+        await db.query("UPDATE projects SET ? WHERE projectId = ?", [cleanData, parseInt(projectId)], "update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;

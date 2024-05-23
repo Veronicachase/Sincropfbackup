@@ -3,7 +3,6 @@ import UsePageTitle from "./UseLocation";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import { HamburgerMenu } from "../components/HamburguerMenu";
 
 export default function Layout() {
   const title = UsePageTitle();
@@ -16,7 +15,7 @@ export default function Layout() {
   return (
     <Box>
       <Box
-        className="bg-primario"s
+        
         sx={{
           textAlign: "center",
           width: "100%",
@@ -27,21 +26,18 @@ export default function Layout() {
           paddingBottom: "1em",
         }}
       >
-        <Box>
+        <Box >
           <Typography
             sx={{ typography: { xs: "h6", sm: "h5" } }}
             variant="h6"
-            color="white"
+            color="#98A1B4"
             paddingLeft="1em"
           >
             {title}
           </Typography>
         </Box>
 
-        <Box>
-          {" "}
-          <HamburgerMenu />{" "}
-        </Box>
+        
       </Box>
       <Outlet />
     </Box>

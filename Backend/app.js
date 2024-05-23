@@ -11,6 +11,7 @@ const orderRouter = require("./routes/OrderRouter");
 const hoursRouter = require ("./routes/hoursRouter");
 const pendingRouter = require ("./routes/pendingRouter");
 const cors = require('cors');
+const sectionsRouter = require("./routes/sectionsRouter");
 dotenv.config();
 
 const app = express();
@@ -35,6 +36,7 @@ app.use ("/contacts",contactRouter)
 app.use ("/orders",orderRouter)
 app.use ("/hours",hoursRouter)
 app.use ("/pendings",pendingRouter)
+app.use("/sections", sectionsRouter)
 
 
 //servidor

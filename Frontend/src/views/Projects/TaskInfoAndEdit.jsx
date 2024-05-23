@@ -49,7 +49,7 @@ export default function TaskInfoAndEdit() {
     });
 
     try {
-      await updateTaskById(taskId, formData);
+      await updateTaskById(taskId, values);
       alert("Datos actualizados");
     } catch (error) {
       alert("Error al editar. Por favor, intenta de nuevo.");

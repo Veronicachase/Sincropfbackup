@@ -10,7 +10,6 @@ import VoiceInput from "../../components/VoiceInput";
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
-  console.log(sectionKey)
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
@@ -66,18 +65,14 @@ export default function ProjectCreateTask() {
           finalImages: []
         }}
         validationSchema={CreateTaskFormSchema}
-        onSubmit={async( values, actions) => {
-        
-          console.log('Data proyect', projectData)
-          console.log('kEY: ', projectData.sections)
-          typeof(key)
-          console.log(values)
-          try{await handleSubmitTask(values, sectionKey)}catch(error){console.log(error)}
-            // .then(() => navigate(-1))
-            // .catch((error) => {
-            //   console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
-            //   actions.setSubmitting(false);
-            // });
+        onSubmit={async (values, actions) => {
+          try {
+            await handleSubmitTask(values, sectionKey);
+            navigate(-1); 
+          } catch (error) {
+            console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
+            actions.setSubmitting(false);
+          }
         }} 
       >
         {({ isSubmitting, setFieldValue }) => (
@@ -102,7 +97,7 @@ export default function ProjectCreateTask() {
                     {employees.map((employee) => (
                       <MenuItem
                         key={employee.employeeId}
-                        value={employee.employeeId}
+                        value={employee.name}
                       >
                         {employee.name}
                       </MenuItem>

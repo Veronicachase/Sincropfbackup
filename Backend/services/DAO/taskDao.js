@@ -8,7 +8,6 @@ taskDao.addTask = async (sectionKey, taskData) => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        console.log('Task data: ', taskData)
       
         let taskObj = {
             taskName: taskData.taskName,
@@ -24,8 +23,6 @@ taskDao.addTask = async (sectionKey, taskData) => {
             prevImages: JSON.stringify(taskData.prevImages || []),  
             finalImages: JSON.stringify(taskData.finalImages || [])
         };
-        
-
         
         taskObj = await removeUndefinedKeys(taskObj);
 

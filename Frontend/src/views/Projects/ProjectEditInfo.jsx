@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-
+// hay que cambiar el botón de actualizar a más abajo pero hay 2 formiks, hay que agregarle el hamburger, 
 // aquí no me funciona nadaaaaaaaaa,  me falta agregar la imagen y setear lo del pdf
 import { Formik, Form, Field } from "formik";
 import { useState, useEffect } from "react";
@@ -276,66 +276,70 @@ export default function ProjectEditInfo() {
             <Typography variant="h6">Secciones:</Typography>
           </Grid>
           {Object.entries(project.sections).map(([sectionKey, isActive]) => (
-            <Grid item xs={12} key={sectionKey}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  marginBottom: "0.5em",
-                  padding: "0.5em",
-                }}
-              >
-                <Typography>{TranslateSectionName(sectionKey)}</Typography>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <IconButton
-                    onClick={() => toggleSection(sectionKey)}
-                    size="small"
-                    sx={{ marginRight: "5px" }}
-                  >
-                    {expandedSections[sectionKey] ? (
-                      <ArrowDropUpIcon />
-                    ) : (
-                      <ArrowDropDownIcon />
-                    )}
-                  </IconButton>
-                  <IconButton size="small" sx={{ marginRight: "5px" }} />
-                  <IconButton
-                    size="small"
-                    sx={{ marginRight: "5px" }}
-                    onClick={() => handleDeleteSection(sectionKey)}
-                  >
-                    <DeleteForeverIcon sx={{ color: "red" }} />
-                  </IconButton>
-                </Box>
-              </Box>
-              <Collapse in={expandedSections[sectionKey]}>
-                {tasks[sectionKey] && tasks[sectionKey].length > 0 && (
-                  <Box
-                    sx={{
-                      border: "1px solid #ccc",
-                      borderRadius: "5px",
-                      padding: "0.5em",
-                      marginTop: "0.5em",
-                    }}
-                  >
-                    <Typography variant="subtitle1">Tareas:</Typography>
-                    <ul>
-                      {tasks[sectionKey].map((task) => (
-                        <li key={task.taskId}>
-                          <a href={`/edit-task/${task.taskId}`}>
-                            {task.taskName} <EditIcon sx={{ color: "#fff" }} />
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+            isActive && (
+              <Grid item xs={12} key={sectionKey}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    marginBottom: "0.5em",
+                    padding: "0.5em",
+                  }}
+                >
+                  <Typography>{TranslateSectionName(sectionKey)}</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton
+                      onClick={() => toggleSection(sectionKey)}
+                      size="small"
+                      sx={{ marginRight: "5px" }}
+                    >
+                      {expandedSections[sectionKey] ? (
+                        <ArrowDropUpIcon />
+                      ) : (
+                        <ArrowDropDownIcon />
+                      )}
+                    </IconButton>
+                    <IconButton size="small" sx={{ marginRight: "5px" }} />
+                    <IconButton
+                      size="small"
+                      sx={{ marginRight: "5px" }}
+                      onClick={() => handleDeleteSection(sectionKey)}
+                    >
+                      <DeleteForeverIcon sx={{ color: "red" }} />
+                    </IconButton>
                   </Box>
-                )}
-              </Collapse>
-            </Grid>
+                </Box>
+          
+                <Collapse in={expandedSections[sectionKey]}>
+                  {tasks[sectionKey] && tasks[sectionKey].length > 0 && (
+                    <Box
+                      sx={{
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        padding: "0.5em",
+                        marginTop: "0.5em",
+                      }}
+                    >
+                      <Typography variant="subtitle1">Tareas:</Typography>
+                      <ul>
+                        {tasks[sectionKey].map((task) => (
+                          <li key={task.taskId}>
+                            <a href={`/edit-task/${task.taskId}`}>
+                              {task.taskName} <EditIcon sx={{ color: "#218BFE" }} />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </Box>
+                  )}
+                </Collapse>
+              </Grid>
+            )
           ))}
+          
         </Grid>
 
         <Box sx={{ marginTop: "1em" }}>

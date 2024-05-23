@@ -1,3 +1,6 @@
+/// aqui no funciona el crear pending nuevo
+
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -163,7 +166,7 @@ export default function Pendings() {
         <Typography variant="h6" sx={{ marginTop: 2 }}>Tareas Pendientes</Typography>
         <List>
           {tasks.map((task) => (
-            <Box key={task.taskId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
+            <Box key={task.taskId} sx={{ display: "flex", justifyContent: "left", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <ListItem onClick={() => navigate(`/tasks/${task.taskId}`)}>
                 <ListItemText primary={task.taskName} />
                 <ListItemSecondaryAction>
@@ -182,7 +185,7 @@ export default function Pendings() {
           <Typography sx={{ marginBottom: "2em" }} variant="h6">Reportes no enviados</Typography>
           {reports.map((report) => (
             report.status === false &&
-            <Box key={report.reportId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
+            <Box key={report.reportId} sx={{ display: "flex", justifyContent:"left", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em" , backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{report.date} - {report.reportName}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(report.reportId)}>
                 <DeleteForeverIcon />
@@ -191,12 +194,12 @@ export default function Pendings() {
           ))}
         </Box>
 
-        <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
+        <Box sx={{ marginBottom: "2em", marginTop: "2em"}}>
           <Typography variant="h6">Trabajadores con equipo incompleto</Typography>
           {employees.map((employee) => (
-            <Box key={employee.id} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
+            <Box key={employee.id} sx={{ display: "flex", justifyContent: "left", gap: 1,  border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{employee.name} - {employee.position}</Typography>
-              <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(employee.id)}>
+              <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(employee.id)} >
                 <DeleteForeverIcon />
               </IconButton>
             </Box>
@@ -206,7 +209,7 @@ export default function Pendings() {
         <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
           <Typography variant="h6">Pedidos Pendientes</Typography>
           {pendingOrders.map((order) => (
-            <Box key={order.orderId} sx={{ display: "flex", justifyContent: "center", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
+            <Box key={order.orderId} sx={{ display: "flex", justifyContent: "left", gap: 1, alignItems: "center", border: "1px solid #f0efef", marginBottom: "1em",  backgroundColor:"#ffffff4d", borderRadius:"5px", padding:".5em 1.5em" }}>
               <Typography>{order.productName}</Typography>
               <IconButton sx={{ color: "red" }} edge="end" aria-label="delete" onClick={() => handleDeleteTask(order.orderId)}>
                 <DeleteForeverIcon />
