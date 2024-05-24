@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
-
+// que los cuadros ocupen todo el ancho las letras justificadas a la izq. margin bottom, cambiar la palabra proyecto
+// de diseño ver que los campos sean del mismo tipo y que luzcan iguales, quitar el crear pdf porque 
+// agregar boton de guardar . Mapa mas pequeño, onCLick agrandar se debe colocar en donde se ve el proyecto 
 // hay que cambiar el botón de actualizar a más abajo pero hay 2 formiks, hay que agregarle el hamburger, 
 // aquí no me funciona nadaaaaaaaaa,  me falta agregar la imagen y setear lo del pdf
 import { Formik, Form, Field } from "formik";
@@ -18,6 +20,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from '@mui/icons-material/Edit';
 import CreatePDFButton from "../../components/CreatePDFButton";
+import { HamburgerMenu }  from "../../components/HamburguerMenu"
 
 import {
   Button,
@@ -159,12 +162,15 @@ export default function ProjectEditInfo() {
   }
 
   return (
-    <Box sx={{ margin: "0 auto", width: "100%", flexGrow: 1, alignContent: "center" }}>
-      <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop: "1em" }}>
-        <Typography variant="body1">
+    <> 
+    
+    <Box sx={{ margin: "0 auto", width: "100%", flexGrow: 1, alignContent: "center", backgroundColor:"#EDF5F4" }}>
+      <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop: "1em", width:"90%"}}>
+        
+      <Typography variant="body1">
           {project.projectName} - {project.constructionType}
-        </Typography>
-
+      </Typography>
+    
         <Formik
           initialValues={formValues}
           enableReinitialize={true}
@@ -172,6 +178,8 @@ export default function ProjectEditInfo() {
           onSubmit={handleSubmit}
         >
           {({ values, setFieldValue, errors }) => (
+
+       
             <Form>
               {Object.entries(values)
                 .filter(
@@ -361,19 +369,11 @@ export default function ProjectEditInfo() {
             Agregar Sección
           </Button>
         </Box>
-
-        <Box>  
-        <CreatePDFButton
-          content={[
-            { text: `Project Name: ${project.projectName}` },
-            { text: `Construction Type: ${project.constructionType}` },
-           
-            
-          ]}
-          imageUrl={imageUrls.prevImages.concat(imageUrls.prevImages)}
-        />
-        </Box>
+          <Button type="submit" variant="outlined" > Guardar Cambios </Button>
+       
       </Box>
     </Box>
+    </>
   );
+  
 }

@@ -7,7 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteTask } from "../../api/deleteTask";
 import { getTaskBySection } from "../../api/getTaskBySection";
-
+import { SectionsAndTask } from "../../components/SectionsAndTasks";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import { AdvancedImage } from "@cloudinary/react";

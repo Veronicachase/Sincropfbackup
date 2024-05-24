@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-      <Box sx={{backgroundColor:"#84C7AE"}}>  
+      <Box sx={{backgroundColor:"#fff"}}>  
         {MenuOptionsList.map((option, index) => (
           <ListItem  key={index} component={Link} to={option.path}>
             <ListItemIcon >{option.icon}</ListItemIcon>

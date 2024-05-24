@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import UsePageTitle from "./UseLocation";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { HamburgerMenu } from "./HamburguerMenu"
 
 export default function Layout() {
   const title = UsePageTitle();
@@ -26,7 +26,7 @@ export default function Layout() {
           paddingBottom: "1em",
         }}
       >
-        <Box >
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
           <Typography
             sx={{ typography: { xs: "h6", sm: "h5" } }}
             variant="h6"
@@ -35,6 +35,7 @@ export default function Layout() {
           >
             {title}
           </Typography>
+          <HamburgerMenu />
         </Box>
 
         

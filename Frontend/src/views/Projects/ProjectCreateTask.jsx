@@ -1,3 +1,5 @@
+// nombre del projecto más grande, justificado izq.
+
 import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
@@ -7,6 +9,7 @@ import { getProjectById } from "../../api/getProjectById";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
+import SideMenu from "../../components/SideMenu";
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
@@ -24,7 +27,7 @@ export default function ProjectCreateTask() {
           console.error("Error al obtener los datos del proyecto:", error);
         }
       }
-        
+
       try {
         const employeeData = await getEmployees();
         console.log(employeeData);
@@ -62,25 +65,42 @@ export default function ProjectCreateTask() {
           status: "noIniciado",
           pdf: [],
           prevImages: [],
-          finalImages: []
+          finalImages: [],
         }}
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
           try {
             await handleSubmitTask(values, sectionKey);
-            navigate(-1); 
+            navigate(-1);
           } catch (error) {
-            console.error("Error durante el proceso de creación de tarea en projectCreateTask: ", error);
+            console.error(
+              "Error durante el proceso de creación de tarea en projectCreateTask: ",
+              error
+            );
             actions.setSubmitting(false);
           }
-        }} 
+        }}
       >
         {({ isSubmitting, setFieldValue }) => (
           <Form>
-            <Box sx={{ maxWidth: 800, margin: "2em auto" }}>
-              <Grid container spacing={2}>
+            <Box
+              sx={{
+                maxWidth: 800,
+                margin: "2em auto",
+                backgroundColor: "#EDF5F4",
+                padding: "2em",
+                display: "flex",
+                borderRadius: "10px",
+              }}
+            >
+              <Box>
+                {" "}
+                <SideMenu />{" "}
+              </Box>
+              <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <Field
+                    sx={{ backgroundColor: "#fff" }}
                     as={TextField}
                     name="taskName"
                     label="Nombre de la tarea"
@@ -90,15 +110,18 @@ export default function ProjectCreateTask() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Field as={Select} name="employeeName" fullWidth displayEmpty>
+                  <Field
+                    as={Select}
+                    name="employeeName"
+                    sx={{ backgroundColor: "#fff" }}
+                    fullWidth
+                    displayEmpty
+                  >
                     <MenuItem value="">
                       <em>Selecciona a un trabajador</em>
                     </MenuItem>
                     {employees.map((employee) => (
-                      <MenuItem
-                        key={employee.employeeId}
-                        value={employee.name}
-                      >
+                      <MenuItem key={employee.employeeId} value={employee.name}>
                         {employee.name}
                       </MenuItem>
                     ))}
@@ -107,6 +130,7 @@ export default function ProjectCreateTask() {
 
                 <Grid item xs={12}>
                   <Field
+                    sx={{ backgroundColor: "#fff" }}
                     as={TextField}
                     name="taskDescription"
                     label="Descripción de la tarea"
@@ -119,6 +143,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={6}>
                   <Field
+                    sx={{ backgroundColor: "#fff" }}
                     as={TextField}
                     name="startDate"
                     label="Fecha de inicio"
@@ -129,6 +154,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={6}>
                   <Field
+                    sx={{ backgroundColor: "#fff" }}
                     as={TextField}
                     name="endDate"
                     label="Fecha de entrega"
@@ -141,7 +167,9 @@ export default function ProjectCreateTask() {
                   <input
                     type="file"
                     name="prevImages"
-                    onChange={(e) => setFieldValue("files", e.currentTarget.files)}
+                    onChange={(e) =>
+                      setFieldValue("files", e.currentTarget.files)
+                    }
                     multiple
                   />
                 </Grid>
@@ -162,26 +190,6 @@ export default function ProjectCreateTask() {
     </Box>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 // import { Formik, Form, Field } from "formik";
@@ -210,7 +218,7 @@ export default function ProjectCreateTask() {
 //           console.error("Error al obtener los datos del proyecto:", error);
 //         }
 //       }
-        
+
 //       try {
 //         const employeeData = await getEmployees();
 //         console.log(employeeData);
@@ -350,15 +358,3 @@ export default function ProjectCreateTask() {
 //     </Box>
 //   );
 // }
-
-
-
-
-
-
-
-
-
-
-
-

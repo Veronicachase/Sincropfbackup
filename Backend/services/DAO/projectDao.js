@@ -7,7 +7,7 @@ const projectDao = {};
 projectDao.addProject = async (projectData) => {
     let conn = null;
     try {
-        console.log(projectData,"projectData")
+        console.log(projectData.sections,"projectData")
         conn = await db.createConnection();
         let projectObj = {
             projectName: "test",
@@ -40,10 +40,11 @@ projectDao.addProject = async (projectData) => {
             createTask: projectData.createTask,            
         };
 
-        let data = {...projectObj, sections: JSON.stringify(projectObj.sections)}
-        data = await removeUndefinedKeys(data);
-        await db.query("INSERT INTO projects SET ?",   data,"insert", conn);
-        return data.projectId; 
+        //let data = {...projectObj, sections: JSON.stringify(projectObj.sections)}
+        console.log( projectObj) 
+        projectObj = await removeUndefinedKeys( projectObj);
+        return await db.query("INSERT INTO projects SET ?",  projectObj,"insert", conn);
+         
     } catch (e) {
         console.error(e.message);
         throw e;
