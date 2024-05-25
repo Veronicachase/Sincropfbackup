@@ -8,6 +8,7 @@ import SideMenu from "../../components/SideMenu";
 import { SectionsAndTasks} from "../../components/SectionsAndTask"; 
 import { Box, Typography, Grid, Button, List, ListItem, ListItemText } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import  CreatePDFButton  from "../../components/CreatePDFButton"
 
 export default function ProjectInfo() {
   const { projectId } = useParams();
@@ -138,13 +139,13 @@ export default function ProjectInfo() {
                   <SectionsAndTasks sectionKey={selectedSectionKey} taskData={taskData} setTaskData={setTaskData} />
                   <Box>
                   <CreatePDFButton
-                    content={[
-                      { text: `Task Name: ${values.taskName}` },
-                      { text: `Description: ${values.taskDescription}` },
-                    ]}
-                    imageUrl={imageUrls.prevImages.concat(
-                      imageUrls.finalImages
-                    )}
+                    // content={[
+                    //   { text: `Task Name: ${values.taskName}` },
+                    //   { text: `Description: ${values.taskDescription}` },
+                    // ]}
+                    // imageUrl={imageUrls.prevImages.concat(
+                    //   imageUrls.finalImages
+                    // )}
                   />
                 </Box>
                 </>

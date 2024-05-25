@@ -4,23 +4,12 @@ import { useEffect, useState } from 'react';
 import { getAllSections } from '../api/getAllSections';
 
 export default function CheckboxC({ setFieldValue, values }) {
-  // const secciones = [
-  //   { label: "Salón", name: "livingRoom" },
-  //   { label: "Cocina", name: "kitchen" },
-  //   { label: "Pasillo", name: "hall" },
-  //   { label: "Habitación ", name: "room" },
-  //   { label: "Baño", name: "bathRoom" },
-  //   { label: "Terraza", name: "terrace" },
-  //   { label: "Lavandería", name: "laundry" },
-  //   { label: "Piscina", name: "pool" },
-  //   { label: "Techo", name: "roof" }
-  // ];
-
   const [secciones, setSecciones] = useState([])
 
   useEffect(() => {
     getAllSections().then((secciones) => setSecciones(secciones.sections))
   }, [values])
+  //TODO: Hacer que no se traiga todo el rato
 
   const handleChange = (name) => (event) => {
     const newSections = { ...values.sections, [name]: event.target.checked };

@@ -5,7 +5,7 @@ export const getAllSections = async () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log("Secciones cargadas correctamente:", data);
+        // console.log("Secciones cargadas correctamente:", data);
         return data;
       } else {
         throw new Error('Fallo en cargar las secciones: ' + response.status);

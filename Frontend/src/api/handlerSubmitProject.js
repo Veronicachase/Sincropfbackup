@@ -1,5 +1,6 @@
 export const handleSubmitProject = async (values) => {    
   console.log('se ejecuta el submit');
+  
     try {
       const response = await fetch("http://localhost:3000/projects", {
         method: "POST",

@@ -40,10 +40,9 @@ projectDao.addProject = async (projectData) => {
             createTask: projectData.createTask,            
         };
 
-        //let data = {...projectObj, sections: JSON.stringify(projectObj.sections)}
-        console.log( projectObj) 
         projectObj = await removeUndefinedKeys( projectObj);
-        return await db.query("INSERT INTO projects SET ?",  projectObj,"insert", conn);
+        let data = {...projectObj, sections: JSON.stringify(projectObj.sections)}
+        return await db.query("INSERT INTO projects SET ?",  data,"insert", conn);
          
     } catch (e) {
         console.error(e.message);

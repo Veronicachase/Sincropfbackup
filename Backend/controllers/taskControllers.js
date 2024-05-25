@@ -1,30 +1,58 @@
+const { cloudinary } = require("../public/cloudinary/cloudinary");
+const uploadImage = require("../public/cloudinary/uploadImage");
 const taskDao = require("../services/DAO/taskDao");
-const path = require("path");
 
 const addTask = async (req, res) => {
-    try {
-      const sectionKey = req.params.sectionKey;
-      const { files } = req;
-      const taskData =  req.body ;
-      console.log('Body', req.body)
-  
-      if (files) {
-        if (files.prevImages) {
-          taskData.prevImages = files.prevImages.map(file => file.path);
-        }
-        if (files.finalImages) {
-          taskData.finalImages = files.finalImages.map(file => file.path);
+  try {
+    const sectionKey = req.params.sectionKey;
+    const taskData = req.body;
+
+    console.log(taskData)
+
+    if (taskData && taskData.prevImages) {
+      const publicIds = [];
+
+      for (const image of taskData.prevImages) {
+        try {
+          const uploadedImage = await cloudinary.uploader.upload(image, {
+            upload_preset: "presets",
+            public_id: `${new Date().getTime()}`, 
+            allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
+          });
+
+          publicIds.push(uploadedImage.public_id);
+
+          console.log("Imagen subida:", uploadedImage);
+        } catch (error) {
+          // Manejar cualquier error ocurrido durante la subida
+          console.error("Error al subir la imagen:", error);
         }
       }
-  
-      const taskId = await taskDao.addTask(sectionKey, taskData);
-      res.status(201).json({ message: "Tarea creada exitosamente", taskId });
-    } catch (error) {
-      console.error("Error al agregar la tarea:", error.message);
-      res.status(500).json({ error: error.message });
+
+      // Asignar el array de public_ids a taskData.prevImages
+      taskData.prevImages = publicIds;
     }
-  };
-  
+
+    if (taskData.finalImages) {
+      // Subir todas las imágenes finales a Cloudinary en paralelo
+      const finalImagesUploadPromises = taskData.finalImages.map(file => uploadImage(file));
+      const finalImagesResults = await Promise.all(finalImagesUploadPromises);
+      
+      // Asignar los public_ids de las imágenes finales a taskData.finalImages
+      taskData.finalImages = finalImagesResults.map(result => result.public_id);
+    }
+
+    // Agregar la tarea a la base de datos
+    const taskId = await taskDao.addTask(sectionKey, taskData);
+    
+    // Enviar respuesta al cliente
+    res.status(201).json({ message: "Tarea creada exitosamente", taskId });
+  } catch (error) {
+    // Manejar errores
+    console.error("Error al agregar la tarea:", error.message);
+    res.status(500).json({ error: "Error al agregar la tarea" });
+  }
+};
 
 const getTaskById = async (req, res) => {
     try {

@@ -1,18 +1,7 @@
 
 export const handleSubmitTask = async (values, sectionKey) => {
-  const formData = new FormData();
-  Object.keys(values).forEach(key => {
-    if (key === 'prevImages') {
-      Array.from(values[key]).forEach(file => {
-        formData.append(key, file);
-      });
-    } else {
-      formData.append(key, values[key]);
-    }
-  });
 
-  console.log('values', values)
-
+  console.log('Valores', values)
   try {
     const response = await fetch(`http://localhost:3000/tasks/${sectionKey}`, {
       method: "POST",
