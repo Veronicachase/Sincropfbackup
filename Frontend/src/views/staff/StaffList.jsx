@@ -46,6 +46,7 @@ export default function EmployeeList() {
 
   return (
     <>
+     
       <Box marginBottom={5}>
         <Button
           variant="outlined"
@@ -61,7 +62,7 @@ export default function EmployeeList() {
         </Button>
       </Box>
 
-      <Box display={"flex"}>
+      <Box display={"flex"} backgroundColor={"#EDF5F4"}  >
         <Box>
           {" "}
           <SideMenu />
@@ -156,6 +157,7 @@ export default function EmployeeList() {
           </ul>
         </Box>
       </Box>
+      
     </>
   );
 }

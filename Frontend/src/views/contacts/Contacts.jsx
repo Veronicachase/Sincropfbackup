@@ -57,7 +57,7 @@ export default function Contacts() {
   }
 
   return (
-<>    
+<>  
 <Box marginBottom={5}  >
 <Button variant="outlined" sx={{border:"1px solid #fff"}} onClick={() => navigate(`/create-contact`)} > 
 <Typography variant="body" color={"#000"} paddingRight={1} >Agregar contacto</Typography>
@@ -67,17 +67,17 @@ export default function Contacts() {
 
 
 
-    <Box display={"flex"}>
+    <Box display={"flex"} backgroundColor={"#EDF5F4"}>
       <Box>
         {" "}
         <SideMenu />{" "}
       </Box>
 
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%"}}>
         {Object.keys(data).map((category) => (
           <Box
             key={category}
-            sx={{ marginBottom: 2, width: "60%", border: " 1px solid #fff" }}
+            sx={{ marginBottom: 2, width: "80%", backgroundColor:"#fff", border: " 1px solid #fff", borderRadius:"10px", marginTop:"1em" }}
           >
             <IconButton
               onClick={() => toggleCollapse(category)}
@@ -93,7 +93,7 @@ export default function Contacts() {
                     key={contactItem.contactId}
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <ListItemText primary={contactItem.contactName} />
+                    <ListItemText primary={contactItem.contactName}  />
                     <IconButton
                       onClick={() =>
                         navigate(`/contact-details/${contactItem.contactId}`)

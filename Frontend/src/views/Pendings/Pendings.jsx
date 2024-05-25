@@ -13,6 +13,7 @@ import { getAllOrders } from "../../api/getAllOrders";
 import { getEmployees } from "../../api/getEmployees";
 import { getAllPendings } from "../../api/getAllPendings";
 import SideMenu from "../../components/SideMenu";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {
   Button,
   TextField,
@@ -180,7 +181,10 @@ export default function Pendings() {
               )}
             </Formik>
             <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
-              <Typography sx={{ marginBottom: "2em", textAlign:"left" }} variant="h6">
+              <Typography
+                sx={{ marginBottom: "2em", textAlign: "left" }}
+                variant="h6"
+              >
                 Mis Pendientes creados
               </Typography>
               {pendings.map(
@@ -216,16 +220,16 @@ export default function Pendings() {
               )}
             </Box>
 
-            <Typography variant="h6" sx={{ marginTop: 2, textAlign:"left" }}>
+            <Typography variant="h6" sx={{ marginTop: 2, textAlign: "left" }}>
               Tareas Pendientes
             </Typography>
+
             <List>
               {tasks.map((task) => (
                 <Box
                   key={task.taskId}
                   sx={{
                     display: "flex",
-                    justifyContent: "left",
                     gap: 1,
                     alignItems: "center",
                     border: "1px solid #f0efef",
@@ -235,9 +239,20 @@ export default function Pendings() {
                     padding: ".5em 1.5em",
                   }}
                 >
-                  <ListItem onClick={() => navigate(`/tasks/${task.taskId}`)}>
+                  <ListItem
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
                     <ListItemText primary={task.taskName} />
                     <ListItemSecondaryAction>
+                      <IconButton>
+                        <RemoveRedEyeIcon
+                          onClick={() => navigate(`/tasks/${task.taskId}`)}
+                        />
+                      </IconButton>
                       <IconButton
                         sx={{ color: "red" }}
                         edge="end"
@@ -255,7 +270,10 @@ export default function Pendings() {
 
           <Box>
             <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
-              <Typography sx={{ marginBottom: "2em", textAlign:"left" }} variant="h6">
+              <Typography
+                sx={{ marginBottom: "2em", textAlign: "left" }}
+                variant="h6"
+              >
                 Reportes no enviados
               </Typography>
               {reports.map(
@@ -278,6 +296,11 @@ export default function Pendings() {
                       <Typography>
                         {report.date} - {report.reportName}
                       </Typography>
+                      <IconButton>
+                      <RemoveRedEyeIcon
+                        onClick={() => navigate(`/tasks/${report.taskId}`)}
+                      />
+                    </IconButton>
                       <IconButton
                         sx={{ color: "red" }}
                         edge="end"
@@ -291,7 +314,7 @@ export default function Pendings() {
               )}
             </Box>
 
-            <Box sx={{ marginBottom: "2em", marginTop: "2em"  }}>
+            <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
               <Typography variant="h6" textAlign={"left"} marginBottom={"1em"}>
                 Trabajadores con equipo incompleto
               </Typography>
@@ -306,13 +329,17 @@ export default function Pendings() {
                     marginBottom: "1em",
                     borderRadius: "5px",
                     padding: ".5em 1.5em",
-                    backgroundColor:"#fff"
+                    backgroundColor: "#fff",
                   }}
                 >
                   <Typography>
                     {employee.name} - {employee.position}
                   </Typography>
-
+                  <IconButton>
+                  <RemoveRedEyeIcon
+                    onClick={() => navigate(`/tasks/${employee.taskId}`)}
+                  />
+                </IconButton>
                   <IconButton
                     sx={{ color: "red" }}
                     edge="end"
@@ -326,7 +353,9 @@ export default function Pendings() {
             </Box>
 
             <Box sx={{ marginBottom: "2em", marginTop: "2em" }}>
-              <Typography variant="h6" textAlign={"left"}>Pedidos Pendientes</Typography>
+              <Typography variant="h6" textAlign={"left"}>
+                Pedidos Pendientes
+              </Typography>
               {pendingOrders.map((order) => (
                 <Box
                   key={order.orderId}
@@ -343,6 +372,11 @@ export default function Pendings() {
                   }}
                 >
                   <Typography>{order.productName}</Typography>
+                  <IconButton>
+                  <RemoveRedEyeIcon
+                    onClick={() => navigate(`/tasks/${order.taskId}`)}
+                  />
+                </IconButton>
                   <IconButton
                     sx={{ color: "red" }}
                     edge="end"

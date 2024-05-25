@@ -58,7 +58,7 @@ export default function MyProjects() {
           <SideMenu />
         </Box>
         <Box width={"100%"} overflow="auto" padding={2}>
-          <Typography variant="h5" color={"#98A1B4"} marginBottom={2}>Lista de proyectos</Typography>
+          <Typography variant="h6" color={"#98A1B4"} marginBottom={2}>Lista de proyectos</Typography>
           {projects.length > 0 ? (
             projects.map((project) => (
               <Box
@@ -86,10 +86,10 @@ export default function MyProjects() {
                   }}
                 >
                   <IconColors />
-                  <Typography variant="h5">
+                  <Typography variant="body1">
                     {project.projectName}
                   </Typography>
-                  <Typography variant="subtitle1">{project.startDate}</Typography>
+                  <Typography variant="body2">{project.startDate}</Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
                   <Box
