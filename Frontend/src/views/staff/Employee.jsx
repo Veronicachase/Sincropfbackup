@@ -1,6 +1,7 @@
 // Arreglar titulos de trabajador,  colocar las horas trabajadas al menos de la ultima semana, 
 // espacios y justificar a la izq. 
 // cambiar actualizar información por edit información, ver orden de los distintos tipos de horas
+// introducir tabla de material,  traer las horas de la ultima semana
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -47,6 +48,26 @@ export default function Employee() {
     if (employeeId) {
       fetchEmployee();
     }
+
+    // Set endDate to today and startDate to one week ago
+    const today = new Date().toISOString().split('T')[0];
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    setEndDate(today);
+    setStartDate(oneWeekAgo.toISOString().split('T')[0]);
+
+    // Fetch hours worked for the last week
+    const fetchHours = async () => {
+      try {
+        const fetchedHours = await getHoursWorked(employeeId, oneWeekAgo.toISOString().split('T')[0], today);
+        setHoursWorked(fetchedHours);
+      } catch (error) {
+        console.error("Failed to fetch hours worked", error);
+        setHoursWorked([]);
+      }
+    };
+    fetchHours();
+
   }, [employeeId]);
 
   const handleFetchHours = async () => {
@@ -64,20 +85,20 @@ export default function Employee() {
   }
 
   return (
-    <Box>
+    <Box backgroundColor="#EDF5F4">
       <Typography variant="h4">{employee.name}</Typography>
       <Typography variant="h5">Información del trabajador</Typography>
       
       <Formik
         initialValues={{
-          name:employee.name,
+          name: employee.name,
           position: employee.position,
           project: employee.project,
           mandatoryEquipment: employee.mandatoryEquipment,
           comments: employee.comments,
         }}
         validationSchema={yup.object({
-          name:yup.string().required(),
+          name: yup.string().required(),
           position: yup.string().required(),
           project: yup.string().required(),
           mandatoryEquipment: yup.string().required(),
@@ -86,7 +107,7 @@ export default function Employee() {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             await updateEmployeeById(employeeId, {
-              name:values.name,
+              name: values.name,
               position: values.position,
               project: values.project,
               mandatoryEquipment: values.mandatoryEquipment,
@@ -103,13 +124,14 @@ export default function Employee() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Box>
+            <Box sx={{ width: "90%", margin: "0 auto" }}>
               <Field
                 as={TextField}
                 name="position"
                 label="Posición"
                 fullWidth
                 margin="normal"
+                sx={{ backgroundColor: "#fff" }}
               />
               <Field
                 as={TextField}
@@ -117,6 +139,7 @@ export default function Employee() {
                 label="Obra"
                 fullWidth
                 margin="normal"
+                sx={{ backgroundColor: "#fff" }}
               />
               <Field
                 as={TextField}
@@ -124,6 +147,7 @@ export default function Employee() {
                 label="Equipo entregado"
                 fullWidth
                 margin="normal"
+                sx={{ backgroundColor: "#fff" }}
               />
               <Field
                 as={TextField}
@@ -131,15 +155,20 @@ export default function Employee() {
                 label="Comentarios"
                 fullWidth
                 margin="normal"
+                sx={{ backgroundColor: "#fff" }}
               />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                variant="contained"
-                color="primary"
-              >
-                Actualizar Información
-              </Button>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  sx={{ marginTop: "1em", marginBottom: "1em" }}
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="contained"
+                  color="primary"
+                >
+                  Editar Información
+                </Button>
+              </Box>
+              <Box sx={{ border: "1px solid #84C7AE", marginBottom: "2em" }}></Box>
             </Box>
           </Form>
         )}
@@ -177,57 +206,61 @@ export default function Employee() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Typography variant="h4">Horas trabajadas</Typography>
-            <Typography>
-              <strong>Fecha:</strong> <CurrentDate />
-            </Typography>
-            <Typography>Introducir horas trabajadas</Typography>
-            <Box>
-              <Field
-                as={TextField}
-                name="regularHour"
-                label="Horas regulares"
-                placeholder="Horas Regulares"
-                margin="normal"
-              />
-              <Field
-                as={TextField}
-                name="regularMinutes"
-                label="Minutos regulares"
-                placeholder="Minutos Regulares"
-                margin="normal"
-              />
-              <Field
-                as={TextField}
-                name="extraHour"
-                label="Horas extra"
-                placeholder="Horas Extras"
-                margin="normal"
-              />
-              <Field
-                as={TextField}
-                name="extraMinutes"
-                label="Minutos Extra"
-                placeholder="Minutos Extras"
-                margin="normal"
-              />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                variant="contained"
-                color="primary"
-              >
-                Agregar horas
-              </Button>
+            <Box sx={{ width: "90%", margin: "0 auto", marginTop: "2em", backgroundColor: "#fff", padding: "2em", borderRadius: "10px" }}>
+              <Typography variant="h6" textAlign={"left"}>Horas trabajadas</Typography>
+              <Typography textAlign={"left"}>
+                <strong>Fecha:</strong> <CurrentDate />
+              </Typography>
+              <Typography textAlign={"left"} marginBottom={"2em"}>Introducir horas trabajadas</Typography>
+              <Box display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"} marginBottom={"1em"}>
+                <Field
+                  as={TextField}
+                  name="regularHour"
+                  label="Horas regulares"
+                  placeholder="Horas Regulares"
+                  margin="normal"
+                />
+                <Field
+                  as={TextField}
+                  name="regularMinutes"
+                  label="Minutos regulares"
+                  placeholder="Minutos Regulares"
+                  margin="normal"
+                />
+                <Field
+                  as={TextField}
+                  name="extraHour"
+                  label="Horas extra"
+                  placeholder="Horas Extras"
+                  margin="normal"
+                />
+                <Field
+                  as={TextField}
+                  name="extraMinutes"
+                  label="Minutos Extra"
+                  placeholder="Minutos Extras"
+                  margin="normal"
+                />
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="contained"
+                  color="primary"
+                >
+                  Agregar horas
+                </Button>
+              </Box>
             </Box>
           </Form>
         )}
       </Formik>
-      
-      <Box>
-        <Typography variant="h6">Consultar Horas Trabajadas</Typography>
+      <Box sx={{ border: "1px solid #84C7AE", marginBottom: "2em", marginTop: "2em" }}></Box>
+      <Box sx={{ marginTop: "2em", backgroundColor: "#fff", width: "90%", margin: "2em auto", padding: "2em", borderRadius: "10px" }}>
+        <Typography variant="h6" textAlign={"left"} marginBottom={"2em"}>Consultar Horas Trabajadas</Typography>
         <TextField
-          label="Fecha de Inicio"
+          label="Desde"
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
@@ -237,7 +270,7 @@ export default function Employee() {
           }}
         />
         <TextField
-          label="Fecha de Fin"
+          label="Hasta"
           type="date"
           value={endDate}
           sx={{ marginRight: 2, marginBottom: 2 }}
@@ -246,14 +279,16 @@ export default function Employee() {
             shrink: true,
           }}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleFetchHours}
-          sx={{ marginLeft: 2 }}
-        >
-          Consultar
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleFetchHours}
+            sx={{ marginLeft: 2 }}
+          >
+            Consultar
+          </Button>
+        </Box>
         {hoursWorked.length > 0 && <HoursTable hoursWorked={hoursWorked} />}
       </Box>
     </Box>
@@ -265,7 +300,7 @@ const HoursTable = ({ hoursWorked }) => {
   const totals = calculateTotalHours(hoursWorked);
 
   return (
-    <Box>
+    <Box >
       <Typography variant="h6" gutterBottom>
         Horas Trabajadas
       </Typography>
@@ -323,9 +358,9 @@ const HoursTable = ({ hoursWorked }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "1em" }}>
         <CreatePDFButton />
-      </Button>
+      </Box>
     </Box>
   );
 };

@@ -47,18 +47,23 @@ export default function MyProjects() {
 
   return (
     <>
-      <Box marginBottom={5} display={"flex"} justifyContent={"right"}>
-        <Button variant="outlined" sx={{backgroundColor:"#fff", border:"1px solid #218BFE"}} onClick={() => navigate(`/create-new-project`)}>
-          <Typography variant="body" color={"#218BFE"} paddingRight={1}>Agregar Proyecto</Typography>
-          <AddCircleIcon sx={{color:"#218BFE"}} />
-        </Button>
-      </Box>
+      
       <Box display="flex" height="90vh" sx={{borderRadius:"5px"}} backgroundColor={"#EDF5F4"}>
         <Box width={{ xs: "100%", md: "25%" }} flexShrink={0}>
           <SideMenu />
         </Box>
         <Box width={"100%"} overflow="auto" padding={2}>
-          <Typography variant="h6" color={"#98A1B4"} marginBottom={2}>Lista de proyectos</Typography>
+        <Box display={"flex"} justifyContent={"space-between"}>     
+        
+        <Typography variant="h6" color={"#98A1B4"} marginBottom={2}>Lista de proyectos</Typography>
+        <Box marginBottom={5} display={"flex"} justifyContent={"right"}>
+        <Button variant="outlined" sx={{backgroundColor:"#fff", border:"1px solid #218BFE"}} onClick={() => navigate(`/create-new-project`)}>
+          <Typography variant="body" color={"#218BFE"} paddingRight={1}>Agregar Proyecto</Typography>
+          <AddCircleIcon sx={{color:"#218BFE"}} />
+        </Button>
+      </Box>
+        </Box>
+          
           {projects.length > 0 ? (
             projects.map((project) => (
               <Box

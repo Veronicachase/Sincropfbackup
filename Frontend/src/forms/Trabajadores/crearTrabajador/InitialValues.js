@@ -1,10 +1,9 @@
 export const initialValues = {
-    Fecha: new Date(),
-    posicion:"",
-    obra:"",
-    si:"",
-    no:"",
-    incompleto:"",
-    comentarios:""
+    date: new Date(),
+    name:"",
+    position:"",
+    project:"",
+    mandatoryEquipment:"",
+    comments:""
    
    }

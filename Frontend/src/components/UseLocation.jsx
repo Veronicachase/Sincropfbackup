@@ -17,6 +17,8 @@ export default function UsePageTitle() {
     { path: "/pendings", title: "Mis pendientes" },
     { path: "/progress", title: "Avances de Proyecto" },
     { path: "/order-list", title: "Pedidos de Material" },
+    { path: "/order-details/:orderId", title: "Detalles del pedido" },
+    { path: "/create-order", title: "Crear Pedido" },
     { path: "/allContacts", title: "Contactos" },
     { path: "/create-contact", title: "Crear contacto nuevo" },
     { path: "/staff-list", title: "Lista de trabajadores" },
@@ -31,3 +33,4 @@ export default function UsePageTitle() {
 
   return title ? title.title : "PÁGINA NO ENCONTRADA";
 }
+

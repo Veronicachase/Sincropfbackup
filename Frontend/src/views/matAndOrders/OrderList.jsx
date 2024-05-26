@@ -120,7 +120,7 @@ function OrderList() {
   if (loading) return <p>Cargando datos de contacto...</p>;
 
   return (
-<Box display={"flex"}> 
+<Box display={"flex"} backgroundColor={"#EDF5F4"}> 
 <Box> <SideMenu/> </Box>
 
     <Box sx={{ marginTop: "2em" }}>
@@ -128,9 +128,9 @@ function OrderList() {
         projects.map((project) => (
           <Box
             key={project.projectId}
-            sx={{ margin: "2em", border: "1px solid #f0efef", borderRadius:"5px" }}
+            sx={{ margin: "2em", border: "1px solid #f0efef", borderRadius:"5px", backgroundColor:"#fff" }}
           >
-            <Box sx={{ display: "flex", padding: "1em", gap: 2 }}>
+            <Box sx={{ display: "flex", padding: "1em", gap: 2 , justifyContent:"space-between"}}>
               <Typography variant="h6">
                 {" "}
                 <strong>Proyecto: </strong> {project.projectName}

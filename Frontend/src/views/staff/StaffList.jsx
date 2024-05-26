@@ -62,13 +62,13 @@ export default function EmployeeList() {
         </Button>
       </Box>
 
-      <Box display={"flex"} backgroundColor={"#EDF5F4"}  >
+      <Box display={"flex"} backgroundColor={"#EDF5F4"} >
         <Box>
           {" "}
           <SideMenu />
         </Box>
 
-        <Box width={"60%"}>
+        <Box width={"60%"} >
           <FormControl fullWidth>
             <Box
               sx={{
@@ -77,10 +77,12 @@ export default function EmployeeList() {
                 gap: 1,
                 marginTop: "3em",
                 marginBottom: "2em",
+              
               }}
             >
               <FilterAltIcon />
-              <Select
+              <Select 
+                paddingTop={"2em"}
                 labelId="filter-select-label"
                 id="filter-select"
                 value={selectedFilter}
@@ -116,7 +118,7 @@ export default function EmployeeList() {
           <Typography variant="h6" sx={{ marginTop: "1em" }}>
             Resultados:
           </Typography>
-          <ul style={{ padding: 0 }}>
+          <ul style={{ padding: 0, backgroundColor:"#fff", borderRadius:"5px" }}>
             {filteredEmployees.map((employee) => (
               <li
                 key={employee.employeeId}
@@ -132,7 +134,7 @@ export default function EmployeeList() {
                   <Typography>{employee.name}</Typography>
                 )}
                 {selectedFilter === "position" && (
-                  <Box>
+                  <Box >
                     <Typography>
                       <strong>{employee.position}</strong> - {employee.name}
                     </Typography>
