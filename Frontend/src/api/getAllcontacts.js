@@ -1,6 +1,6 @@
 export const getAllContacts = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/Contacts`, {
+      const response = await fetch(`http://localhost:3000/contacts`, {
         method: "GET",
       });
       if (response.ok) {

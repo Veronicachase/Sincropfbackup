@@ -3,16 +3,16 @@ export const getTaskBySection = async (projectId, sectionKey) => {
     const response = await fetch(`http://localhost:3000/tasks/${projectId}/${sectionKey}`, {
       method: "GET",
     });
+
     if (response.ok) {
-      const data = await response.json();
-      console.log("Tarea obtenida correctamente:", data);
-      if (data.prevImages) {
-        console.log("Imagenes previas:", data.prevImages);
-      }
-      if (data.finalImages) {
-        console.log("Imagenes finales:", data.finalImages);
-      }
-      return data;
+      // console.log('Respuesta', await response.json())
+      const tasks = await response.json(); 
+
+      console.log("Tareas obtenidas correctamente:", tasks);
+
+      
+      // return tasks.filter(task => task.sectionKey === sectionKey && task.sectionIsActive);
+      return tasks;
     } else {
       throw new Error('Ha habido un fallo al obtener el estatus de la tarea: ' + response.status);
     }

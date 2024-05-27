@@ -56,29 +56,32 @@ taskDao.getAllTasks = async () => {
     }
 };
 
-
 taskDao.getTasksBySection = async (projectId, sectionKey) => {
     let conn = null;
     try {
         conn = await db.createConnection();
         const sql = `
-            SELECT *
-            FROM tasks 
-            JOIN projects ON tasks.projectId = projects.projectId
-            WHERE JSON_EXTRACT(projects.sections, '$.${sectionKey}') = true AND projects.projectId = ?
+            SELECT t.*
+            FROM tasks t
+            JOIN projects p ON t.projectId = p.projectId
+            WHERE JSON_UNQUOTE(JSON_EXTRACT(p.sections, CONCAT('$.', ?))) = '1'
+            AND p.projectId = ?
         `;
-        const results = await db.query(sql, [projectId],"select", conn);
-        return results; 
+        const results = await db.query(sql, [sectionKey, projectId], "select", conn);
+        // console.log("Resultados de la consulta SQL:", results);
+      
+        return results;
     } catch (e) {
         console.error("Error al obtener tareas por sección:", e.message);
-        throw e;  
+        throw e;
     } finally {
         if (conn) {
-        await conn.end();
+            await conn.end();
         }
     }
 };
 
+module.exports = taskDao;
 
 taskDao.getTaskById = async (taskId) => {
     let conn = null;

@@ -1,11 +1,13 @@
+//const { jwtVerify } = require("jose");
 const { jwtVerify } = require("jose");
 const HoursDao = require("../services/DAO/hoursDao");
 const employeeDao = require("../services/DAO/employeeDao"); 
 
-const getHoursById = async (req, res) => {
+const getHoursByEmployeeId = async (req, res) => {
   try {
-    const { employeeId } = req.params; 
-    const hours = await HoursDao.gethoursByEmployeeId(employeeId);
+    const { employeeId } = req.params;
+    const { start, end } = req.query; // aqui obtengo start y end de req.query
+    const hours = await HoursDao.gethoursByEmployeeId(employeeId, start, end);
     if (!hours || hours.length === 0) return res.status(404).send("Horas no encontradas para este trabajador");
     return res.status(200).json(hours);
   } catch (e) {
@@ -15,28 +17,32 @@ const getHoursById = async (req, res) => {
 };
 
 const addHours = async (req, res) => {
-  const { authorization } = req.headers;
-  if (!authorization) return res.sendStatus(401); 
-  const token = authorization.split(" ")[1];
-
   try {
-    const encoder = new TextEncoder();
-    const { payload } = await jwtVerify(token, encoder.encode(process.env.JWT_SECRET));
+    const { employeeId } = req.params; 
+    const { regularHours, regularMinutes, extraHours, extraMinutes } = req.body; 
+
+    if (!employeeId) {
+      return res.status(400).send("ID del empleado es requerido");
+    }
 
     const hoursData = {
       date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-      regularHours: req.body.regularHours,
-      regularMinutes: req.body.regularMinutes,
-      extraHours: req.body.extraHours,
-      extraMinutes: req.body.extraMinutes,
-      employeeId: req.body.employeeId
+      regularHours,
+      regularMinutes,
+      extraHours,
+      extraMinutes,
+      employeeId, 
     };
 
-    const newHours = await HoursDao.addHours(req.body.employeeId, hoursData);
-    return res.status(201).send(`Horas añadidas con ID: ${newHours.insertId}`);
+    const newHours = await HoursDao.addHours(employeeId, hoursData);
+    if (newHours && newHours.insertId) {
+      return res.status(201).send(`Horas añadidas con ID: ${newHours.insertId}`);
+    } else {
+      return res.status(500).send("Error al agregar las horas, ID no disponible.");
+    }
   } catch (e) {
-    console.error(e.message);
-    return res.status(500).send("Internal Server Error");
+    console.error('Error al agregar las horas:', e.message);
+    return res.status(500).send("Error interno del servidor");
   }
 };
 
@@ -66,4 +72,5 @@ const deleteHour = async (req, res) => {
   }
 };
 
-module.exports = { getHoursById, addHours, updateHours, deleteHour };
+
+module.exports = { getHoursByEmployeeId, addHours, updateHours, deleteHour };

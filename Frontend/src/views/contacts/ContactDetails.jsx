@@ -77,19 +77,19 @@ export default function ContactDetails() {
           <Form>
             <Grid sx={{marginBottom:"2em",marginTop:"2em"}} >
               <Field as={TextField} name="phone" label="Teléfono"  />
-              {formik.values.phone && <a href={`tel:${formik.values.phone}`}><PhoneIcon sx={{color:"#fff"}} /></a>}
+              {formik.values.phone && <a href={`tel:${formik.values.phone}`}><PhoneIcon sx={{color:"#84c7ae", marginLeft:".3em"}} /></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}} >
               <Field as={TextField} name="mobile" label="Móvil" />
-              {formik.values.mobile && <a href={`https://wa.me/${formik.values.mobile}`}><WhatsAppIcon sx={{color:"#fff"}} /></a>}
+              {formik.values.mobile && <a href={`https://wa.me/${formik.values.mobile}`}><WhatsAppIcon sx={{color:"#84c7ae", marginLeft:".3em"}} /></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="email" label="Email" />
-              {formik.values.email && <a href={`mailto:${formik.values.email}`}><EmailIcon  sx={{color:"#fff"}}/></a>}
+              {formik.values.email && <a href={`mailto:${formik.values.email}`}><EmailIcon  sx={{color:"#84c7ae", marginLeft:".3em", alignSelf:"center"}}/></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="address" label="Dirección" />
-              {formik.values.address && <a href={`https://maps.google.com/?q=${formik.values.address} `}><FmdGoodIcon sx={{color:"#fff"}}  /></a>}
+              {formik.values.address && <a href={`https://maps.google.com/?q=${formik.values.address} `}><FmdGoodIcon sx={{color:"#84c7ae", marginLeft:".3em"}}  /></a>}
             </Grid>
             <Grid sx={{marginBottom:"2em"}}>
               <Field as={TextField} name="comments" label="Comentarios" />

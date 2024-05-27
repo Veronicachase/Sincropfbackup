@@ -208,7 +208,7 @@ function OrderList() {
                 ) : (
                   <Typography>No se encontraron pedidos</Typography>
                 )}
-                <Box sx={{display:"flex", gap:2, justifyContent:"center"}}>   
+                <Box sx={{display:"flex", gap:2, justifyContent:"center", paddingBottom:"1em"}}>   
                 <Box>
                 <Button
                   onClick={() => navigate("/create-order")}

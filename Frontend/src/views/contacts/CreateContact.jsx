@@ -17,6 +17,7 @@ export default function CreateContact() {
     address: "",
     email: "",
     phone: "",
+    mobile:"",
     comments: ""
   };
 
@@ -30,7 +31,7 @@ export default function CreateContact() {
           actions.setSubmitting(false);
           actions.resetForm();
           alert("Contacto creado correctamente");
-          navigate("/contacts");
+          navigate("/allContacts");
         }).catch(error => {
           console.error("Error en el proceso: ", error);
           actions.setSubmitting(false);
@@ -72,6 +73,9 @@ export default function CreateContact() {
                 </Select>
               </Grid>
               <Grid item xs={12}>
+                <Field as={TextField} label="Nombre" name="contactName" fullWidth  sx={{backgroundColor:"#ffffff4d"}}/>
+              </Grid>
+              <Grid item xs={12}>
                 <Field as={TextField} label="Empresa" name="company" fullWidth  sx={{backgroundColor:"#ffffff4d"}}/>
               </Grid>
               <Grid item xs={12}>
@@ -84,10 +88,13 @@ export default function CreateContact() {
                 <Field as={TextField} label="Teléfono" name="phone" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
               </Grid>
               <Grid item xs={12}>
+                <Field as={TextField} label="Móvil" name="mobile" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
+              </Grid>
+              <Grid item xs={12}>
                 <Field as={TextField} label="Comentarios" name="comments" fullWidth multiline rows={3} sx={{backgroundColor:"#ffffff4d"}}/>
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="outlined" disabled={isSubmitting} sx={{border:"1px solid #fff", color:"#fff"}}>
+                <Button type="submit" variant="contained" disabled={isSubmitting} sx={{border:"1px solid #fff", color:"#fff"}}>
                   Crear Contacto
                 </Button>
               </Grid>

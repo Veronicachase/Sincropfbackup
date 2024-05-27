@@ -27,11 +27,11 @@ export default function Contacts() {
       try {
         console.log("Llamando a getAllContacts desde el frontend");
         const allContacts = await getAllContacts();
-        console.log("Contactos obtenidos:", allContacts);
+        console.log("Contactos cargados correctamente:", allContacts);
 
         // aquí los agrupo por categoría para que pueda desplagarlos por cada una
         const groupedContacts = allContacts.reduce((acc, contact) => {
-          const category = contact.category.trim();
+          const category = contact.category;
           if (!acc[category]) {
             acc[category] = [];
           }

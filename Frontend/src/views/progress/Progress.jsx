@@ -15,6 +15,7 @@ import LocalSeeIcon from '@mui/icons-material/LocalSee';
 import { Formik, Form, Field } from 'formik';
 import MyButton from '../../components/MyButton';
 import '../../assets/styles/estilosGenerales.css';
+import VoiceInputNoFormik  from "../../components/VoiceInputNoFormik"
 
 export default function Proyecto() {
   const [isToggled, setIsToggled] = useState(false);

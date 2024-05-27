@@ -40,7 +40,6 @@ export default function Layout() {
           paddingBottom: "1em",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography
             sx={{ typography: { xs: "h6", sm: "h5" } }}
             variant="h6"
@@ -56,7 +55,6 @@ export default function Layout() {
 
 
         </Box>
-      </Box>
       <Box sx={{ borderBottom: "1px solid #ccc", marginBottom: "2em" }}></Box>
       <Outlet />
     </Box>

@@ -82,13 +82,13 @@ export default function EmployeeList() {
             >
               <FilterAltIcon />
               <Select 
-                paddingTop={"2em"}
+               
                 labelId="filter-select-label"
                 id="filter-select"
                 value={selectedFilter}
                 displayEmpty
                 onChange={handleChange}
-                sx={{ minWidth: 100 }}
+                sx={{ minWidth: 100, paddingTop:"2em" }}
                 renderValue={(selected) => {
                   if (!selected) {
                     return (

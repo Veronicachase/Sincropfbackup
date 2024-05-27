@@ -34,7 +34,8 @@ HoursDao.addHours = async (employeeId, hoursData) => {
       employeeId: employeeId
     };
     hoursObj = await removeUndefinedKeys(hoursObj);
-    return await db.query("INSERT INTO hours SET ?", hoursObj, "insert", conn);
+    const result = await db.query("INSERT INTO hours SET ?", hoursObj, "insert", conn);
+    return result; 
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -42,12 +43,13 @@ HoursDao.addHours = async (employeeId, hoursData) => {
   }
 };
 
+
 HoursDao.updateHours = async (employeeId, hoursData) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     let hoursObj = {
-      date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      date: moment().format("YYYY-MM-DD "),
       regularHours: hoursData.regularHours,
       extraHours: hoursData.extraHours,
       extraMinutes: hoursData.extraMinutes,

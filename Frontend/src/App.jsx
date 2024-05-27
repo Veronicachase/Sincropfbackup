@@ -1,6 +1,6 @@
 
 import { Routes, Route, Navigate } from "react-router-dom";
-import AuthContextProvider from './context/AuthContext';
+//import AuthContextProvider from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
 import CreateNewProject from './views/projects/CreateNewProject';
 import MyProjects from './views/projects/MyProjects';
@@ -29,7 +29,7 @@ import "./App.css";
 
 export default function App() {
   return (
-    <AuthContextProvider>
+    //<AuthContextProvider>
       <CreatePdfContextProvider>
         <Routes>
           <Route path="/" element={<Navigate replace to="/login" />} />
@@ -61,7 +61,7 @@ export default function App() {
           </Route>
         </Routes>
       </CreatePdfContextProvider>
-    </AuthContextProvider>
+    //</AuthContextProvider>
   );
 }
 

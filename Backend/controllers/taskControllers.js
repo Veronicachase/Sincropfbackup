@@ -2,6 +2,8 @@ const { cloudinary } = require("../public/cloudinary/cloudinary");
 const uploadImage = require("../public/cloudinary/uploadImage");
 const taskDao = require("../services/DAO/taskDao");
 
+
+
 const addTask = async (req, res) => {
   try {
     const sectionKey = req.params.sectionKey;
@@ -83,22 +85,30 @@ const getAllTasks = async (req, res) => {
     }
 };
 
-const getTasksBySection = async (req, res) => {
-    try {
-        const {projectId, sectionKey} = req.params;
-        console.log("Recibiendo projectId:", projectId, "Recibiendo sectionKey:", sectionKey); /// esto no me trae nada
-        const tasks = await taskDao.getTasksBySection(projectId, sectionKey);
 
-        if (tasks && tasks.length > 0) {
-            res.json(tasks);
-        } else {
-            res.status(404).json({ message: "Tarea  no encontrada para la sección escogida" });
-        }
-    } catch (error) {
-        console.error("Error al obtener la tarea:", error.message);
-        res.status(500).json({ error: error.message });
+const getTasksBySection = async (req, res) => {
+  try {
+    const { projectId, sectionKey } = req.params;
+    console.log("Recibiendo projectId:", projectId, "Recibiendo sectionKey:", sectionKey);
+    
+    let tasks = await taskDao.getTasksBySection(projectId, sectionKey);
+
+    // console.log('Task en el controlador', tasks)
+    // Filtra las tareas para asegurarme de que solo obtengo las activas
+    // tasks = tasks.filter(task => task.sectionIsActive);
+    // console.log(tasks)
+
+    if (tasks && tasks.length > 0) {
+      res.json(tasks);
+    } else {
+      res.status(404).json({ message: "Tarea no encontrada para la sección escogida" });
     }
+  } catch (error) {
+    console.error("Error al obtener la tarea:", error.message);
+    res.status(500).json({ error: error.message });
+  }
 };
+
 
 const updateTask = async (req, res) => {
     try {
