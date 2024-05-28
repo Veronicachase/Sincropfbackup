@@ -1,175 +1,400 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProjectById } from "../../api/getProjectById"; 
-import { getTaskBySection } from "../../api/getTaskBySection";
-import MapView from "../../components/MapView";
-import SideMenu from "../../components/SideMenu";
-import { SectionsAndTasks} from "../../components/SectionsAndTask"; 
-import { Box, Typography, Grid, Button, List, ListItem, ListItemText, Collapse, IconButton } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CreatePDFButton from "../../components/CreatePDFButton";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-export default function ProjectInfo() {
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Drawer, Box, List, ListItem, ListItemText, Typography, AppBar, Toolbar, IconButton, ListItemIcon, Button } from "@mui/material";
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { SectionsAndTasks } from "../../components/SectionsAndTask";
+import { getProjectById } from "../../api/getProjectById";
+import { getTaskBySection } from "../../api/getTaskBySection";
+
+import { sectionMapping } from "../../components/SectionMappingIcons";
+
+const drawerWidth = 240;
+
+const ProjectInfo = () => {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [selectedSectionKey, setSelectedSectionKey] = useState(null);
-  const [expanded, setExpanded] = useState(false);
   const [taskData, setTaskData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (projectId) {
-      getProjectById(projectId)
-        .then((projectData) => {
-          setProject(projectData);
-          setLoading(false);
-        })
-        .catch((error) => {
+    const fetchProjectData = async () => {
+      if (projectId) {
+        setLoading(true);
+        try {
+          const data = await getProjectById(projectId);
+          setProject(data);
+          if (data.sections && Array.isArray(data.sections)) {
+            setSelectedSectionKey(data.sections[0]); // Pre-seleccionar la primera sección
+          }
+        } catch (error) {
           console.error("Error fetching project data:", error);
+        } finally {
           setLoading(false);
-        });
-    }
+        }
+      }
+    };
+
+    fetchProjectData();
   }, [projectId]);
 
   useEffect(() => {
-    if (projectId && selectedSectionKey) {
-      getTaskBySection(projectId, selectedSectionKey)
-        .then((tasks) => {
+    const fetchTaskData = async () => {
+      if (projectId && selectedSectionKey) {
+        try {
+          const tasks = await getTaskBySection(projectId, selectedSectionKey);
           setTaskData(tasks);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Error fetching tasks:", error);
-        });
-    }
+        }
+      }
+    };
+
+    fetchTaskData();
   }, [projectId, selectedSectionKey]);
 
-  if (loading) {
-    return <p>Cargando proyecto...</p>;
-  }
+  if (loading) return <p>Cargando proyecto...</p>;
+  if (!project) return <p>No se encontró el proyecto</p>;
 
-  if (!project) {
-    return <p>No se encontró el proyecto</p>;
-  }
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  const sectionsWithTasks = taskData.reduce((acc, task) => {
-    if (!acc[task.section]) {
-      acc[task.section] = [];
-    }
-    acc[task.section].push(task);
-    return acc;
-  }, {});
+  const drawer = (
+    <div>
+      <Typography variant="h6" noWrap component="div" sx={{ p: 2 }}>
+        Secciones del Proyecto
+      </Typography>
+      <List>
+        {project.sections && project.sections.map((section) => (
+          <ListItem key={section} onClick={() => setSelectedSectionKey(section)}>
+            <ListItemIcon>
+              {sectionMapping[section] ? sectionMapping[section].icon : <ArrowCircleRightIcon />}
+            </ListItemIcon>
+            <ListItemText primary={sectionMapping[section] ? sectionMapping[section].name : section} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
   return (
-    <>
-      <Box display="flex" sx={{ backgroundColor: "#EDF5F4", paddingTop: "2em" }}>
-        <SideMenu />
-        <Box flex="1" p={3}>
+    <Box sx={{ display: 'flex' }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
           <IconButton
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="mostrar más"
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            sx={{ mr: 2, display: { sm: 'none' } }}
+            onClick={() => {/* toggle mobile drawer logic here if needed */}}
           >
-            {expanded ?  <ExpandLessIcon />  : <Typography style={{display: "flex"}}> Ver datos<ExpandMoreIcon /></Typography>}
+            <ArrowCircleRightIcon />
           </IconButton>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Box border={1} display={"flex"} flexDirection={"column"} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc" textAlign={"left"} lineHeight={"2"}>
-                  <Typography variant="h5">Datos</Typography>
-                  <Typography variant="body1"><strong>Nombre del proyecto: </strong>{project.projectName}</Typography>
-                  <Typography variant="body1"><strong>Identificador: </strong>{project.identifier}</Typography>
-                  <Typography variant="body1"><strong>Empresa contratante: </strong>{project.hiringCompany}</Typography>
-                  <Typography variant="body1"><strong>Tipo de Proyecto: </strong>{project.typeOfWork}</Typography>
-                  <Typography variant="body1"><strong>Tipo de construcción: </strong>{project.constructionType}</Typography>
-                  <Typography variant="body1"><strong>Descripción general del proyecto: </strong>{project.projectDescription}</Typography>
-                  <Typography variant="body1"><strong>Fecha de inicio: </strong>{project.startDate}</Typography>
-                  <Typography variant="body1"><strong>Fecha de entrega: </strong>{project.endDate}</Typography>
-                  <Typography variant="body1"><strong>Estado:</strong>{project.status}</Typography>
-                </Box>
-              </Grid>
+          <Typography variant="h6" noWrap>
+            Información del Proyecto
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        {drawer}
+        <Button  variant="contained" onClick={() => navigate(`/project-info-data/${projectId}`)}>Datos del proyecto</Button>
 
-              <Grid item xs={12}>
-                <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc" textAlign={"left"}>
-                  <Typography variant="h5">Dirección</Typography>
-                  <Typography variant="body1"><strong>Dirección:</strong>{project.addressDescription}</Typography>
-                  <Typography variant="body1"><strong>Bloque:</strong>{project.block}</Typography>
-                  <Typography variant="body1"><strong>No.:</strong>{project.unit}</Typography>
-                  <Typography variant="body1"><strong>Código Postal:</strong>{project.zipCode}</Typography>
-                  <Typography variant="body1"><strong>Provincia:</strong>{project.province}</Typography>
-                </Box>
-              </Grid>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
+        <Toolbar />
+        <SectionsAndTasks projectId={projectId} sectionKey={selectedSectionKey} taskData={taskData} setTaskData={setTaskData} />
+      </Box>
+    </Box>
+  );
+};
 
-              <Grid item xs={12}>
-                <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc">
-                  <Typography variant="h5">Mapa</Typography>
-                  <MapView />
-                </Box>
-              </Grid>
+export default ProjectInfo;
 
-              <Grid item xs={12}>
-                <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc">
-                  <Typography variant="h5">Imagen general del proyecto</Typography>
-                  <Box sx={{ marginTop: "1em" }}>
-                    {project.image && <img src={project.image} alt="Project" width="100%" />}
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Collapse>
 
-          {/* Visualización de secciones y tareas */}
-          <Box display="flex" mt={3} backgroundColor={"#fff"} borderRadius={"10px"}>
-            <Box width="25%" borderRight={1} borderColor="#ccc">
-              <Typography variant="body1" sx={{ padding: 1 }}>Secciones activas del proyecto</Typography>
-              <List>
-                {Object.keys(project.sections).map((key) => (
-                  <ListItem key={key} onClick={() => setSelectedSectionKey(key)}>
-                    <ListItemText primary={key.charAt(0).toUpperCase() + key.slice(1)} />
-                    <ArrowForwardIcon/>
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-            <Box flex="1" padding="2em">
-              {selectedSectionKey && (
-                <>
-                  <Box marginBottom={5}>
-                    <Button
-                      variant="outlined"
-                      sx={{ border: "1px solid #fff" }}
-                      onClick={() => navigate(`/project-create-task/${projectId}/${selectedSectionKey}`)}
-                    >
-                      <Typography variant="body" color={"#000"} paddingRight={1}>
-                        Agregar tarea{" "}
-                      </Typography>
-                      <AddCircleIcon sx={{ color: "#000" }} />
-                    </Button>
-                  </Box>
-                  <SectionsAndTasks 
-                    projectId={projectId} 
-                    sectionKey={selectedSectionKey} 
-                    taskData={taskData} 
-                    setTaskData={setTaskData} 
-                  />
-                </>
-              )}
-            </Box>
-          </Box>
+// import { useNavigate, useParams } from "react-router-dom";
+// import { sectionMapping } from "../../components/SectionMappingIcons"
+// import { getProjectById } from "../../api/getProjectById";
+// import { getTaskBySection } from "../../api/getTaskBySection";
+// import { Drawer, Box, List, ListItem, ListItemText, Typography, AppBar, Toolbar, IconButton,ListItemIcon } from "@mui/material";
+// import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+// import { SectionsAndTasks } from "../../components/SectionsAndTask"
+// import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
+
+
+// const drawerWidth = 240;
+
+// const ProjectInfo = () => {
+//   const { projectId } = useParams();
+//   const [project, setProject] = useState(null);
+//   const [selectedSectionKey, setSelectedSectionKey] = useState(null);
+//   const [taskData, setTaskData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     if (projectId) {
+//       setLoading(true);
+//       getProjectById(projectId)
+//         .then(data => {
+//           setProject(data);
+//           setSelectedSectionKey(Object.keys(data.sections)[0]); // Pre-select the first section
+//         })
+//         .catch(error => console.error("Error fetching project data:", error))
+//         .finally(() => setLoading(false));
+//     }
+//   }, [projectId]);
+
+//   useEffect(() => {
+//     if (projectId && selectedSectionKey) {
+//       getTaskBySection(projectId, selectedSectionKey)
+//         .then(setTaskData)
+//         .catch(error => console.error("Error fetching tasks:", error));
+//     }
+//   }, [projectId, selectedSectionKey]);
+
+//   if (loading) return <p>Cargando proyecto...</p>;
+//   if (!project) return <p>No se encontró el proyecto</p>;
+
+//   const drawer = (
+//     <div>
+//       <Typography variant="h6" noWrap component="div" sx={{ p: 2 }}>
+//         Secciones del Proyecto
+//       </Typography>
+//       <List>
+//         {project.sections && Object.keys(project.sections).map((key) => (
+//           <ListItem key={key} onClick={() => setSelectedSectionKey(key)}>
+//             <ListItemIcon>
+//               {sectionMapping[key] ? sectionMapping[key].icon : <ArrowCircleRightIcon/>} 
+//             </ListItemIcon>
+//             <ListItemText primary={sectionMapping[key] ? sectionMapping[key].name : key} />
+//           </ListItem>
+//         ))}
+//       </List>
+//     </div>
+//   );
+
+//   return (
+//     <Box sx={{ display: 'flex' }}>
+//       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+//         <Toolbar>
+//           <IconButton
+//             color="inherit"
+//             aria-label="open drawer"
+//             edge="start"
+//             sx={{ mr: 2, display: { sm: 'none' } }}
+//             onClick={() => {/* toggle mobile drawer logic here if needed */}}
+//           >
+//             <ArrowCircleRightIcon/>
+//           </IconButton>
+//           <Typography variant="h6" noWrap>
+//             Información del Proyecto
+//           </Typography>
+//         </Toolbar>
+//       </AppBar>
+//       <Drawer
+//         variant="permanent"
+//         sx={{
+//           width: drawerWidth,
+//           flexShrink: 0,
+//           [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+//         }}
+//       >
+//         {drawer}
+//       </Drawer>
+//       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+//         <Toolbar />
+//         <SectionsAndTasks/>
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default ProjectInfo;
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import { getProjectById } from "../../api/getProjectById"; 
+// import { getTaskBySection } from "../../api/getTaskBySection";
+// import MapView from "../../components/MapView";
+// import SideMenu from "../../components/SideMenu";
+// import { SectionsAndTasks} from "../../components/SectionsAndTask"; 
+// import { Box, Typography, Grid, Button, List, ListItem, ListItemText, Collapse, IconButton } from "@mui/material";
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+// import AddCircleIcon from '@mui/icons-material/AddCircle';
+// //import { CreatePDFButton } from "../../components/CreatePDFButton";
+// import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+// export default function ProjectInfo() {
+//   const { projectId } = useParams();
+//   const [project, setProject] = useState(null);
+//   const [selectedSectionKey, setSelectedSectionKey] = useState(null);
+//   const [expanded, setExpanded] = useState(false);
+//   const [taskData, setTaskData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     if (projectId) {
+//       getProjectById(projectId)
+//         .then((projectData) => {
+//           setProject(projectData);
+//           setLoading(false);
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching project data:", error);
+//           setLoading(false);
+//         });
+//     }
+//   }, [projectId]);
+
+//   useEffect(() => {
+//     if (projectId && selectedSectionKey) {
+//       getTaskBySection(projectId, selectedSectionKey)
+//         .then((tasks) => {
+//           setTaskData(tasks);
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching tasks:", error);
+//         });
+//     }
+//   }, [projectId, selectedSectionKey]);
+
+//   if (loading) {
+//     return <p>Cargando proyecto...</p>;
+//   }
+
+//   if (!project) {
+//     return <p>No se encontró el proyecto</p>;
+//   }
+
+//   const handleExpandClick = () => {
+//     setExpanded(!expanded);
+//   };
+
+//   const sectionsWithTasks = taskData.reduce((acc, task) => {
+//     if (!acc[task.section]) {
+//       acc[task.section] = [];
+//     }
+//     acc[task.section].push(task);
+//     return acc;
+//   }, {});
+
+//   return (
+//     <>
+//       <Box display="flex" sx={{ backgroundColor: "#EDF5F4", paddingTop: "2em" }}>
+//         <SideMenu />
+//         <Box flex="1" p={3}>
+//           <IconButton
+//             onClick={handleExpandClick}
+//             aria-expanded={expanded}
+//             aria-label="mostrar más"
+//           >
+//             {expanded ?  <ExpandLessIcon />  : <Typography style={{display: "flex"}}> Ver datos<ExpandMoreIcon /></Typography>}
+//           </IconButton>
+//           <Collapse in={expanded} timeout="auto" unmountOnExit>
+//             <Grid container spacing={3}>
+//               <Grid item xs={12}>
+//                 <Box border={1} display={"flex"} flexDirection={"column"} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc" textAlign={"left"} lineHeight={"2"}>
+//                   <Typography variant="h5">Datos</Typography>
+//                   <Typography variant="body1"><strong>Nombre del proyecto: </strong>{project.projectName}</Typography>
+//                   <Typography variant="body1"><strong>Identificador: </strong>{project.identifier}</Typography>
+//                   <Typography variant="body1"><strong>Empresa contratante: </strong>{project.hiringCompany}</Typography>
+//                   <Typography variant="body1"><strong>Tipo de Proyecto: </strong>{project.typeOfWork}</Typography>
+//                   <Typography variant="body1"><strong>Tipo de construcción: </strong>{project.constructionType}</Typography>
+//                   <Typography variant="body1"><strong>Descripción general del proyecto: </strong>{project.projectDescription}</Typography>
+//                   <Typography variant="body1"><strong>Fecha de inicio: </strong>{project.startDate}</Typography>
+//                   <Typography variant="body1"><strong>Fecha de entrega: </strong>{project.endDate}</Typography>
+//                   <Typography variant="body1"><strong>Estado:</strong>{project.status}</Typography>
+//                 </Box>
+//               </Grid>
+
+//               <Grid item xs={12}>
+//                 <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc" textAlign={"left"}>
+//                   <Typography variant="h5">Dirección</Typography>
+//                   <Typography variant="body1"><strong>Dirección:</strong>{project.addressDescription}</Typography>
+//                   <Typography variant="body1"><strong>Bloque:</strong>{project.block}</Typography>
+//                   <Typography variant="body1"><strong>No.:</strong>{project.unit}</Typography>
+//                   <Typography variant="body1"><strong>Código Postal:</strong>{project.zipCode}</Typography>
+//                   <Typography variant="body1"><strong>Provincia:</strong>{project.province}</Typography>
+//                 </Box>
+//               </Grid>
+
+//               <Grid item xs={12}>
+//                 <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc">
+//                   <Typography variant="h5">Mapa</Typography>
+//                   <MapView />
+//                 </Box>
+//               </Grid>
+
+//               <Grid item xs={12}>
+//                 <Box border={1} borderRadius={2} p={2} backgroundColor="#fff" borderColor="#ccc">
+//                   <Typography variant="h5">Imagen general del proyecto</Typography>
+//                   <Box sx={{ marginTop: "1em" }}>
+//                     {project.image && <img src={project.image} alt="Project" width="100%" />}
+//                   </Box>
+//                 </Box>
+//               </Grid>
+//             </Grid>
+//           </Collapse>
+
+//           {/* Visualización de secciones y tareas */}
+//           <Box display="flex" mt={3} backgroundColor={"#fff"} borderRadius={"10px"}>
+//             <Box width="25%" borderRight={1} borderColor="#ccc">
+//               <Typography variant="body1" sx={{ padding: 1 }}>Secciones activas del proyecto</Typography>
+//               <List>
+//                 {Object.keys(project.sections).map((key) => (
+//                   <ListItem key={key} onClick={() => setSelectedSectionKey(key)}>
+//                     <ListItemText primary={key.charAt(0).toUpperCase() + key.slice(1)} />
+//                     <ArrowForwardIcon/>
+//                   </ListItem>
+//                 ))}
+//               </List>
+//             </Box>
+//             <Box flex="1" padding="2em">
+//               {selectedSectionKey && (
+//                 <>
+//                   <Box marginBottom={5}>
+//                     <Button
+//                       variant="outlined"
+//                       sx={{ border: "1px solid #fff" }}
+//                       onClick={() => navigate(`/project-create-task/${projectId}/${selectedSectionKey}`)}
+//                     >
+//                       <Typography variant="body" color={"#000"} paddingRight={1}>
+//                         Agregar tarea{" "}
+//                       </Typography>
+//                       <AddCircleIcon sx={{ color: "#000" }} />
+//                     </Button>
+//                   </Box>
+//                   <SectionsAndTasks 
+//                     projectId={projectId} 
+//                     sectionKey={selectedSectionKey} 
+//                     taskData={taskData} 
+//                     setTaskData={setTaskData} 
+//                   />
+//                 </>
+//               )}
+//             </Box>
+//           </Box>
 
           
-        </Box>
-      </Box>
-    </>
-  );
-}
+//         </Box>
+//       </Box>
+//     </>
+//   );
+// }
 
 
 

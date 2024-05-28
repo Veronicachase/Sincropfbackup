@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Box, Typography, IconButton, Collapse, Modal } from '@mui/material';
+import { Box, Typography, IconButton, Collapse, Modal, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types';
 import { deleteTask } from '../api/deleteTask';
 import { getTaskBySection } from '../api/getTaskBySection';
 import { useNavigate } from 'react-router-dom';
-import CreatePDFButton from '../components/CreatePDFButton';
+import { CreatePDFButton } from '../components/CreatePDFButton';
 import { getProjectById } from '../api/getProjectById';
 
 export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTaskData }) => {
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const navigate = useNavigate();
-  const [project, setProject] = useState(null); 
-  const [modalOpen, setModalOpen] = useState(false); 
-  const [selectedImage, setSelectedImage] = useState(null); 
+  const [project, setProject] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -76,9 +76,11 @@ export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTask
 
   return (
     <Box>
+    <Typography sx={{textAlign:"left", marginBottom:"1em"}}  variant='h5'> Tareas</Typography>
       {taskData.length === 0 ? (
         <Typography>No hay tareas para esta sección.</Typography>
       ) : (
+        
         taskData.map((task) => (
           <Box key={task.taskId} id={`task-${task.taskId}`} sx={{ marginBottom: 3, border: '1px solid #ccc', borderRadius: '5px', padding: 2 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -103,13 +105,13 @@ export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTask
 
                 <Box mt={2}>
                   <Typography sx={{textAlign:"left"}} variant="body1"><strong>Imágenes Iniciales:</strong></Typography>
-                  <Box display="flex" flexWrap="wrap" backgroundColor="#EDF5F4" borderRadius={"10px"} padding={"1em"}>
+                  <Box display="flex" flexWrap="wrap" backgroundColor="#edf3f9" borderRadius={"10px"} padding={"1em"}>
                     {task.prevImages && task.prevImages.map((image, index) => (
-                      <img 
-                        key={index} 
-                        src={image} 
-                        alt={`Inicial ${index}`} 
-                        style={{ width: '100px', margin: '5px', cursor: 'pointer' }} 
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Inicial ${index}`}
+                        style={{ width: '100px', margin: '5px', cursor: 'pointer' }}
                         onClick={() => handleImageClick(image)}
                       />
                     ))}
@@ -118,20 +120,21 @@ export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTask
 
                 <Box mt={2}>
                   <Typography sx={{textAlign:"left"}}  variant="body1"><strong>Imágenes Finales:</strong></Typography>
-                  <Box display="flex" flexWrap="wrap" backgroundColor="#EDF5F4" borderRadius={"10px"} padding={"1em"}>
+                  <Box display="flex" flexWrap="wrap" backgroundColor="#edf3f9" borderRadius={"10px"} padding={"1em"}>
                     {task.finalImages && task.finalImages.map((image, index) => (
-                      <img 
-                        key={index} 
-                        src={image} 
-                        alt={`Final ${index}`} 
-                        style={{ width: '100px', margin: '5px', cursor: 'pointer' }} 
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Final ${index}`}
+                        style={{ width: '100px', margin: '5px', cursor: 'pointer' }}
                         onClick={() => handleImageClick(image)}
                       />
                     ))}
                   </Box>
                 </Box>
                 {project && (
-                  <CreatePDFButton project={project} tasks={[task]} fileName={`reporte_${project.projectName}_${task.taskName}.pdf`} />
+                  <CreatePDFButton project={project} tasks={[task]} fileName={`reporte_${project.projectName}_${task.taskName}.pdf`} /> 
+                  
                 )}
               </Box>
             </Collapse>
@@ -155,19 +158,6 @@ SectionsAndTasks.propTypes = {
   setTaskData: PropTypes.func,
 };
 
-export default SectionsAndTasks;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // import { useState, useEffect } from 'react';
@@ -186,7 +176,7 @@ export default SectionsAndTasks;
 // export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTaskData }) => {
 //   const [expandedTaskId, setExpandedTaskId] = useState(null);
 //   const navigate = useNavigate();
-//   const [project, setProject] = useState(null); 
+//   const [project, setProject] = useState(null);
 
 //   useEffect(() => {
 //     const fetchProject = async () => {
@@ -288,13 +278,7 @@ export default SectionsAndTasks;
 //   setTaskData: PropTypes.func,
 // };
 
-
-
 // export default SectionsAndTasks;
-
-
-
-
 
 // import { useState, useEffect } from 'react';
 // import { Box, Typography, IconButton, Collapse } from '@mui/material';
@@ -414,14 +398,7 @@ export default SectionsAndTasks;
 //   setTaskData: PropTypes.func,
 // };
 
-
-
 // export default SectionsAndTasks;
-
-
-
-
-
 
 // // import  { useState, useEffect } from "react";
 // // import { Box, Typography, IconButton, Collapse } from "@mui/material";
@@ -434,7 +411,6 @@ export default SectionsAndTasks;
 // // import { getTaskBySection } from "../api/getTaskBySection";
 // // import { useNavigate } from "react-router-dom";
 // // import CreatePDFButton from "../components/CreatePDFButton"
-   
 
 // // export const SectionsAndTasks = ({ projectId, sectionKey, taskData = [], setTaskData }) => {
 // //   const [expandedTaskId, setExpandedTaskId] = useState(null);
@@ -528,24 +504,6 @@ export default SectionsAndTasks;
 // //   taskData: PropTypes.array,
 // //   setTaskData: PropTypes.func,
 // // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // // // import React, { useState, useEffect } from "react";
 // // // import { Box, Typography, IconButton, Collapse } from "@mui/material";
@@ -721,19 +679,6 @@ export default SectionsAndTasks;
 // // // SectionsAndTasks.propTypes = {
 // // //   projectId: PropTypes.string.isRequired,
 // // // };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // // // import { useState, useEffect } from "react";
 // // // import { Box, Typography, IconButton, Collapse } from "@mui/material";
@@ -1180,3 +1125,4 @@ export default SectionsAndTasks;
 // // //   taskData: PropTypes.array.isRequired,
 // // //   setTaskData: PropTypes.func.isRequired,
 // // // };
+   
