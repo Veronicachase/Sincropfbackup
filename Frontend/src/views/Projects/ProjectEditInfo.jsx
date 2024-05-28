@@ -19,7 +19,7 @@ import MapView from "../../components/MapView";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from '@mui/icons-material/Edit';
-import { HamburgerMenu }  from "../../components/HamburguerMenu"
+import { HamburgerMenu } from "../../components/HamburguerMenu";
 
 import {
   Button,
@@ -32,10 +32,10 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  TextField,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import IconColors from "../../components/IconColors";
 
 export default function ProjectEditInfo() {
   const { projectId } = useParams();
@@ -46,7 +46,7 @@ export default function ProjectEditInfo() {
   const [tasks, setTasks] = useState({});
   const navigate = useNavigate();
   const [newSection, setNewSection] = useState("");
-  const [imageUrls, setImageUrls] = useState({ prevImages: [], finalImages: [] })
+  const [imageUrls, setImageUrls] = useState({ prevImages: [], finalImages: [] });
 
   useEffect(() => {
     if (projectId) {
@@ -123,22 +123,22 @@ export default function ProjectEditInfo() {
       }
     }
   };
+
   const handleFileChange = (event, type) => {
     const files = Array.from(event.target.files);
-    const urls = files.map(file => URL.createObjectURL(file));
+    const urls = files.map((file) => URL.createObjectURL(file));
     setImageUrls((prev) => ({
       ...prev,
-      [type]: urls
+      [type]: urls,
     }));
   };
 
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
-      // Agregando mis valores a formData para que el formato pueda ser manejado por Formik y entregado en el formato adecuado
-      Object.keys(values).forEach(key => {
+      Object.keys(values).forEach((key) => {
         if (Array.isArray(values[key])) {
-          values[key].forEach(file => {
+          values[key].forEach((file) => {
             formData.append(key, file);
           });
         } else {
@@ -161,218 +161,180 @@ export default function ProjectEditInfo() {
   }
 
   return (
-    <> 
-    
-    <Box sx={{ margin: "0 auto", width: "100%", flexGrow: 1, alignContent: "center",  }}>
-      <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop: "1em", width:"90%"}}>
-        
-      <Typography variant="body1">
-          {project.projectName} - {project.constructionType}
+    <Box sx={{ width: "90%", margin: "2em auto", padding: 3 }}>
+      <Typography variant="h5" sx={{ marginBottom: "1em" }}>
+        Editar Proyecto: {project.projectName} - {project.constructionType}
       </Typography>
-    
-        <Formik
-          initialValues={formValues}
-          enableReinitialize={true}
-          validationSchema={NewProjectFormSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ values, setFieldValue, errors }) => (
 
-       
-            <Form>
-              {Object.entries(values)
-                .filter(
-                  ([key]) =>
-                    ![
-                      "projectId",
-                      "filesId",
-                      "employeeId",
-                      "userId",
-                      "reports",
-                      "sections",
-                      "area",
-                      "addedSection",
-                      "createTask",
-                      "portal",
-                      "image",
-                    ].includes(key)
-                )
-                .map(([key]) => (
-                  <Box key={key}>
-                    {key !== "typeOfWork" &&
-                      key !== "constructionType" &&
-                      key !== "status" && (
-                        <Grid item xs={12} md={12}>
-                          <Box
-                            sx={{
-                              border: "1px solid #ccc",
-                              marginBottom: ".5em",
-                              paddingLeft: "1em",
-                              paddingTop: "10px",
-                              paddingBottom: "10px",
-                              borderRadius: "5px",
-                              backgroundColor: "#ffffff4d",
-                            }}
-                          >
-                            <label htmlFor={key}>
-                              <strong>{getLabel(key)}</strong>{" "}
-                            </label>
-                            <Field
-                              id={key}
-                              name={key}
-                              as="input"
-                              value={values[key] || ""}
-                              style={{ border: "none", backgroundColor: "#ffffff4d" }}
-                            />
-                          </Box>
-                        </Grid>
-                      )}
-                    {key === "map" && (
-                      <Grid item xs={12}>
-                        <div id="map" style={{ height: "400px", width: "100%" }}>
-                          <MapView setFieldValue={setFieldValue} />
-                        </div>
-                      </Grid>
-                    )}
-                    {key === "typeOfWork" && (
-                      <FormControl fullWidth sx={{ marginTop: "1em", backgroundColor: "#ffffff4d" }}>
-                        <InputLabel>{getLabel(key)}</InputLabel>
-                        <Select
-                          name="typeOfWork"
-                          value={values.typeOfWork}
-                          onChange={(e) =>
-                            setFieldValue("typeOfWork", e.target.value)
-                          }
-                        >
-                          <MenuItem value="finishings">Repasos</MenuItem>
-                          <MenuItem value="construction">Construcción</MenuItem>
-                        </Select>
-                      </FormControl>
-                    )}
-                  </Box>
-                ))}
-                <Box sx={{ marginTop: "1em" }}>
-                <input
-                  type="file"
-                  name="prevImages"
-                  multiple
-                  onChange={(e) => {
-                    setFieldValue("prevImages", Array.from(e.target.files));
-                    handleFileChange(e, "prevImages");
-                  }}
-                />
-                <input
-                  type="file"
-                  name="finalImages"
-                  multiple
-                  onChange={(e) => {
-                    setFieldValue("finalImages", Array.from(e.target.files));
-                    handleFileChange(e, "finalImages");
-                  }}
-                />
-              </Box>
-              <Box>
-                <Button type="submit">Actualizar</Button>
-              </Box>
-            </Form>
-          )}
-        </Formik>
-
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h6">Secciones:</Typography>
-          </Grid>
-          {Object.entries(project.sections).map(([sectionKey, isActive]) => (
-            isActive && (
-              <Grid item xs={12} key={sectionKey}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    marginBottom: "0.5em",
-                    padding: "0.5em",
-                  }}
-                >
-                  <Typography>{TranslateSectionName(sectionKey)}</Typography>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton
-                      onClick={() => toggleSection(sectionKey)}
-                      size="small"
-                      sx={{ marginRight: "5px" }}
-                    >
-                      {expandedSections[sectionKey] ? (
-                        <ArrowDropUpIcon />
-                      ) : (
-                        <ArrowDropDownIcon />
-                      )}
-                    </IconButton>
-                    <IconButton size="small" sx={{ marginRight: "5px" }} />
-                    <IconButton
-                      size="small"
-                      sx={{ marginRight: "5px" }}
-                      onClick={() => handleDeleteSection(sectionKey)}
-                    >
-                      <DeleteForeverIcon sx={{ color: "red" }} />
-                    </IconButton>
-                  </Box>
-                </Box>
-          
-                <Collapse in={expandedSections[sectionKey]}>
-                  {tasks[sectionKey] && tasks[sectionKey].length > 0 && (
-                    <Box
-                      sx={{
-                        border: "1px solid #ccc",
-                        borderRadius: "5px",
-                        padding: "0.5em",
-                        marginTop: "0.5em",
-                      }}
-                    >
-                      <Typography variant="subtitle1">Tareas:</Typography>
-                      <ul>
-                        {tasks[sectionKey].map((task) => (
-                          <li key={task.taskId}>
-                            <a href={`/edit-task/${task.taskId}`}>
-                              {task.taskName} <EditIcon sx={{ color: "#218BFE" }} />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </Box>
+      <Formik
+        initialValues={formValues}
+        enableReinitialize={true}
+        validationSchema={NewProjectFormSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, setFieldValue, errors }) => (
+          <Form>
+            {Object.entries(values)
+              .filter(
+                ([key]) =>
+                  ![
+                    "projectId",
+                    "filesId",
+                    "employeeId",
+                    "userId",
+                    "reports",
+                    "sections",
+                    "area",
+                    "addedSection",
+                    "createTask",
+                    "portal",
+                    "image",
+                  ].includes(key)
+              )
+              .map(([key]) => (
+                <Box key={key} sx={{ marginBottom: 2 }}>
+                  {key !== "typeOfWork" && key !== "constructionType" && key !== "status" && (
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label={getLabel(key)}
+                      name={key}
+                      value={values[key] || ""}
+                      onChange={(e) => setFieldValue(key, e.target.value)}
+                    />
                   )}
-                </Collapse>
-              </Grid>
-            )
-          ))}
-          
-        </Grid>
+                  {key === "map" && (
+                    <Grid item xs={12}>
+                      <Box sx={{ height: 400, width: "100%", marginTop: 2 }}>
+                        <MapView setFieldValue={setFieldValue} />
+                      </Box>
+                    </Grid>
+                  )}
+                  {key === "typeOfWork" && (
+                    <FormControl fullWidth variant="outlined" sx={{ marginTop: 2 }}>
+                      <InputLabel>{getLabel(key)}</InputLabel>
+                      <Select
+                        name="typeOfWork"
+                        value={values.typeOfWork}
+                        onChange={(e) => setFieldValue("typeOfWork", e.target.value)}
+                        label={getLabel(key)}
+                      >
+                        <MenuItem value="finishings">Repasos</MenuItem>
+                        <MenuItem value="construction">Construcción</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                </Box>
+              ))}
 
-        <Box sx={{ marginTop: "1em" }}>
-          <FormControl fullWidth>
-            <InputLabel> Nueva sección</InputLabel>
-            <input
-              type="text"
-              placeholder="Escriba aquí el nombre de la sección que quiere crear"
-              value={newSection}
-              onChange={(e) => setNewSection(e.target.value)}
-            />
-          </FormControl>
-          <Button
-            variant="outlined"
-            onClick={handleAddSection}
-            startIcon={<AddCircleIcon />}
-            sx={{ marginTop: "2em", border: "1px solid #fff", color: "#000", marginBottom: "2em" }}
-          >
-            Agregar Sección
-          </Button>
-        </Box>
-          <Button type="submit" variant="outlined" > Guardar Cambios </Button>
-       
+            <Box sx={{ marginTop: 2 }}>
+              <Button variant="outlined" component="label" sx={{ marginRight: 2 }}>
+                Agregar Imágenes Anteriores
+                <input type="file" name="prevImages" multiple hidden onChange={(e) => {
+                  setFieldValue("prevImages", Array.from(e.target.files));
+                  handleFileChange(e, "prevImages");
+                }} />
+              </Button>
+              <Button variant="outlined" component="label">
+                Agregar Imágenes Finales
+                <input type="file" name="finalImages" multiple hidden onChange={(e) => {
+                  setFieldValue("finalImages", Array.from(e.target.files));
+                  handleFileChange(e, "finalImages");
+                }} />
+              </Button>
+            </Box>
+
+            <Box sx={{ textAlign: "center", marginTop: 3 }}>
+            <Button
+                variant="outlined"
+                onClick={() => navigate("/my-projects")}
+                sx={{ marginRight: 2, marginLeft: 2, ":hover": { backgroundColor: "secondary.light" } }}
+              >
+                Cancelar
+              </Button>
+
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{ marginLeft: 2, backgroundColor: "primary.main", ":hover": { backgroundColor: "primary.dark" } }}
+              >
+                Actualizar
+              </Button>
+              
+            </Box>
+          </Form>
+        )}
+      </Formik>
+
+      <Grid container spacing={2} sx={{ marginTop: 3 }}>
+        <Grid item xs={12}>
+          <Typography variant="h6">Secciones:</Typography>
+        </Grid>
+        {Object.entries(project.sections).map(([sectionKey, isActive]) =>
+          isActive ? (
+            <Grid item xs={12} key={sectionKey}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  padding: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+              >
+                <Typography>{TranslateSectionName(sectionKey)}</Typography>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton onClick={() => toggleSection(sectionKey)} size="small" sx={{ marginRight: "5px" }}>
+                    {expandedSections[sectionKey] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                  </IconButton>
+                  <IconButton onClick={() => handleDeleteSection(sectionKey)} size="small" sx={{ color: "red" }}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+
+              <Collapse in={expandedSections[sectionKey]}>
+                {tasks[sectionKey] && tasks[sectionKey].length > 0 && (
+                  <Box sx={{ border: "1px solid #ccc", borderRadius: "5px", padding: "0.5em", marginTop: "0.5em" }}>
+                    <Typography variant="subtitle1">Tareas:</Typography>
+                    <ul>
+                      {tasks[sectionKey].map((task) => (
+                        <li key={task.taskId}>
+                          <a href={`/edit-task/${task.taskId}`}>
+                            {task.taskName} <EditIcon sx={{ color: "#218BFE" }} />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </Box>
+                )}
+              </Collapse>
+            </Grid>
+          ) : null
+        )}
+      </Grid>
+
+      <Box sx={{ marginTop: 3, textAlign: "center" }}>
+        <FormControl fullWidth variant="outlined">
+          <TextField
+            label="Nueva sección"
+            placeholder="Escriba aquí el nombre de la sección que quiere crear"
+            value={newSection}
+            onChange={(e) => setNewSection(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+        </FormControl>
+        <Button
+          variant="outlined"
+          onClick={handleAddSection}
+          startIcon={<AddCircleIcon />}
+          sx={{ borderColor: "primary.main", color: "primary.main", ":hover": { backgroundColor: "primary.light" } }}
+        >
+          Agregar Sección
+        </Button>
       </Box>
     </Box>
-    </>
   );
-  
 }

@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemText,
   Button,
+  Paper,
 } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -14,7 +15,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllContacts } from "../../api/getAllContacts";
-import SideMenu from "../../components/SideMenu";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function Contacts() {
@@ -29,7 +29,7 @@ export default function Contacts() {
         const allContacts = await getAllContacts();
         console.log("Contactos cargados correctamente:", allContacts);
 
-        // aquí los agrupo por categoría para que pueda desplagarlos por cada una
+        // Agrupar contactos por categoría
         const groupedContacts = allContacts.reduce((acc, contact) => {
           const category = contact.category;
           if (!acc[category]) {
@@ -57,61 +57,100 @@ export default function Contacts() {
   }
 
   return (
-<>  
-<Box marginBottom={5}  >
-<Button variant="outlined" sx={{border:"1px solid #fff"}} onClick={() => navigate(`/create-contact`)} > 
-<Typography variant="body" color={"#000"} paddingRight={1} >Agregar contacto</Typography>
-<AddCircleIcon sx={{color:"#fff"}} />
-</Button>
- </Box>  
-
-
-
-    <Box display={"flex"} backgroundColor={"#EDF5F4"}>
-      <Box>
-        {" "}
-        <SideMenu />{" "}
+    <>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        marginBottom={5}
+        marginTop="2em"
+      >
+        <Button
+          variant="outlined"
+          onClick={() => navigate(`/create-contact`)}
+          sx={{
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            ":hover": { backgroundColor: "#115293" },
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="body" paddingRight={1}>
+            Agregar contacto
+          </Typography>
+          <AddCircleIcon />
+        </Button>
       </Box>
 
-      <Box sx={{ width: "100%"}}>
-        {Object.keys(data).map((category) => (
-          <Box
-            key={category}
-            sx={{ marginBottom: 2, width: "80%", backgroundColor:"#fff", border: " 1px solid #fff", borderRadius:"10px", marginTop:"1em" }}
-          >
-            <IconButton
-              onClick={() => toggleCollapse(category)}
-              sx={{ width: "100%", justifyContent: "space-between" }}
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ width: "80%" }}>
+          {Object.keys(data).map((category) => (
+            <Paper
+              key={category}
+              sx={{
+                marginBottom: 2,
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                transition: "transform 0.3s, box-shadow 0.3s",
+                ":hover": {
+                  transform: "scale(1.01)",
+                  boxShadow: 3,
+                },
+              }}
             >
-              <Typography variant="h6">{category}</Typography>
-              {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </IconButton>
-            <Collapse in={open[category]} timeout="auto" unmountOnExit>
-              <List>
-                {data[category].map((contactItem) => (
-                  <ListItem
-                    key={contactItem.contactId}
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <ListItemText primary={contactItem.contactName}  />
-                    <IconButton
-                      onClick={() =>
-                        navigate(`/contact-details/${contactItem.contactId}`)
-                      }
+              <Box
+                onClick={() => toggleCollapse(category)}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "1em",
+                  cursor: "pointer",
+                  backgroundColor: "#f0f0f0",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography variant="h6">{category}</Typography>
+                <IconButton>
+                  {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </IconButton>
+              </Box>
+              <Collapse in={open[category]} timeout="auto" unmountOnExit>
+                <List>
+                  {data[category].map((contactItem) => (
+                    <ListItem
+                      key={contactItem.contactId}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "1em",
+                        ":hover": {
+                          backgroundColor: "#e0f7fa",
+                        },
+                      }}
                     >
-                      <ArrowForwardIosIcon />
-                    </IconButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
-          </Box>
-        ))}
+                      <ListItemText primary={contactItem.contactName} />
+                      <IconButton
+                        onClick={() =>
+                          navigate(`/contact-details/${contactItem.contactId}`)
+                        }
+                      >
+                        <ArrowForwardIosIcon />
+                      </IconButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </Paper>
+          ))}
+        </Box>
       </Box>
-    </Box>
     </>
   );
 }
+
 
 // import { Box, Typography, IconButton, Collapse, List, ListItem, ListItemText } from '@mui/material';
 // import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';

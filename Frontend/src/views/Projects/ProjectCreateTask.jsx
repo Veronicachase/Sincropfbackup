@@ -7,7 +7,7 @@ import { getProjectById } from "../../api/getProjectById";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
-import SideMenu from "../../components/SideMenu";
+
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
@@ -99,7 +99,7 @@ export default function ProjectCreateTask() {
               }}
             >
               <Box>
-                <SideMenu />
+               
               </Box>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
@@ -169,6 +169,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={12}>
                   <input
+                   
                     type="file"
                     name="prevImages"
                     onChange={(e) => {
@@ -182,7 +183,7 @@ export default function ProjectCreateTask() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    sx={{ backgroundColor: "#84C7AE", color: "#fff" }}
+                    sx={{ backgroundColor: "#1976d2", color: "#fff", marginTop:"2em" }}
                   >
                     Crear Tarea
                   </Button>

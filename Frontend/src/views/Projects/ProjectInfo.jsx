@@ -7,11 +7,12 @@ import { getProjectById } from "../../api/getProjectById";
 import { getTaskBySection } from "../../api/getTaskBySection";
 import { HamburgerMenu } from "../../components/HamburguerMenu";
 import { sectionMapping } from "../../components/SectionMappingIcons";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const drawerWidth = 240;
 
 const ProjectInfo = () => {
-  const { projectId } = useParams();
+  const { projectId, sectionKey } = useParams();
   const [project, setProject] = useState(null);
   const [selectedSectionKey, setSelectedSectionKey] = useState(null);
   const [taskData, setTaskData] = useState([]);
@@ -130,8 +131,17 @@ const ProjectInfo = () => {
           Datos del proyecto
         </Button>
       </Drawer>
+      
       <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
+
         <Toolbar />
+        <Box >
+      <Button variant="oulined" sx={{border:"1px solid #1976d2"}} onClick={()=>{
+        navigate(`/project-create-task/${projectId}/${sectionKey}`)
+      }}> 
+      
+      Agregar Tarea  <AddCircleIcon sx={{marginLeft:".5em", color:"#1976d2"}} /> </Button>
+      </Box>
         <SectionsAndTasks projectId={projectId} sectionKey={selectedSectionKey} taskData={taskData} setTaskData={setTaskData} />
       </Box>
     </Box>

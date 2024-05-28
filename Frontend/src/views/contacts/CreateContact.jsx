@@ -1,10 +1,7 @@
 
 import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Box, Typography, Button } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import { Grid, Box, Typography, Button, MenuItem, Select, TextField } from '@mui/material';
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
 import { handleSubmitContact } from '../../api/handleSubmitContact'; 
 import toast, { Toaster } from 'react-hot-toast';
@@ -18,7 +15,7 @@ export default function CreateContact() {
     address: "",
     email: "",
     phone: "",
-    mobile:"",
+    mobile: "",
     comments: ""
   };
 
@@ -27,11 +24,11 @@ export default function CreateContact() {
       initialValues={initialValues}
       validationSchema={NewContactFormSchema}
       onSubmit={(values, actions) => {
-        handleSubmitContact (values).then(() => {
+        handleSubmitContact(values).then(() => {
           console.log(values);
           actions.setSubmitting(false);
           actions.resetForm();
-          toast.success('Contacto creado correctamente!')
+          toast.success('Contacto creado correctamente!');
           navigate("/allContacts");
         }).catch(error => {
           console.error("Error en el proceso: ", error);
@@ -48,13 +45,21 @@ export default function CreateContact() {
               maxWidth: "800px",
               margin: "2em auto",
               flexDirection: "column",
-              boxShadow: "shadow-custom",
-              color: "#021F59",
-              padding: 2
+              boxShadow: 3,
+              borderRadius: "10px",
+              padding: 3,
+              backgroundColor: "#fff",
+              transition: "transform 0.3s, box-shadow 0.3s",
+              ":hover": {
+                transform: "scale(1.01)",
+                boxShadow: 6,
+              },
             }}
           >
-            <Typography variant="h6" sx={{ textAlign: 'center' }}>Crear Contacto</Typography>
-            <Grid container spacing={2}>
+            <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: 2 }}>
+              Crear Contacto
+            </Typography>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Select
                   fullWidth
@@ -62,7 +67,15 @@ export default function CreateContact() {
                   value={values.category}
                   onChange={event => setFieldValue("category", event.target.value)}
                   displayEmpty
-                  sx={{backgroundColor:"#ffffff4d"}}
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value=""><em>Selecciona una categoría</em></MenuItem>
                   <MenuItem value="client">Cliente</MenuItem>
@@ -74,28 +87,144 @@ export default function CreateContact() {
                 </Select>
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Nombre" name="contactName" fullWidth  sx={{backgroundColor:"#ffffff4d"}}/>
+                <Field
+                  as={TextField}
+                  label="Nombre"
+                  name="contactName"
+                  fullWidth
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Empresa" name="company" fullWidth  sx={{backgroundColor:"#ffffff4d"}}/>
+                <Field
+                  as={TextField}
+                  label="Empresa"
+                  name="company"
+                  fullWidth
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Dirección" name="address" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
+                <Field
+                  as={TextField}
+                  label="Dirección"
+                  name="address"
+                  fullWidth
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Email" name="email" fullWidth placeholder="Ejemplo: juan@gmail.com" sx={{backgroundColor:"#ffffff4d"}} />
+                <Field
+                  as={TextField}
+                  label="Email"
+                  name="email"
+                  fullWidth
+                  placeholder="Ejemplo: juan@gmail.com"
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Teléfono" name="phone" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
+                <Field
+                  as={TextField}
+                  label="Teléfono"
+                  name="phone"
+                  fullWidth
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Móvil" name="mobile" fullWidth sx={{backgroundColor:"#ffffff4d"}} />
+                <Field
+                  as={TextField}
+                  label="Móvil"
+                  name="mobile"
+                  fullWidth
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Field as={TextField} label="Comentarios" name="comments" fullWidth multiline rows={3} sx={{backgroundColor:"#ffffff4d"}}/>
+                <Field
+                  as={TextField}
+                  label="Comentarios"
+                  name="comments"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    borderRadius: "10px",
+                    backgroundColor: "#f9f9f9",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" disabled={isSubmitting} sx={{border:"1px solid #fff", color:"#fff"}}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                  sx={{
+                    backgroundColor: "#1976d2",
+                    color: "#fff",
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                    borderRadius: "10px",
+                    ":hover": {
+                      backgroundColor: "#1565c0",
+                      transform: "scale(1.02)",
+                    },
+                  }}
+                >
                   Crear Contacto
                 </Button>
               </Grid>
