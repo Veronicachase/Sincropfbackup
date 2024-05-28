@@ -18,6 +18,7 @@ import { updateTaskById } from "../../api/updateTaskById";
 import IconColors from "../../components/IconColors";
 import { getEmployees } from "../../api/getEmployees";
 import SideMenu from "../../components/SideMenu";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function TaskInfoAndEdit() {
   const { taskId } = useParams();
@@ -61,9 +62,11 @@ export default function TaskInfoAndEdit() {
 
     try {
       await updateTaskById(taskId, values);
-      alert("Datos actualizados");
+      toast.success('Datos actualizados!')
+      
     } catch (error) {
-      alert("Error al editar. Por favor, intenta de nuevo.");
+      toast.error("Error al editar. Por favor, intenta de nuevo.")
+      
       console.error("Error en el envío del formulario:", error);
     } finally {
       actions.setSubmitting(false);

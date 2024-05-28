@@ -4,6 +4,7 @@ import Logo from "../../assets/images/logo2.png"
 import { useFormik } from "formik";
 import { RegisterFormSchema } from "../../forms/LoginAndRegister/RegisterFormSchema";
 import { useNavigate, Link } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 import "../../assets/styles/estilosGenerales.css";
 import "./register.css";
 
@@ -33,7 +34,8 @@ const Register = () => {
         });
         const data = await response.json();
         if (response.ok) {
-          alert("Te has registrado correctamente, inicia sesión para entrar");
+          toast.success('Te has registrado correctamente, inicia sesión para entrar!')
+         
           navigate("/login");
         } else {
           console.error("Error en el registro", data);

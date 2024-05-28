@@ -7,6 +7,7 @@ import { Grid, Box, Typography, Button, Select, MenuItem } from "@mui/material";
 import { handleSubmitOrder } from "../../api/handleSubmitOrder";
 import { orderFormSchema } from "../../forms/OrdersMaterial/OrdersFormSchema";
 import { getAllProjects } from "../../api/getAllProjects";
+import toast, { Toaster } from 'react-hot-toast';
 
 function CreateOrder() {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ function CreateOrder() {
             console.log(values);
             actions.setSubmitting(false);
             actions.resetForm();
-            alert("Producto creado correctamente");
+            toast.success('Producto creado correctamente!');
             navigate("/order-list");
           })
           .catch((error) => {

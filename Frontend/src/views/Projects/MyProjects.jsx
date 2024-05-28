@@ -1,5 +1,5 @@
 
-import { Box, Typography, Button, IconButton, CircularProgress, Link } from '@mui/material';
+import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -50,24 +50,22 @@ export default function MyProjects() {
 
   return (
     <>
-      <Box display="flex" height="90vh" sx={{ borderRadius: '5px' }} backgroundColor={'#EDF5F4'}>
+      <Box display="flex" height="100vh" sx={{ borderRadius: '5px' }}>
         <Box width={{ xs: '100%', md: '25%' }} flexShrink={0}>
           <SideMenu />
         </Box>
-        <Box flexGrow={1} overflow="auto" padding={2} sx={{ marginLeft: { xs: 0, md: 3 } }}>
+        <Box flexGrow={1} overflow="auto" padding={2} sx={{ marginLeft: { xs: 0, md: 3 }, backgroundColor: '#f5f5f5' }}>
           <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mb={5}>
-            <Typography variant="h6" color={'#98A1B4'}>
+            <Typography variant="h4" color={'#333'}>
               Lista de proyectos
             </Typography>
             <Button
-              variant="outlined"
-              sx={{ backgroundColor: '#fff', border: '1px solid #218BFE' }}
+              variant="contained"
+              sx={{ backgroundColor: '#1976d2', color: '#fff' }}
               onClick={() => navigate(`/create-new-project`)}
-              startIcon={<AddCircleIcon sx={{ color: '#218BFE' }} />}
+              startIcon={<AddCircleIcon />}
             >
-              <Typography variant="body" color={'#218BFE'}>
-                Agregar Proyecto
-              </Typography>
+              Agregar Proyecto
             </Button>
           </Box>
 
@@ -80,12 +78,18 @@ export default function MyProjects() {
                   padding: 2,
                   cursor: 'pointer',
                   marginBottom: '.5em',
-                  color: '#98A1B4',
+                  color: '#333',
                   borderRadius: '5px',
                   backgroundColor: '#fff',
                   justifyContent: 'space-between',
                   paddingLeft: '2em',
                   paddingRight: '2em',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
+                  },
                 }}
                 onClick={() => handleClickProject(project.projectId)}
               >
@@ -98,8 +102,8 @@ export default function MyProjects() {
                   }}
                 >
                   <IconColors />
-                  <Typography variant="body1">{project.projectName}</Typography>
-                  <Typography variant="body2">{project.startDate}</Typography>
+                  <Typography variant="h6">{project.projectName}</Typography>
+                  <Typography variant="body2" color="textSecondary">{project.startDate}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Box
@@ -115,7 +119,7 @@ export default function MyProjects() {
                         navigate(`/project-edit-info/${project.projectId}`);
                       }}
                     >
-                      <EditIcon sx={{ color: '#218BFE' }} />
+                      <EditIcon sx={{ color: '#1976d2' }} />
                     </IconButton>
                     <Typography variant="caption">Editar</Typography>
                   </Box>
@@ -132,7 +136,7 @@ export default function MyProjects() {
                         navigate(`/project-info/${project.projectId}`);
                       }}
                     >
-                      <ArrowForwardIosIcon sx={{ color: '#218BFE' }} />
+                      <ArrowForwardIosIcon sx={{ color: '#1976d2' }} />
                     </IconButton>
                     <Typography variant="caption">Ver</Typography>
                   </Box>

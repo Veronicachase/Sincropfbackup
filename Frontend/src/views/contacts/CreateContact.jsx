@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
 import { handleSubmitContact } from '../../api/handleSubmitContact'; 
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function CreateContact() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function CreateContact() {
           console.log(values);
           actions.setSubmitting(false);
           actions.resetForm();
-          alert("Contacto creado correctamente");
+          toast.success('Contacto creado correctamente!')
           navigate("/allContacts");
         }).catch(error => {
           console.error("Error en el proceso: ", error);

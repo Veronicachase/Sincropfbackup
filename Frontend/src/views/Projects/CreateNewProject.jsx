@@ -53,7 +53,7 @@ function CreateNewProject() {
     >
       {({ isSubmitting, setFieldValue, values, errors }) => (
         <Form>
-          <Box sx={{ width: "90%", margin: "auto", padding: 3 }}>
+          <Box sx={{ width: "90%", margin: " 3em auto", padding: 3 }}>
             <Grid container spacing={3} alignItems="center">
               <Grid container spacing={2} justifyContent="center">
                 {ProjectTextField.map((field) => (
@@ -134,6 +134,7 @@ function CreateNewProject() {
             </Grid>
 
               <Grid item xs={12}>
+              <Typography sx={{textAlign:"left"}} variant="subtitle1">Indica la ubicación </Typography>
                 <Box id="map" sx={{ height: 400, width: "100%" }}>
                   <MapView setFieldValue={setFieldValue} />
                 </Box>

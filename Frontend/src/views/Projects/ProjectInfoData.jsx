@@ -34,7 +34,7 @@ export default function ProjectinfoData() {
 
   return (
     <>
-      <Button sx={{ marginBottom: "2em" }} variant="contained" onClick={() => navigate(`/project-info/${projectId}`)}>Tareas</Button>
+      <Button sx={{ marginBottom: "2em", marginTop:"2em" }} variant="contained" onClick={() => navigate(`/project-info/${projectId}`)}>Tareas</Button>
       <Box display="flex"  alignItems="center" sx={{ paddingTop: "1em" }}>
         <Grid container spacing={3} direction="column" alignItems="center">
           <Grid item xs={12} md={6}>

@@ -10,6 +10,7 @@ import { getContactById } from '../../api/getContactById';
 import { updateContactById } from '../../api/updateContactById';
 import { NewContactFormSchema } from '../../forms/Contactos/NewContactSchema';
 import SideMenu from "../../components/SideMenu"
+import toast, { Toaster } from 'react-hot-toast';
 
 const defaultInitialValues = {
   category: "",
@@ -23,6 +24,7 @@ const defaultInitialValues = {
 };
 
 export default function ContactDetails() {
+  <div><Toaster/></div>
   const { contactId } = useParams();
   const [contact, setContact] = useState({});
   const [formValues, setFormValues] = useState(defaultInitialValues);
@@ -55,9 +57,11 @@ export default function ContactDetails() {
     try {
       await updateContactById(contactId, values);
       console.log("Valores de contacto actualizados", values);
-      alert("Datos actualizados");
+      toast('Datos actualizados!', {
+        icon: '👏',
+      });
     } catch (error) {
-      alert("Error al editar. Por favor, intenta de nuevo.");
+      toast.error("No has podido editar, intenta denuevo.");
     }
   };
 

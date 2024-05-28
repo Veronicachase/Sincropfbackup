@@ -1,4 +1,3 @@
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Drawer, Box, List, ListItem, ListItemText, Typography, AppBar, Toolbar, IconButton, ListItemIcon, Button } from "@mui/material";
@@ -6,7 +5,7 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { SectionsAndTasks } from "../../components/SectionsAndTask";
 import { getProjectById } from "../../api/getProjectById";
 import { getTaskBySection } from "../../api/getTaskBySection";
-
+import { HamburgerMenu } from "../../components/HamburguerMenu";
 import { sectionMapping } from "../../components/SectionMappingIcons";
 
 const drawerWidth = 240;
@@ -60,12 +59,26 @@ const ProjectInfo = () => {
 
   const drawer = (
     <div>
-      <Typography variant="h6" noWrap component="div" sx={{ p: 2 }}>
-        Secciones del Proyecto
-      </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ p: 2 }}>
+        <Typography variant="h6" noWrap>
+          Secciones del Proyecto
+        </Typography>
+        <HamburgerMenu />
+      </Box>
       <List>
         {project.sections && project.sections.map((section) => (
-          <ListItem key={section} onClick={() => setSelectedSectionKey(section)}>
+          <ListItem
+            key={section}
+            onClick={() => setSelectedSectionKey(section)}
+            sx={{
+              borderRadius: '5px',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              '&:hover': {
+                transform: 'scale(1.02)',
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+              },
+            }}
+          >
             <ListItemIcon>
               {sectionMapping[section] ? sectionMapping[section].icon : <ArrowCircleRightIcon />}
             </ListItemIcon>
@@ -77,8 +90,8 @@ const ProjectInfo = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#1976d2' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -103,8 +116,19 @@ const ProjectInfo = () => {
         }}
       >
         {drawer}
-        <Button  variant="contained" onClick={() => navigate(`/project-info-data/${projectId}`)}>Datos del proyecto</Button>
-
+        <Button
+          variant="contained"
+          sx={{
+            margin: '10px',
+            backgroundColor: '#218BFE',
+            '&:hover': {
+              backgroundColor: '#1976d2',
+            },
+          }}
+          onClick={() => navigate(`/project-info-data/${projectId}`)}
+        >
+          Datos del proyecto
+        </Button>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
         <Toolbar />
@@ -115,6 +139,7 @@ const ProjectInfo = () => {
 };
 
 export default ProjectInfo;
+
 
 
 // import { useNavigate, useParams } from "react-router-dom";

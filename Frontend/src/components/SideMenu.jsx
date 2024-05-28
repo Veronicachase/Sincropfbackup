@@ -22,9 +22,8 @@ export default function SideMenu() {
           whiteSpace: "nowrap",
           backgroundColor: "#FFF",
           height: "100vh",
-          borderRight:"2px solid #fff",
-          borderRadius:"5px"
-          
+          borderRight: "2px solid #fff",
+          borderRadius: "5px",
         }}
       >
         <IconButton onClick={toggleCollapse}>
@@ -32,15 +31,27 @@ export default function SideMenu() {
         </IconButton>
         <List>
           {MenuOptionsList.map((option, index) => (
-            <ListItem component={Link} to={option.path} key={index}>
+            <ListItem
+              component={Link}
+              to={option.path}
+              key={index}
+              sx={{
+                borderRadius: '5px',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.02)',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                },
+              }}
+            >
               <ListItemIcon>{option.icon}</ListItemIcon>
-              {!collapsed && <ListItemText sx={{color:"#98A1B4"}} primary={option.name} />}
+              {!collapsed && <ListItemText sx={{ color: "#98A1B4" }} primary={option.name} />}
             </ListItem>
           ))}
         </List>
       </Box>
-      <Box  p={2}>
-       
+      <Box p={2}>
+        {/* Additional content can be placed here */}
       </Box>
     </Box>
   );

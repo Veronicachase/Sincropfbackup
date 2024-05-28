@@ -12,6 +12,8 @@ import { addHours } from "../../api/addHours";
 import CurrentDate from "../../components/CurrentDate";
 import { calculateTotalHours } from "../../components/CalculatedTotalHours";
 import CreateEmployeePDFButton from "../../components/CreateEmployeePDFButton"; // Asegúrate de importar correctamente
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const validationSchemaEmployee = yup.object({
   mandatoryEquipment: yup
@@ -106,10 +108,12 @@ export default function Employee() {
               mandatoryEquipment: values.mandatoryEquipment,
               comments: values.comments,
             });
-            alert("Información del trabajador actualizada exitosamente.");
+           
+            toast.success('Información del trabajador actualizada exitosamente!')
+            
           } catch (error) {
             console.error("Failed to update employee information", error);
-            alert("Error al actualizar la información del trabajador.");
+            toast.error("error al ingresar la información.");
           } finally {
             setSubmitting(false);
           }
@@ -177,10 +181,12 @@ export default function Employee() {
               extraHours: values.extraHour,
               extraMinutes: values.extraMinutes,
             });
-            alert("Horas trabajadas agregadas exitosamente.");
+            toast.error("Horas trabajadas agregadas exitosamente.")
+          
           } catch (error) {
             console.error("Failed to update hours worked", error);
-            alert("Error al actualizar las horas trabajadas.");
+            toast.error("Error al actualizar las horas trabajadas.")
+           
           } finally {
             setSubmitting(false);
           }

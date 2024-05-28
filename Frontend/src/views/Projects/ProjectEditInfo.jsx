@@ -163,7 +163,7 @@ export default function ProjectEditInfo() {
   return (
     <> 
     
-    <Box sx={{ margin: "0 auto", width: "100%", flexGrow: 1, alignContent: "center", backgroundColor:"#EDF5F4" }}>
+    <Box sx={{ margin: "0 auto", width: "100%", flexGrow: 1, alignContent: "center",  }}>
       <Box sx={{ textAlign: "left", marginLeft: "2em", marginTop: "1em", width:"90%"}}>
         
       <Typography variant="body1">

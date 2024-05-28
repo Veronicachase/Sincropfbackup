@@ -7,6 +7,7 @@ import { getOrderById } from "../../api/getOrderById";
 import { updateOrder } from "../../api/updateOrder";
 import { getAllProjects } from "../../api/getAllProjects";
 import { OrderFormSchema } from "../../forms/Orders/OrdersFormSchema";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function OrderDetails() {
   const navigate = useNavigate();
@@ -66,7 +67,8 @@ export default function OrderDetails() {
         updateOrder(orderId, values)
           .then(() => {
             actions.setSubmitting(false);
-            alert("Pedido actualizado correctamente");
+            toast.success('Pedido actualizado correctamente!')
+            
             navigate("/order-list");
           })
           .catch((error) => {
