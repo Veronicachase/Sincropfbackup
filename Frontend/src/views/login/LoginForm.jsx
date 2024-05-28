@@ -1,25 +1,13 @@
-import { TextField, Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import Logo from "../../assets/images/sincro.webp";
-import MyButton from "../../components/MyButton";
+import { TextField, Box, Typography, Button } from "@mui/material";
 import { useFormik } from "formik";
 import { LoginFormSchema } from "../../forms/LoginAndRegister/LoginFormSchema";
 import { useNavigate, Link } from "react-router-dom";
-import Espana from "../../assets/images/Espana.png";
-import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../context/AuthContext";
 import "../../assets/styles/estilosGenerales.css";
-import "./loginForm.css";
 
 const LoginForm = () => {
-  const { t, i18n } = useTranslation("home");
   const { login } = useAuthContext();
   const navigate = useNavigate();
-
-  function changeLanguage() {
-    i18n.language === "es"
-      ? i18n.changeLanguage("en")
-      : i18n.changeLanguage("es");
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -38,18 +26,18 @@ const LoginForm = () => {
   });
 
   return (
-    <Box display={{ flexGrow: 1, width: "100%", maxWidth: "700px" }} flexDirection={"column"} margin={"auto"}>
-      <Box>
-        <ToggleButtonGroup>
-          <ToggleButton onClick={changeLanguage} value="Español" aria-label="español">
-            <img src={Espana} alt="Bandera de España" />
-          </ToggleButton>
-          <ToggleButton onClick={changeLanguage} value="English" aria-label="English">
-            {t("button")}
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
-      <img className="logo" src={Logo} alt="Sincro" />
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "700px",
+        display: "flex",
+        margin: "7em auto",
+      }}
+      flexDirection="row"
+      justifyContent="center"
+      alignItems="center"
+      gap={3}
+    >
       <Box
         display="flex"
         flexDirection="column"
@@ -73,8 +61,10 @@ const LoginForm = () => {
               value={formik.values.email}
               onChange={formik.handleChange("email")}
               onBlur={formik.handleBlur("email")}
-              className={formik.errors.email && formik.touched.email ? "input-error" : ""}
-              InputProps={{ style: { borderRadius: 20 } }}
+              className={
+                formik.errors.email && formik.touched.email ? "input-error" : ""
+              }
+              InputProps={{ style: { borderRadius: 10 } }}
               sx={{
                 marginBottom: "2em",
                 width: "300px",
@@ -92,12 +82,15 @@ const LoginForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange("password")}
               onBlur={formik.handleBlur("password")}
-              className={formik.errors.password && formik.touched.password ? "input-error" : ""}
-              InputProps={{ style: { borderRadius: 20 } }}
+              className={
+                formik.errors.password && formik.touched.password
+                  ? "input-error"
+                  : ""
+              }
+              InputProps={{ style: { borderRadius: 10 } }}
               sx={{
                 marginBottom: "2em",
                 width: "300px",
-                borderRadius: "15.34px",
                 backgroundColor: "#fff",
               }}
             />
@@ -105,7 +98,23 @@ const LoginForm = () => {
               <p className="error">{formik.errors.password}</p>
             )}
 
-            <MyButton disabled={formik.isSubmitting}>Iniciar sesión</MyButton>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#84C7AE",
+                marginBottom: "1em",
+                "&:active": {
+                  backgroundColor: "#A9A9A9 !important",
+                },
+                "&:hover": {
+                  backgroundColor: "#72B298",
+                },
+              }}
+              disabled={formik.isSubmitting}
+            >
+              Iniciar sesión
+            </Button>
           </Box>
 
           <Typography variant="body2">

@@ -12,8 +12,10 @@ export default function HomeOptions() {
  
       <Box
         sx={{
-          width: "80%",
+          width: "70%",
           margin: "auto", 
+          marginBottom:"5em",
+          height:"80vh"
         }}
       >
         <Grid container spacing={5} justifyContent={"space-between"} marginTop={"3em"} >

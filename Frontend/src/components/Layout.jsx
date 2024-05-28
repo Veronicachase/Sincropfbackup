@@ -37,7 +37,8 @@ export default function Layout() {
           justifyContent: "space-between",
           margin: "0 auto",
           paddingTop: "1em",
-          paddingBottom: "1em",
+          paddingBottom:"1em"
+          
         }}
       >
           <Typography
@@ -55,7 +56,7 @@ export default function Layout() {
 
 
         </Box>
-      <Box sx={{ borderBottom: "1px solid #ccc", marginBottom: "2em" }}></Box>
+      <Box ></Box>
       <Outlet />
     </Box>
   );

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { TextField, Box, Typography } from "@mui/material";
-import Logo from "../../assets/images/sincro.webp";
-import MyButton from "../../components/MyButton";
+import { TextField, Box, Typography, Button } from "@mui/material";
+import Logo from "../../assets/images/logo2.png"
 import { useFormik } from "formik";
 import { RegisterFormSchema } from "../../forms/LoginAndRegister/RegisterFormSchema";
 import { useNavigate, Link } from "react-router-dom";
@@ -79,8 +78,8 @@ const Register = () => {
     >
       <img className="logo" src={Logo} alt="Sincro" />
       <Box
-        backgroundColor="#f6fbf9"
-        borderRadius="49px"
+        backgroundColor="#fff"
+        borderRadius="10px"
         paddingTop={3}
         paddingBottom={3}
       >
@@ -119,14 +118,29 @@ const Register = () => {
                 }
                 InputProps={{
                   style: {
-                    borderRadius: 18,
+                    borderRadius: 10,
                     backgroundColor: "#fff",
                     marginBottom: ".8em",
                   },
                 }}
               />
             ))}
-            <MyButton disabled={formik.isSubmitting}> Registrar</MyButton>
+            <Button 
+  variant="contained" 
+  sx={{
+    backgroundColor: "#84C7AE",
+    marginBottom: "1em",
+    '&:active': {
+      backgroundColor: "#A9A9A9 !important" 
+    },
+    '&:hover': {
+      backgroundColor: "#72B298", 
+    }
+  }} 
+  disabled={formik.isSubmitting}
+>
+  Registrar
+</Button>
           </Box>
 
           <Typography variant="body2">
