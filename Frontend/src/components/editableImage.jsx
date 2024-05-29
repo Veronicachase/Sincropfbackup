@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Image, Line } from 'react-konva';
 import Modal from 'react-modal';
 import { Button, Box } from '@mui/material';
+import ExpandableImage from '../ui/CloudinaryImg';
 
 Modal.setAppElement('#root'); // Establece el elemento raíz para accesibilidad
 
@@ -14,11 +15,24 @@ const EditableImage = ({ src, onSave }) => {
   const stageRef = useRef(null);
   const imageRef = useRef(null);
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await fetch(src, { mode: 'cors' });
+        const blob = await response.blob();
+        const img = new window.Image();
+        img.src = URL.createObjectURL(blob);
+        img.onload = () => setImage(img);
+      } catch (error) {
+        console.error("Error fetching the image", error);
+      }
+    };
+
+    fetchImage();
+  }, [src]);
+
   const handleOpenModal = () => {
     setIsOpen(true);
-    const img = new window.Image();
-    img.src = src;
-    img.onload = () => setImage(img);
   };
 
   const handleCloseModal = () => {
@@ -54,7 +68,12 @@ const EditableImage = ({ src, onSave }) => {
 
   return (
     <Box>
-      <img src={src} alt="Thumbnail" onClick={handleOpenModal} style={{ cursor: 'pointer' }} />
+      <ExpandableImage
+        uploadedImg={src}
+        alt="Thumbnail"
+        onClick={handleOpenModal}
+        style={{ cursor: 'pointer', width: '150px', height: '100px', zIndex: "10" }}
+      />
       <Modal isOpen={isOpen} onRequestClose={handleCloseModal} contentLabel="Edit Image">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>Edit Image</h2>

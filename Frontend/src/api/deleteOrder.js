@@ -15,7 +15,7 @@ export const deleteOrder = async (orderId) => {
       setOrderData(prevTasks => prevTasks.filter(task => task.taskid !== orderId));
     } catch (error) {
       console.error('Error al eliminar la tarea:', error);
-      alert('Error al eliminar la tarea. Por favor, intenta de nuevo.');
+     
     }
   };
   

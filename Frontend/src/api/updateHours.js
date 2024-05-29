@@ -17,6 +17,6 @@ export const updateHours = async (employeeId, orderData) => {
     } catch (error) {
       console.error('Error al hacer los cambios en horas:', error);
      
-      alert('Error al editar . Por favor, intenta de nuevo.');
+      //alert('Error al editar . Por favor, intenta de nuevo.');
     }
   };

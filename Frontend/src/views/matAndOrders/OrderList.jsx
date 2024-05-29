@@ -24,6 +24,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SendIcon from "@mui/icons-material/Send";
 import OrderDetailsModal from "../../components/orderDetailModal";
+import { addOrder } from "../../api/addOrder"; 
 
 
 function OrderList() {
@@ -35,8 +36,8 @@ function OrderList() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false); // Estado para controlar el modal
-  const [selectedOrder, setSelectedOrder] = useState(null); // Estado para el pedido seleccionado
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [selectedOrder, setSelectedOrder] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -109,6 +110,25 @@ function OrderList() {
     setModalOpen(false);
     setSelectedOrder(null);
   };
+  const handleAddOrder = async (projectId) => {
+    try {
+      const newOrder = await addOrder({
+        productName: 'Nuevo Producto',
+        projectId: projectId,
+        date: new Date().toISOString(),
+        status: 'pendiente',
+        description: 'Descripción del nuevo producto'
+      });
+      setOrders((prevOrders) => [...prevOrders, newOrder]); // Agrega el nuevo pedido directamente al estado
+      setSnackbarMessage("Pedido creado con éxito");
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error("Error al crear el pedido:", error);
+      setSnackbarMessage("Error al crear el pedido");
+      setSnackbarOpen(true);
+    }
+  };
+  
 
   const generateMailToLink = (projectId) => {
     const projectOrders = orders.filter((order) => order.projectId === projectId);
@@ -226,7 +246,7 @@ function OrderList() {
                   )}
                   <Box sx={{ display: "flex", gap: 2, justifyContent: "center", paddingBottom: "1em" }}>
                     <Button
-                      onClick={() => navigate("/create-order")}
+                      onClick={() => handleAddOrder(project.projectId)} // Pasa el projectId al manejar la adición de pedidos
                       sx={{
                         backgroundColor: "#1976d2",
                         color: "#fff",
@@ -276,8 +296,6 @@ function OrderList() {
 }
 
 export default OrderList;
-
-
 
 
 

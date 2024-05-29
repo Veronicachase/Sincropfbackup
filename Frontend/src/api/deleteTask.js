@@ -13,7 +13,7 @@ export const deleteTask = async (taskId) => {
 
     } catch (error) {
       console.error('Error al eliminar la tarea:', error);
-      alert('Error al eliminar la tarea. Por favor, intenta de nuevo.');
+      
     }
   };
   

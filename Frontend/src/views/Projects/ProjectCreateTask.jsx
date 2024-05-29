@@ -7,6 +7,7 @@ import { getProjectById } from "../../api/getProjectById";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
+import { previewFiles } from "../../utils/previewFiles";
 
 
 export default function ProjectCreateTask() {
@@ -14,6 +15,8 @@ export default function ProjectCreateTask() {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
+  const [file, setFile] = useState("");
+	const [image, setImage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,10 +41,12 @@ export default function ProjectCreateTask() {
     fetchData();
   }, [projectId]);
 
-  const transformFileList = (fileList) => {
-    return Array.from(fileList);
-  };
   
+  const handleChange = (e) => {
+		const file = e.target.files[0];
+		setFile(file);
+		previewFiles(file, setImage);
+	};
   
 
   if (!projectData) {
@@ -73,7 +78,9 @@ export default function ProjectCreateTask() {
         }}
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
-          values.prevImages = values.files;
+          console.log(image)
+          values.prevImages = image;
+          console.log('Values', values)
           try {
             await handleSubmitTask(values, sectionKey);
             navigate(-1);
@@ -116,16 +123,23 @@ export default function ProjectCreateTask() {
                 <Grid item xs={12}>
                   <Field
                     as={Select}
-                    name="employeeName"
+                    name="employeeId"
                     sx={{ backgroundColor: "#fff" }}
                     fullWidth
                     displayEmpty
+                    onChange={(event) => {
+                      const selectedEmployeeId = event.target.value;
+                      const selectedEmployee = employees.find(employee => employee.employeeId === selectedEmployeeId);
+                      const selectedEmployeeName = selectedEmployee ? selectedEmployee.name : '';
+                      setFieldValue('employeeId', selectedEmployeeId);
+                      setFieldValue('employeeName', selectedEmployeeName);
+                    }}
                   >
                     <MenuItem value="">
                       <em>Selecciona a un trabajador</em>
                     </MenuItem>
                     {employees.map((employee) => (
-                      <MenuItem key={employee.employeeId} value={employee.name}>
+                      <MenuItem key={employee.employeeId} value={employee.employeeId}>
                         {employee.name}
                       </MenuItem>
                     ))}
@@ -173,8 +187,7 @@ export default function ProjectCreateTask() {
                     type="file"
                     name="prevImages"
                     onChange={(e) => {
-                      const transformedFiles = transformFileList(e.currentTarget.files);
-                      setFieldValue("files", transformedFiles);
+                      handleChange(e)
                     }}
                     multiple
                   />

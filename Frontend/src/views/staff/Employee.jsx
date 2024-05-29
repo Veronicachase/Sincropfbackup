@@ -23,10 +23,10 @@ const validationSchemaEmployee = yup.object({
 });
 
 const validationSchemaHours = yup.object({
-  regularHour: yup.number().required("Horas regulares son obligatorias"),
-  regularMinutes: yup.number().required("Minutos regulares son obligatorios"),
-  extraHour: yup.number().required("Horas extras son obligatorias"),
-  extraMinutes: yup.number().required("Minutos extras son obligatorios"),
+  regularHour: yup.number(),
+  regularMinutes: yup.number(),
+  extraHour: yup.number(),
+  extraMinutes: yup.number(),
 });
 
 export default function Employee() {

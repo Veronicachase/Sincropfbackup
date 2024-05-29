@@ -26,6 +26,6 @@ export const updateTaskById = async (taskId, taskData) => {
     console.log("Cambios hechos");
   } catch (error) {
     console.error('Error al hacer los cambios:', error);
-    alert('Error al editar. Por favor, intenta de nuevo.');
+    //alert('Error al editar. Por favor, intenta de nuevo.');
   }
 };

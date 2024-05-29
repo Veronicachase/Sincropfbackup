@@ -169,7 +169,7 @@ export default function OrderDetails() {
                     <em>Seleccionar Proyecto</em>
                   </MenuItem>
                   {projects.map((project) => (
-                    <MenuItem key={project.id} value={project.name}>
+                    <MenuItem key={project.projectId} value={project.projectName}>
                       {project.name}
                     </MenuItem>
                   ))}

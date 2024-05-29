@@ -1,11 +1,10 @@
 const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys");
 const moment = require("moment");
-const db = require("../db")
+const db = require("../db");
 
 const pendingDao = {};
 
 pendingDao.getPendingById = async (pendingId) => {
-  
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -21,37 +20,33 @@ pendingDao.getPendingById = async (pendingId) => {
     conn && (await conn.end());
   }
 };
+
 pendingDao.getAllPendings = async () => {
   let conn = null;
-  
   try {
-      conn = await db.createConnection();
-      const results = await db.query2("SELECT * FROM pendings ", conn);
-      if (results.length) {
-          return results;
-      }
-      return null;
+    conn = await db.createConnection();
+    const results = await db.query("SELECT * FROM pendings", null, "select", conn);  // Corrección aquí
+    if (results.length) {
+      return results;
+    }
+    return null;
   } catch (e) {
-      console.error(e.message);
-      throw e;
+    console.error(e.message);
+    throw e;
   } finally {
-      if (conn) await conn.end();
+    if (conn) await conn.end();
   }
 };
 
-
-
 pendingDao.addPending = async (pendingData) => {
- 
   let conn = null;
   try {
     conn = await db.createConnection();
     
     let pendingObj = {
       date: moment().format("YYYY-MM-DD HH:mm:ss"),
-      details:pendingObj.details,
-      status:pendingObj.status
-     
+      details: pendingData.details,  // Corrección aquí
+      status: pendingData.status  // Corrección aquí
     };
    
     pendingObj = await removeUndefinedKeys(pendingObj);
@@ -74,10 +69,10 @@ pendingDao.updatePending = async (pendingId, pendingData) => {
   try {
     conn = await db.createConnection();
    
-      let pendingObj = {
-        date: moment().format("YYYY-MM-DD HH:mm:ss"),
-        details:pendingObj.details,
-        status:pendingObj.status
+    let pendingObj = {
+      date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      details: pendingData.details,  // Corrección aquí
+      status: pendingData.status  // Corrección aquí
     };
     
     pendingObj = await removeUndefinedKeys(pendingObj);
@@ -94,9 +89,7 @@ pendingDao.updatePending = async (pendingId, pendingData) => {
   }
 };
 
-
 pendingDao.deletePending = async (pendingId) => {
-
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -107,8 +100,5 @@ pendingDao.deletePending = async (pendingId) => {
     conn && (await conn.end());
   }
 };
-
-
-
 
 module.exports = pendingDao;

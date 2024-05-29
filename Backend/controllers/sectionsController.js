@@ -10,4 +10,22 @@ const getSections = async (req, res) => {
     }
 }
 
-module.exports = {getSections}
+
+const addSection = async (req, res) => {
+    const { projectId } = req.params;
+    const { section } = req.body;
+
+    if (!section) {
+        return res.status(400).json({ error: 'Section is required' });
+    }
+
+    try {
+        const result = await sectionsDao.addSection(projectId, section);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error("Error adding section:", error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
+module.exports = {getSections, addSection}

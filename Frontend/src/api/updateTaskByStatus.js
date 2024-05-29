@@ -1,6 +1,6 @@
 export const updateTaskStatus = async (taskId, status) => {
     try {
-      const response = await fetch(`/api/tasks/${taskId}/status`, {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

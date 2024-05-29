@@ -3,7 +3,7 @@ const path = require("path");
 
 const addPending = async (req, res) => {
     try {
-        const pendingId = await pendingDao.addpending(req.body);
+        const pendingId = await pendingDao.addPending(req.body);
         res.status(201).json({ message: "Pedido de pending creado exitosamente", pendingId });
     } catch (error) {
         console.error("Error al agregar el pendiente:", error.message);
@@ -14,7 +14,7 @@ const addPending = async (req, res) => {
 const getPendingById = async (req, res) => {
     try {
         const pendingId = req.params.pendingId;
-        const pending = await pendingDao.getPending(pendingId);
+        const pending = await pendingDao.getPendingById(pendingId);
         if (pending) {
             res.json(pending);
         } else {
