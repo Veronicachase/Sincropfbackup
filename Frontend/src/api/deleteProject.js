@@ -14,7 +14,8 @@ export const deleteProject = async (projectId) => {
     
     } catch (error) {
       console.error('Error al eliminar el proyecto:', error);
-      alert('Error al eliminar el proyecto. Por favor, intenta de nuevo.');
+
+      
     }
   };
   

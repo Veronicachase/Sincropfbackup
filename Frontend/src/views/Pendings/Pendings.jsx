@@ -202,7 +202,7 @@ export default function Pendings() {
               </Typography>
               {pendings.map(
                 (pending) =>
-                  pending.status !== "terminado" && (
+                  (
                     <Box
                       key={pending.pendingId}
                       sx={{
@@ -234,98 +234,13 @@ export default function Pendings() {
               )}
             </Box>
 
-            <Typography variant="h6" sx={{ cursor:"pointer",paddingLeft:"1em",   marginTop: 2, textAlign: "left" }}>
-              Tareas Pendientes
-            </Typography>
+            
 
-            <List>
-              {tasks.map((task) => (
-                <Box
-                  key={`${task.taskId}-${task.taskName}`}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    border: "1px solid #f0efef",
-                    marginBottom: "1em",
-                    backgroundColor: "#fff",
-                    borderRadius: "5px",
-                    padding: ".5em 1.5em",
-                    cursor:"pointer",
-                    ":hover": { backgroundColor: "#f9f9f9" },
-                  }}
-                >
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography sx={{ cursor:"pointer", textAlign: "left" }}>{task.taskName}</Typography>
-                  </Box>
-                  <Box>
-                    <IconButton
-                      onClick={() => navigateToDetail(task.taskId, "task")}
-                    >
-                      <RemoveRedEyeIcon />
-                    </IconButton>
-                    <IconButton
-                      sx={{ color: "red" }}
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => handleDeleteTask(task.taskId)}
-                    >
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-              ))}
-            </List>
-          </Box>
+            </Box>
+            
 
           <Box>
-            <Box sx={{ marginBottom: 2, marginTop: 2 }}>
-              <Typography
-                sx={{cursor:"pointer",paddingLeft:"1em", marginBottom: 2, textAlign: "left" }}
-                variant="h6"
-              >
-                Reportes no enviados
-              </Typography>
-              {reports.map(
-                (report) =>
-                  report.status === false && (
-                    <Box
-                      key={report.reportId}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        border: "1px solid #f0efef",
-                        marginBottom: "1em",
-                        backgroundColor: "#fff",
-                        borderRadius: "5px",
-                        padding: ".5em 1.5em",
-                        cursor:"pointer",
-                        ":hover": { backgroundColor: "#f9f9f9" },
-                      }}
-                    >
-                      <Typography>
-                        {report.date} - {report.reportName}
-                      </Typography>
-                      <Box>
-                        <IconButton
-                          onClick={() => navigateToDetail(report.taskId, "task")}
-                        >
-                          <RemoveRedEyeIcon />
-                        </IconButton>
-                        <IconButton
-                          sx={{ color: "red" }}
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleDeleteTask(report.reportId)}
-                        >
-                          <DeleteForeverIcon />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  )
-              )}
-            </Box>
+            
 
             <Box sx={{paddingLeft:"1em", marginBottom: 2, marginTop: 2 }}>
               <Typography variant="h6" textAlign={"left"} marginBottom={"1em"}>

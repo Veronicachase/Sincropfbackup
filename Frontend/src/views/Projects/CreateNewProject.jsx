@@ -8,6 +8,7 @@ import MapView from "../../components/MapView";
 import { Grid, Box, Button, MenuItem, Typography } from "@mui/material";
 import Select from "../../ui/Select";
 import { handleSubmitProject } from "../../api/handlerSubmitProject";
+import toast, { Toaster } from 'react-hot-toast';
 import {
   ProjectTextField,
   ProjectTextField2,
@@ -42,7 +43,8 @@ function CreateNewProject() {
           .then(() => {
             actions.setSubmitting(false);
             actions.resetForm();
-            alert("Proyecto creado correctamente");
+            toast.success('Proyecto creado correctamente!')
+            
             navigate("/my-projects");
           })
           .catch((error) => {

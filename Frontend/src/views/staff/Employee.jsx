@@ -166,7 +166,7 @@ export default function Employee() {
                   Editar Información
                 </Button>
               </Box>
-              <Box sx={{ border: "1px solid #84C7AE", marginBottom: "2em" }}></Box>
+              <Box sx={{ border: "1px solid #1976d2", marginBottom: "2em" }}></Box>
             </Box>
           </Form>
         )}

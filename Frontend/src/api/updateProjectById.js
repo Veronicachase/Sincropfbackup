@@ -17,7 +17,7 @@ export const updateProjectById = async (projectId, projectData) => {
   } catch (error) {
     console.error('Error al hacer los cambios, fetch updateProjectById, no llega la info :', error);
    
-    alert('Error al editar. Por favor, intenta de nuevo.');
+
   }
 };
 

@@ -7,7 +7,7 @@ export default function HomeOptions() {
     <Box
       sx={{
         width: "100%",
-        height: "100vh",
+        height: "80vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -28,7 +28,6 @@ export default function HomeOptions() {
               <Box
                 sx={{
                   width: "100%",
-                  height: "8em",
                   boxShadow: "1px 2px 3px #ccc",
                   display: "flex",
                   justifyContent: "center",
@@ -36,6 +35,7 @@ export default function HomeOptions() {
                   borderRadius: "10px",
                   padding: "2em .2em",
                   color: "#021F59",
+                  cursor:"pointer",
                   transition: "transform 0.3s, box-shadow 0.3s",
                   "&:hover": {
                     transform: "scale(1.05)",
@@ -52,9 +52,10 @@ export default function HomeOptions() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
+                    cursor:"pointer"
                   }}
                 >
-                  <Typography variant="h5">{option.name}</Typography>
+                  <Typography sx={{cursor:"pointer"}}  variant="h5">{option.name}</Typography>
                   {option.icon}
                 </Link>
               </Box>

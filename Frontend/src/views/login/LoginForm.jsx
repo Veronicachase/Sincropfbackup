@@ -32,12 +32,13 @@ const LoginForm = () => {
         maxWidth: "700px",
         display: "flex",
         flexDirection: "column",
-        margin: "5em auto",
+        margin: "7em auto",
         padding: "2em",
         alignItems: "center",
         justifyContent: "center",
         boxShadow: 3,
         borderRadius: "20px",
+        
        
       }}
     >

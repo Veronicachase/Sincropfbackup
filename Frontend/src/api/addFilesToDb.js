@@ -15,7 +15,7 @@ const addFilesToDb = async (image) => {
       console.log("Imagen agregada con éxito");
     } catch (error) {
       console.error('Error al agregar la imagen:', error);
-      alert('Error al agregar la imagen. Por favor, intenta de nuevo.');
+   
     }
   };
   

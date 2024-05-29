@@ -30,6 +30,8 @@ export function HamburgerMenu() {
               sx={{
                 borderRadius: '5px',
                 transition: 'transform 0.2s, box-shadow 0.2s',
+                cursor:"pointer",
+                
                 '&:hover': {
                   transform: 'scale(1.02)',
                   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',

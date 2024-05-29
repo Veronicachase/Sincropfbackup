@@ -15,7 +15,7 @@ const updateSection = async (projectId, sectionKey, sectionData) => {
       console.log("Sección actualizada exitosamente");
     } catch (error) {
       console.error('Error al actualizar la sección:', error);
-      alert('Error al actualizar la sección. Por favor, intenta de nuevo.');
+
     }
   };
   

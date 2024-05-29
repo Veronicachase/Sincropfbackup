@@ -17,7 +17,7 @@
     } catch (error) {
       console.error('Error al hacer los cambios en pedidos-orden-materiales:', error);
      
-      alert('Error al editar . Por favor, intenta de nuevo.');
+      
     }
   };
   

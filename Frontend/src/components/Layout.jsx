@@ -20,10 +20,10 @@ export default function Layout() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
+        <AppBar position="static" sx={{ backgroundColor: "#1976d2", cursor:"pointer" }}>
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-              <HamburgerMenu />
+              <HamburgerMenu/>
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
               {title}

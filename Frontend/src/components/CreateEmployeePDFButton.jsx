@@ -93,7 +93,7 @@ const CreateEmployeePDFButton = ({ employee, hoursWorked, fileName = 'employee-d
 
   return (
     <>
-      <Button type='button' onClick={handleClickOpen} variant="contained" style={{ backgroundColor: '#84C7AE' }} aria-label="Create PDF">
+      <Button type='button' onClick={handleClickOpen} variant="contained" style={{ backgroundColor: "#1976d2" }} aria-label="Create PDF">
         Crear PDF del Empleado
       </Button>
       <Dialog open={open} onClose={handleClose}>

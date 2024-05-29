@@ -50,7 +50,7 @@ function CreateOrder() {
     status: "pendiente",
     date: new Date().toISOString().slice(0, 10),
     area: "",
-    section: "",
+  
     image: "",
   };
 
@@ -266,66 +266,8 @@ function CreateOrder() {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <Field
-                    name="area"
-                    as={CustomTextField}
-                    label="Área"
-                    placeholder="Zona en la que utilizará el producto"
-                    fullWidth
-                    InputProps={{
-                      style: {
-                        borderRadius: "10px",
-                        backgroundColor: "#fff",
-                      },
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    name="section"
-                    as={Select}
-                    value={values.section}
-                    onChange={(event) =>
-                      setFieldValue("section", event.target.value)
-                    }
-                    label="Sección a Trabajar"
-                    fullWidth
-                    displayEmpty
-                    renderValue={(selected) => {
-                      if (!selected) {
-                        return <em>Selecciona un área</em>;
-                      }
-                      return selected;
-                    }}
-                    sx={{
-                      borderRadius: "10px",
-                      backgroundColor: "#fff",
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          border: "none",
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>Selecciona un área</em>
-                    </MenuItem>
-                    <MenuItem value="cocina">Cocina</MenuItem>
-                    <MenuItem value="salon">Salón</MenuItem>
-                    <MenuItem value="baño">Baño</MenuItem>
-                    <MenuItem value="techo">Techo</MenuItem>
-                    <MenuItem value="piso">Piso</MenuItem>
-                    <MenuItem value="piscina">Piscina</MenuItem>
-                    <MenuItem value="terraza">Terraza</MenuItem>
-                    <MenuItem value="otro">Otro</MenuItem>
-                  </Field>
-                </Grid>
-
+                
+                    
                 <Grid item xs={12}>
                   <Button
                     variant="outlined"

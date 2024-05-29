@@ -1,7 +1,7 @@
 export const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   if (file.size > 10000000) {
-    alert("El archivo que intentas subir es demasiado grande, max 10 mb");
+   console.log("El archivo que intentas subir es demasiado grande, max 10 mb");
     return;
   }
 

@@ -1,11 +1,22 @@
 import jsPDF from "jspdf";
 import PropTypes from "prop-types";
 
+// Función para convertir una URL de imagen a base64
+const toBase64 = (url) =>
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    }));
+
 export const CreatePDFButton = ({ tasks, fileName, additionalInfo }) => {
-  const generatePDF = () => {
+  const generatePDF = async () => {
     const doc = new jsPDF();
 
-    tasks.forEach((task, index) => {
+    for (const [index, task] of tasks.entries()) {
       const y = 10 + index * 130; // Incremento en 'y' para evitar superposición de contenido
       
       doc.setFontSize(12); // Tamaño de letra para el título de la tarea
@@ -33,7 +44,8 @@ export const CreatePDFButton = ({ tasks, fileName, additionalInfo }) => {
       doc.text(`Imágenes Iniciales:`, 10, nextSectionY + 60);
 
       if (task.prevImages && task.prevImages.length > 0) {
-        task.prevImages.forEach((image, imgIndex) => {
+        for (const [imgIndex, imageUrl] of task.prevImages.entries()) {
+          const base64Image = await toBase64(imageUrl);
           const imageX = 10 + imgIndex * 70;
           const imageY = nextSectionY + 70;
           const width = 50; // Ancho de la imagen
@@ -45,15 +57,16 @@ export const CreatePDFButton = ({ tasks, fileName, additionalInfo }) => {
           doc.rect(imageX - 2, imageY - 2, width + 4, height + 4, "FD"); // 'FD' para llenar el rectángulo (Fill, Draw)
 
           // Agregando la imagen
-          doc.addImage(image, "JPEG", imageX, imageY, width, height);
-        });
+          doc.addImage(base64Image, "JPEG", imageX, imageY, width, height);
+        }
       }
 
       // Texto antes de las imágenes finales
       doc.text(`Imágenes Finales:`, 10, nextSectionY + 130);
 
       if (task.finalImages && task.finalImages.length > 0) {
-        task.finalImages.forEach((image, imgIndex) => {
+        for (const [imgIndex, imageUrl] of task.finalImages.entries()) {
+          const base64Image = await toBase64(imageUrl);
           const imageX = 10 + imgIndex * 70;
           const imageY = nextSectionY + 140;
           const width = 50; // Ancho de la imagen
@@ -65,10 +78,10 @@ export const CreatePDFButton = ({ tasks, fileName, additionalInfo }) => {
           doc.rect(imageX - 2, imageY - 2, width + 4, height + 4, "FD"); // 'FD' para llenar el rectángulo (Fill, Draw)
 
           // Agregando la imagen
-          doc.addImage(image, "JPEG", imageX, imageY, width, height);
-        });
+          doc.addImage(base64Image, "JPEG", imageX, imageY, width, height);
+        }
       }
-    });
+    }
 
     doc.save(fileName);
   };

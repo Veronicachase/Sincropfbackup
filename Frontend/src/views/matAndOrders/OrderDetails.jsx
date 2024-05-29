@@ -269,23 +269,7 @@ export default function OrderDetails() {
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <Field
-                  name="section"
-                  as={CustomTextField}
-                  label="Sección"
-                  fullWidth
-                  InputProps={{
-                    style: {
-                      borderRadius: "10px",
-                      backgroundColor: "#fff",
-                    },
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
+              
 
               <Grid item xs={12}>
                 <Field

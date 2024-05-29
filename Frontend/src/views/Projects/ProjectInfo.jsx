@@ -93,7 +93,7 @@ const ProjectInfo = () => {
       handleClose(); // Cerrar el diálogo
     } catch (error) {
       console.error('Error al agregar la sección:', error);
-      alert('Error al agregar la sección. Por favor, intenta de nuevo.');
+      
     }
   };
 
@@ -106,9 +106,10 @@ const ProjectInfo = () => {
         <Typography variant="h6" noWrap>
           Secciones del Proyecto
         </Typography>
-        <HamburgerMenu />
+        
       </Box>
       <List>
+      <HamburgerMenu/>
         {project.sections && project.sections.map((section) => (
           <ListItem
             key={section}
@@ -116,6 +117,7 @@ const ProjectInfo = () => {
             sx={{
               borderRadius: '5px',
               transition: 'transform 0.2s, box-shadow 0.2s',
+              cursor:"pointer",
               '&:hover': {
                 transform: 'scale(1.02)',
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
@@ -146,7 +148,7 @@ const ProjectInfo = () => {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: 'none', cursor:"pointer" } }}
             onClick={() => {/* toggle mobile drawer logic here if needed */}}
           >
             <ArrowCircleRightIcon />
