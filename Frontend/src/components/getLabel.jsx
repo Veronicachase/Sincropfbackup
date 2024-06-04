@@ -31,15 +31,13 @@ export function getLabel(key) {
     case "endDate":
       return "Fecha de entrega";
 
-    case "area":
-      return "Área";
+    
     case "projectDescription":
       return " Descripción del Proyecto";
 
     case "taskDescription":
       return "Detalles de la tarea";
-    case "createTask":
-      return "Tarea";
+    
     case "sections":
       return "Secciones a trabajar";
 

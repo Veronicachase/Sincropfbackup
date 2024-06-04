@@ -21,7 +21,7 @@ export function HamburgerMenu() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <Box sx={{ backgroundColor: "#fff" }}>
+        <Box sx={{ backgroundColor: "#fff", paddingRight:"2em" }}>
           {MenuOptionsList.map((option, index) => (
             <ListItem
               key={index}

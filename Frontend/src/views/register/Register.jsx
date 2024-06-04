@@ -78,14 +78,13 @@ const Register = () => {
       flexDirection={"column"}
       margin={"auto"}
     >
-      <img className="logo" src={Logo} alt="Sincro" />
       <Box
         backgroundColor="#fff"
         borderRadius="10px"
         paddingTop={3}
         paddingBottom={3}
       >
-        <Typography className="fc-primary" mb={5} variant="h4">
+        <Typography sx={{color:"#1976D2"}} mb={5} variant="h4">
           Registrar
         </Typography>
 
@@ -130,13 +129,13 @@ const Register = () => {
             <Button 
   variant="contained" 
   sx={{
-    backgroundColor: "#84C7AE",
+    backgroundColor: "#1976D2",
     marginBottom: "1em",
     '&:active': {
       backgroundColor: "#A9A9A9 !important" 
     },
     '&:hover': {
-      backgroundColor: "#72B298", 
+      backgroundColor: "#1976d28e", 
     }
   }} 
   disabled={formik.isSubmitting}

@@ -128,7 +128,7 @@ module.exports = taskDao;
 //     let conn =null;
 //     try {
 //         conn = await db.createConnection();
-//         const results = await db.query2("SELECT * FROM tasks ", conn);
+//         const results = await db.query("SELECT * FROM tasks ",null, "select" ,conn);
 //         if (results.length) {
 //             return results || [];
 //         }

@@ -62,19 +62,13 @@ export const ProjectTextField = [
 
 export  const ProjectTextField2 = [
   
-  { 
+  /*{ 
   name:"createTask",
   label:"Crear proyecto",
   type:"text",
   value:"createTask",
-  placeholder:"Nombre del proyecto " },
+  placeholder:"Nombre del proyecto " },*/
 
-  // { 
-  // name:"area",
-  // label:"Área",
-  // type:"text",
-  // value:"area",
-  // placeholder:"Zona en que se hará el trabajo"},
 
   {
   name:"projectDescription",

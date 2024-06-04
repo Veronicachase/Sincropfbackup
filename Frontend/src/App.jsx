@@ -26,7 +26,9 @@ import ProjectEditInfo from "./views/projects/ProjectEditInfo";
 import ForgotPassword from './views/forgotPassword/ForgotPassword';
 import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 import ProjectInfoData  from "./views/projects/ProjectInfoData"
+import ResetPassword from "./views/forgotPassword/ResetPassword";
 import "./App.css";
+
 
 export default function App() {
   return (
@@ -38,6 +40,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword/>} />
           <Route element={<Layout />}>
             {/*<Route element={<RequireAuth />}>*/}
             <Route path="/create-new-project" element={<CreateNewProject />} />

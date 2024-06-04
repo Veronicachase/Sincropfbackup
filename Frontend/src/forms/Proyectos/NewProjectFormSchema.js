@@ -10,7 +10,7 @@ export const NewProjectFormSchema = yup.object().shape({
   zipCode: yup.number(),
   province: yup.string(),
   TypeOfWork: yup.string().oneOf(["construction", "finishings", "installations",  "solarPanels", "other"]),
-  ConstructionType: yup.string().oneOf(["Chalet", "Apartment", "Rural", "Other"]),
+  ConstructionType: yup.string().oneOf(["chalet", "apartment", "rural", "other"]),
   map: yup.string().nullable().matches(
     /^-?\d+(\.\d+)?, \s*-?\d+(\.\d+)?$/,         
     'El formato de la ubicación debe ser "latitud, longitud"'
@@ -18,19 +18,10 @@ export const NewProjectFormSchema = yup.object().shape({
   startDate: yup.date(),
   endDate: yup.date(),
   projectDescription: yup.string(),
-  createTask: yup.string(),
-  addedSection: yup.string(),
-  sections: yup.object().shape({
-    livingRoom: yup.boolean(),
-    kitchen: yup.boolean(),
-    hall: yup.boolean(),
-    room: yup.boolean(),
-    bathRoom: yup.boolean(),
-    terrace: yup.boolean(),
-    laundry: yup.boolean(),
-    pool: yup.boolean(),
-    roof: yup.boolean()
-  }),
+  //createTask: yup.string(),
+  sections: yup.array().of(
+    yup.string()
+  ),
   status: yup.string().oneOf(["noIniciado", "iniciado", "terminado"]),
   image:yup.string()
 });

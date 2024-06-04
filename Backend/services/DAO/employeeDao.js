@@ -26,7 +26,7 @@ employeeDao.getAllEmployees = async () => {
   
   try {
       conn = await db.createConnection();
-      const results = await db.query2("SELECT * FROM employees ", conn);
+      const results = await db.query("SELECT * FROM employees ",null,"select", conn);
       if (results.length) {
           return results;
       }

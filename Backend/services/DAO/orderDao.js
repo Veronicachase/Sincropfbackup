@@ -53,7 +53,7 @@ orderDao.getAllOrders = async () => {
     let conn = null;
     try {
         conn = await db.createConnection();
-        const results = await db.query2("SELECT * FROM orders ", conn);
+        const results = await db.query("SELECT * FROM orders ", null,"select" , conn);
         if (results.length) {
             return results || [];
         }
@@ -74,7 +74,7 @@ orderDao.getAllOrdersByIdProject = async (projectId) => {
         const sql = `SELECT orders.* FROM orders 
                      JOIN projects ON orders.projectId = projects.projectId 
                      WHERE projects.projectId = ?`;
-        const results = await db.query2(sql, [projectId], conn);
+        const results = await db.query(sql, [projectId],"select", conn);
 
       
         return results.length ? results : [];

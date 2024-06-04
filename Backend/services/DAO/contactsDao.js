@@ -54,7 +54,7 @@ contactDao.getAllContacts = async () => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const results = await db.query2("SELECT * FROM contacts ", conn);
+    const results = await db.query("SELECT * FROM contacts ",null, "select", conn);
     if (results.length) {
       return results || [];
     }

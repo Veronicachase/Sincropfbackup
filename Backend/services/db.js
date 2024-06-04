@@ -20,16 +20,6 @@ db.createConnection = async () => {
   }
 };
 
-db.query2 = async (sqlQuery, conn) => {
-  try {
-    const [result] = await conn.query(sqlQuery);
-    return JSON.parse(JSON.stringify(result));
-  } catch (error) {
-    console.error("Error en la query o en la conexión: ", error);
-    throw new Error(error.message);
-  }
-};
-
 
 db.query = async (sqlQuery, params, type, conn) => {
   try {

@@ -16,7 +16,7 @@ export default function SideMenu() {
     <Box display="flex">
       <Box
         sx={{
-          width: collapsed ? 80 : 240,
+          width: collapsed ? 80 : 250,
           transition: "width 0.3s",
           overflow: "hidden",
           whiteSpace: "nowrap",
