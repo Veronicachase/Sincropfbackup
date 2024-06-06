@@ -1,14 +1,14 @@
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import { Drawer, Box, List, ListItem, ListItemText, Typography, AppBar, Toolbar, IconButton, ListItemIcon, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { Drawer, Box, List, ListItem, ListItemText, Toolbar, ListItemIcon, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, useMediaQuery, Collapse } from "@mui/material";
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { SectionsAndTasks } from "../../components/SectionsAndTask";
 import { getProjectById } from "../../api/getProjectById";
 import { getTaskBySection } from "../../api/getTaskBySection";
-import { HamburgerMenu } from "../../components/HamburguerMenu";
+import { handleUpdateSection } from "../../api/handleUpdateSection";
 import { sectionMapping } from "../../components/SectionMappingIcons";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { AddButton } from '../../components/AddButton';
 
 const drawerWidth = 240;
 
@@ -20,7 +20,9 @@ const ProjectInfo = () => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [newSection, setNewSection] = useState("");
+  const [openSections, setOpenSections] = useState({});
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -30,7 +32,7 @@ const ProjectInfo = () => {
           const data = await getProjectById(projectId);
           setProject(data);
           if (data.sections && Array.isArray(data.sections)) {
-            setSelectedSectionKey(data.sections[0]); // Pre-seleccionar la primera sección
+            setSelectedSectionKey(data.sections[0]); // Pre-select the first section
           }
         } catch (error) {
           console.error("Error fetching project data:", error);
@@ -67,33 +69,11 @@ const ProjectInfo = () => {
     setNewSection("");
   };
 
-  const handleUpdateSection = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/sections/${projectId}/sections`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ section: newSection }),
-      });
-
-      if (!response.ok) {
-        throw new Error('No se pudo agregar la nueva sección');
-      }
-
-      const result = await response.json();
-      console.log('Nueva sección agregada exitosamente:', result);
-
-      // Actualizar el estado del proyecto con la nueva sección
-      setProject((prevProject) => ({
-        ...prevProject,
-        sections: [...prevProject.sections, newSection],
-      }));
-
-      handleClose(); // Cerrar el diálogo
-    } catch (error) {
-      console.error('Error al agregar la sección:', error);
-      
+  const handleSectionClick = (section) => {
+    if (isMobile) {
+      setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+    } else {
+      setSelectedSectionKey(section);
     }
   };
 
@@ -101,76 +81,66 @@ const ProjectInfo = () => {
   if (!project) return <p>No se encontró el proyecto</p>;
 
   const drawer = (
-    <div>
-      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ p: 2 }}>
-        <Typography variant="h6" noWrap>
-          Secciones del Proyecto
-        </Typography>
-        
-      </Box>
+    <Box sx={{ width: '100%' }}>
       <List>
-      <HamburgerMenu/>
         {project.sections && project.sections.map((section) => (
-          <ListItem
-            key={section}
-            onClick={() => setSelectedSectionKey(section)}
-            sx={{
-              borderRadius: '5px',
-              transition: 'transform 0.2s, box-shadow 0.2s',
-              cursor:"pointer",
-              '&:hover': {
-                transform: 'scale(1.02)',
-                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-              },
-            }}
-          >
-            <ListItemIcon>
-              {sectionMapping[section] ? sectionMapping[section].icon : <ArrowCircleRightIcon />}
-            </ListItemIcon>
-            <ListItemText primary={sectionMapping[section] ? sectionMapping[section].name : section} />
-          </ListItem>
+          <div key={section}>
+            <ListItem
+              onClick={() => handleSectionClick(section)}
+              sx={{
+                borderRadius: '5px',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                cursor: "pointer",
+                '&:hover': {
+                  transform: 'scale(1.02)',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                },
+              }}
+            >
+              <ListItemIcon>
+                {sectionMapping[section] ? sectionMapping[section].icon : <ArrowCircleRightOutlinedIcon />}
+              </ListItemIcon>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <ListItemText primary={sectionMapping[section] ? sectionMapping[section].name : section} />
+                {isMobile ? <ArrowDropDownIcon sx={{ color: "grey" }} /> : <ArrowCircleRightOutlinedIcon sx={{ color: "grey" }} />}
+              </Box>
+            </ListItem>
+            {isMobile && (
+              <Collapse in={openSections[section]} timeout="auto" unmountOnExit>
+                <Box sx={{ margin: '0 16px' }}>
+                  <SectionsAndTasks projectId={projectId} sectionKey={section} taskData={taskData} setTaskData={setTaskData} />
+                  <AddButton buttonText="Agregar Tarea" onClick={() => navigate(`/project-create-task/${projectId}/${section}`)} />
+                </Box>
+              </Collapse>
+            )}
+          </div>
         ))}
       </List>
-      <Button
-        variant="outlined"
-        onClick={handleClickOpen}
-      >
-        Agregar sección
-      </Button>
-    </div>
+      <Box sx={{ marginTop: "2em", display: "flex", width: isMobile ? "200px" : "100%", justifyContent: "center" }}>
+        <AddButton buttonText={isMobile ? "" : "Agregar Sección"} onClick={handleClickOpen} />
+      </Box>
+    </Box>
   );
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#1976d2' }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            sx={{ mr: 2, display: { sm: 'none', cursor:"pointer" } }}
-            onClick={() => {/* toggle mobile drawer logic here if needed */}}
-          >
-            <ArrowCircleRightIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Información del Proyecto
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <Box sx={{ display: 'flex', height: '100vh', overflowX: 'hidden' }}>
       <Drawer
         variant="permanent"
         sx={{
-          width: drawerWidth,
+          width: isMobile ? '100%' : drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+          top: '64px',
+          [`& .MuiDrawer-paper`]: { width: isMobile ? '100%' : drawerWidth, boxSizing: 'border-box', top: '64px' },
         }}
       >
         {drawer}
         <Button
           variant="contained"
           sx={{
-            margin: '10px',
+            marginTop: 2,
+            width: "200px",
+            display: "flex",
+            margin: "2em auto",
             backgroundColor: '#218BFE',
             '&:hover': {
               backgroundColor: '#1976d2',
@@ -181,23 +151,17 @@ const ProjectInfo = () => {
           Datos del proyecto
         </Button>
       </Drawer>
-
-      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 1, margin: isMobile ? '0 16px' : '0' }}>
         <Toolbar />
-        <Box>
-          <Button variant="outlined" sx={{ border: "1px solid #1976d2" }} onClick={() => {
-            if (selectedSectionKey) {
-              navigate(`/project-create-task/${projectId}/${selectedSectionKey}`);
-            } else {
-              console.error('No sectionKey selected');
-            }
-          }}>
-            Agregar Tarea  <AddCircleIcon sx={{ marginLeft: ".5em", color: "#1976d2" }} /> 
-          </Button>
-        </Box>
-        <SectionsAndTasks projectId={projectId} sectionKey={selectedSectionKey} taskData={taskData} setTaskData={setTaskData} />
+        {!isMobile && (
+          <>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <AddButton buttonText="Agregar Tarea" onClick={() => navigate(`/project-create-task/${projectId}/${selectedSectionKey}`)} />
+            </Box>
+            <SectionsAndTasks projectId={projectId} sectionKey={selectedSectionKey} taskData={taskData} setTaskData={setTaskData} />
+          </>
+        )}
       </Box>
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Agregar Nueva Sección</DialogTitle>
         <DialogContent>
@@ -230,3 +194,4 @@ const ProjectInfo = () => {
 export default ProjectInfo;
 
 
+ 

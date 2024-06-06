@@ -1,7 +1,6 @@
-// no se borran mis proyectos
 
 
-import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, IconButton, CircularProgress, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -16,6 +15,7 @@ export default function MyProjects() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -51,28 +51,28 @@ export default function MyProjects() {
 
   return (
     <>
-      <Box display="flex" height="100vh" sx={{ borderRadius: '5px' }}>
-        <Box  width={{md: '25%' }} flexShrink={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
+      <Box display="flex" height="100vh" sx={{ borderRadius: '5px', marginTop: "2em" }}>
+        <Box width={{ md: '25%' }} flexShrink={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
           <SideMenu />
         </Box>
         <Box flexGrow={1} overflow="auto" padding={2} sx={{ marginLeft: { xs: 0, md: 0 }, backgroundColor: '#f5f5f5' }}>
           <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mb={5}>
-            <Typography variant="h5" color={'#333'} 
-            sx={{
-              typography: {
-                xs: 'subtitle1', 
-                md: 'h5'        
-              }
-            }}>
+            <Typography variant="h5" color={'#333'}
+              sx={{
+                typography: {
+                  xs: 'subtitle1',
+                  md: 'h5'
+                }
+              }}>
               Lista de proyectos
             </Typography>
-            <Button 
+            <Button
               variant="contained"
-              sx={{ backgroundColor: '#1976d2', color: '#fff', fontSize:{ xs:'0.75rem'} }}
+              sx={{ backgroundColor: '#1976d2', color: '#fff', fontSize: { xs: '0.75rem' } }}
               onClick={() => navigate(`/create-new-project`)}
               startIcon={<AddCircleIcon />}
             >
-              Agregar Proyecto
+              Agregar Nuevo
             </Button>
           </Box>
 
@@ -82,6 +82,7 @@ export default function MyProjects() {
                 key={project.projectId}
                 sx={{
                   display: 'flex',
+                  flexDirection: isMobile ? 'column' : 'row',
                   padding: 2,
                   cursor: 'pointer',
                   marginBottom: '.5em',
@@ -104,21 +105,26 @@ export default function MyProjects() {
                   sx={{
                     textAlign: 'left',
                     display: 'flex',
-                    gap: 3,
                     alignItems: 'center',
                     
                   }}
                 >
-                  
-                  <Box> 
-                  <Typography variant="h6" sx={{typography: {
-                    xs: 'subtitle1', 
-                    md: 'h6'        
-                  }}}>{project.projectName}</Typography>
-                  <Typography variant="body2" color="textSecondary">{project.startDate}</Typography>
+                  <Box display={"flex"} gap={3} alignItems={"center"} >
+                    <Typography variant="h6" sx={{
+                      typography: {
+                        xs: 'subtitle1',
+                        md: 'h6'
+                      }
+                    }}>{project.projectName}</Typography>
+                    <Typography variant="body2" color="textSecondary">{project.startDate}</Typography>
                   </Box>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{
+                  display: 'flex',
+                  gap: 2,
+                  justifyContent:"center",
+                  marginTop: isMobile ? '1em' : 0,
+                }}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -183,10 +189,3 @@ export default function MyProjects() {
     </>
   );
 }
-
-
-
-
-
-
-

@@ -9,8 +9,11 @@ export const pool = createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 });
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> d9ef4e5097aa3a3678c4331fac38dc58f0676fc8

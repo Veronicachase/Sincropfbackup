@@ -18,9 +18,9 @@ export default function Layout() {
   const showHamburgerMenu = (path) => matchPath({ path, end: false }, location.pathname);
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1}}>
-        <AppBar position="static" sx={{ backgroundColor: "#1976d2", cursor:"pointer" }}>
+    <>s
+      
+        <AppBar position="fixed" sx={{ backgroundColor: "#1976d2", cursor:"pointer"}}>
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
               <HamburgerMenu/>
@@ -30,7 +30,7 @@ export default function Layout() {
             </Typography>
           </Toolbar>
         </AppBar>
-      </Box>
+    
       <Box>
         <Outlet />
       </Box>

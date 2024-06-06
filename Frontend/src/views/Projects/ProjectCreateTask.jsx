@@ -9,14 +9,13 @@ import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
 import { previewFiles } from "../../utils/previewFiles";
 
-
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [projectData, setProjectData] = useState(null);
   const [file, setFile] = useState("");
-	const [image, setImage] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,13 +40,11 @@ export default function ProjectCreateTask() {
     fetchData();
   }, [projectId]);
 
-  
   const handleChange = (e) => {
-		const file = e.target.files[0];
-		setFile(file);
-		previewFiles(file, setImage);
-	};
-  
+    const file = e.target.files[0];
+    setFile(file);
+    previewFiles(file, setImage);
+  };
 
   if (!projectData) {
     return <div>Loading...</div>;
@@ -78,9 +75,9 @@ export default function ProjectCreateTask() {
         }}
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
-          console.log(image)
+          console.log(image);
           values.prevImages = image;
-          console.log('Values', values)
+          console.log("Values", values);
           try {
             await handleSubmitTask(values, sectionKey);
             navigate(-1);
@@ -103,11 +100,10 @@ export default function ProjectCreateTask() {
                 padding: "2em",
                 display: "flex",
                 borderRadius: "10px",
+                
               }}
             >
-              <Box>
-               
-              </Box>
+             
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <Field
@@ -124,22 +120,29 @@ export default function ProjectCreateTask() {
                   <Field
                     as={Select}
                     name="employeeId"
-                    sx={{ backgroundColor: "#fff" }}
+                    sx={{ backgroundColor: "#fff" , marginTop:".5em"}}
                     fullWidth
                     displayEmpty
                     onChange={(event) => {
                       const selectedEmployeeId = event.target.value;
-                      const selectedEmployee = employees.find(employee => employee.employeeId === selectedEmployeeId);
-                      const selectedEmployeeName = selectedEmployee ? selectedEmployee.name : '';
-                      setFieldValue('employeeId', selectedEmployeeId);
-                      setFieldValue('employeeName', selectedEmployeeName);
+                      const selectedEmployee = employees.find(
+                        (employee) => employee.employeeId === selectedEmployeeId
+                      );
+                      const selectedEmployeeName = selectedEmployee
+                        ? selectedEmployee.name
+                        : "";
+                      setFieldValue("employeeId", selectedEmployeeId);
+                      setFieldValue("employeeName", selectedEmployeeName);
                     }}
                   >
                     <MenuItem value="">
                       <em>Selecciona a un trabajador</em>
                     </MenuItem>
                     {employees.map((employee) => (
-                      <MenuItem key={employee.employeeId} value={employee.employeeId}>
+                      <MenuItem
+                        key={employee.employeeId}
+                        value={employee.employeeId}
+                      >
                         {employee.name}
                       </MenuItem>
                     ))}
@@ -148,7 +151,7 @@ export default function ProjectCreateTask() {
 
                 <Grid item xs={12}>
                   <Field
-                    sx={{ backgroundColor: "#fff" }}
+                    sx={{ backgroundColor: "#fff" , marginTop:".5em" }}
                     as={TextField}
                     name="taskDescription"
                     label="Descripción de la tarea"
@@ -161,7 +164,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={6}>
                   <Field
-                    sx={{ backgroundColor: "#fff" }}
+                    sx={{ backgroundColor: "#fff" , marginTop:"2em", marginBottom:"2em"  }}
                     as={TextField}
                     name="startDate"
                     label="Fecha de inicio"
@@ -172,7 +175,7 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={6}>
                   <Field
-                    sx={{ backgroundColor: "#fff" }}
+                    sx={{ backgroundColor: "#fff", marginTop:"2em", marginBottom:"2em" }}
                     as={TextField}
                     name="endDate"
                     label="Fecha de entrega"
@@ -183,11 +186,10 @@ export default function ProjectCreateTask() {
                 </Grid>
                 <Grid item xs={12}>
                   <input
-                   
                     type="file"
                     name="prevImages"
                     onChange={(e) => {
-                      handleChange(e)
+                      handleChange(e);
                     }}
                     multiple
                   />
@@ -196,7 +198,11 @@ export default function ProjectCreateTask() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    sx={{ backgroundColor: "#1976d2", color: "#fff", marginTop:"2em" }}
+                    sx={{
+                      backgroundColor: "#1976d2",
+                      color: "#fff",
+                      marginTop: "2em",
+                    }}
                   >
                     Crear Tarea
                   </Button>

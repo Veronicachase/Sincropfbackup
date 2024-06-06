@@ -9,6 +9,8 @@ import {
   Collapse,
   Button,
   Paper,
+  useMediaQuery,
+
 } from "@mui/material";
 import { deleteOrder } from "../../api/deleteOrder";
 import { getAllOrders } from "../../api/getAllOrders";
@@ -39,6 +41,7 @@ function OrderList() {
   const [modalOpen, setModalOpen] = useState(false); 
   const [selectedOrder, setSelectedOrder] = useState(null); 
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     fetchProjectsAndOrders();
@@ -90,7 +93,7 @@ function OrderList() {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -119,7 +122,7 @@ function OrderList() {
         status: 'pendiente',
         description: 'Descripción del nuevo producto'
       });
-      setOrders((prevOrders) => [...prevOrders, newOrder]); // Agrega el nuevo pedido directamente al estado
+      setOrders((prevOrders) => [...prevOrders, newOrder]);
       setSnackbarMessage("Pedido creado con éxito");
       setSnackbarOpen(true);
     } catch (error) {
@@ -147,7 +150,7 @@ function OrderList() {
   if (loading) return <p>Cargando datos de contacto...</p>;
 
   return (
-    <Box display={"flex"} flexDirection="column" alignItems="center">
+    <Box display={"flex"} flexDirection="column" alignItems="center" marginTop={"2em"}>
       <Box sx={{ marginTop: "2em", width: "90%" }}>
         {projects.length > 0 ? (
           projects.map((project) => (
@@ -198,16 +201,20 @@ function OrderList() {
                             alignItems: "center",
                             borderRadius: "10px",
                             transition: "transform 0.3s, background-color 0.3s",
+                            flexDirection:isMobile?"column":"",
                             ":hover": {
                               transform: "scale(1.02)",
                               backgroundColor: "#e0f7fa",
                             },
                           }}
                         >
-                          <Box>
-                            <Typography variant="body2">
+                        <Box sx={{display:"flex", gap:2}} > 
+                        
+                          <Box sx={{display:"flex"}}>
+                          <IconColorsOrder/>
+                           {/*<Typography variant="body2">
                               {formatDate(order.date)}
-                            </Typography>
+                            </Typography> */} 
                           </Box>
                           <Box
                             sx={{
@@ -217,10 +224,11 @@ function OrderList() {
                               justifyContent: "left",
                             }}
                           >
-                            <IconColorsOrder status={order.status} />
+                            
                             <Typography variant="body1">
                               {order.productName}
                             </Typography>
+                          </Box>
                           </Box>
                           <Box sx={{ display: "flex", gap: 1 }}>
                             <IconButton
@@ -246,7 +254,7 @@ function OrderList() {
                   )}
                   <Box sx={{ display: "flex", gap: 2, justifyContent: "center", paddingBottom: "1em" }}>
                     <Button
-                      onClick={() => handleAddOrder(project.projectId)} // Pasa el projectId al manejar la adición de pedidos
+                      onClick={() => handleAddOrder(project.projectId)}
                       sx={{
                         backgroundColor: "#1976d2",
                         color: "#fff",

@@ -15,7 +15,7 @@ export const sectionMapping = {
   roof: { icon: <RoofingIcon />, name: 'Techo' },
   terrace: { icon: <DeckIcon />, name: 'Terraza' },
   room: { icon: <BedroomParentIcon />, name: 'Habitación' },
-  bathroom: { icon: <BathtubIcon />, name: 'Baño' },
+  bathRoom: { icon: <BathtubIcon />, name: 'Baño' },
   hall: { icon: <ArrowCircleRightIcon />, name: 'Pasillo' },
   livingRoom: { icon: <LivingIcon />, name: 'Sala de estar' },
 };

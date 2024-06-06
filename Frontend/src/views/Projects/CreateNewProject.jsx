@@ -64,7 +64,7 @@ function CreateNewProject() {
     >
       {({ isSubmitting, setFieldValue, values }) => (
         <Form>
-          <Container maxWidth="md" sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+          <Container maxWidth="md" sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop:"2em" }}>
             <Box sx={{ width: "100%", maxWidth: 900, marginTop: "3em", paddingLeft: "1em" }}>
               <Grid container spacing={3} alignItems="center">
                 <Grid container spacing={2}>
