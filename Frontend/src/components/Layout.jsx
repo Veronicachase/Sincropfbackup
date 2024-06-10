@@ -20,16 +20,14 @@ export default function Layout() {
   return (
     <>s
       
-        <AppBar position="fixed" sx={{ backgroundColor: "#1976d2", cursor:"pointer"}}>
-          <Toolbar variant="dense">
-            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-              <HamburgerMenu/>
-            </IconButton>
-            <Typography variant="h6" color="inherit" component="div">
-              {title}
-            </Typography>
-          </Toolbar>
-        </AppBar>
+    <AppBar position="fixed" sx={{ backgroundColor: "#1976d2", cursor: "pointer" }}>
+    <Toolbar variant="dense">
+        <HamburgerMenu/>
+        <Typography variant="h6" color="inherit" component="div">
+            {title}
+        </Typography>
+    </Toolbar>
+</AppBar>
     
       <Box>
         <Outlet />

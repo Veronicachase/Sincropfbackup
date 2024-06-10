@@ -6,12 +6,20 @@ export const ProjectTextField = [
     value:"hiringCompany",
     placeholder: "Empresa Contratante",
   },
+
+  {
+    name: "projectName",
+    type: "text",
+    label: "Nombre del proyecto",
+    value:"projectName",
+    placeholder: "Nombre asignado a este proyecto",
+  },
   {
     name: "identifier",
     type: "text",
     label: "Identificador",
     value:"projectName",
-    placeholder: "Nombre del proyecto",
+    placeholder: "Nombre fácil y rápido ",
   },
 
   { name: "block", type: "text", label: "Bloque", placeholder: "Bloque", value:"block"  },
@@ -34,7 +42,7 @@ export const ProjectTextField = [
   },
   
   {
-    name: "addressDrescription",
+    name: "addressDescription",
     type: "text",
     label: "Detalle de Dirección",
     value:"addressDrescription",

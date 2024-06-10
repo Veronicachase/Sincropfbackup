@@ -37,7 +37,7 @@ export default function HomeOptions() {
                   justifyContent: "center",
                   backgroundColor: "#ffffff4d",
                   borderRadius: "10px",
-                  padding: "2em .2em",
+                  padding: "1em .2em",
                   color: "#021F59",
                   cursor: "pointer",
                   transition: "transform 0.3s, box-shadow 0.3s",

@@ -1,10 +1,36 @@
 const projectDao = require("../services/DAO/projectDao");
 const path = require("path");
+const uploadImage = require('../public/cloudinary/uploadImage');
 
 
 const addProject = async (req, res) => {
     try {
-        const projectId = await projectDao.addProject(req.body);
+        const { body, file } = req;
+
+        let imageUrl = '';
+       
+        if (file) {
+            const result = await uploadImage(file.path);
+            console.log('Cloudinary response: esto es lo que me trae de cloudinary', result);
+            imageUrl = result.secure_url;
+        }
+
+        const projectData = {
+            ...body,
+            image: imageUrl
+         
+
+        };
+
+        const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+        
+        if (!projectData.sections) {
+            projectData.sections = defaultSections;
+        } else {
+            projectData.sections = projectData.sections.concat(defaultSections);
+        }
+        
+        const projectId = await projectDao.addProject(projectData);
         res.status(201).json({ message: "proyecto creado exitosamente", projectId });
     } catch (error) {
         console.error("Error al agregar el proyecto:", error.message);

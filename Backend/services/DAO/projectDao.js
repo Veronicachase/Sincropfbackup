@@ -14,23 +14,26 @@ projectDao.addProject = async (projectData) => {
         conn = await db.createConnection();
 
         let projectObj = {
-            projectName: projectData.projectName,
-            identifier: projectData.identifier,
-            addressDescription: projectData.addressDescription,
-            address: projectData.address,
-            block: projectData.block,
-            unit: projectData.unit,
-            zipCode: projectData.zipCode,
-            province: projectData.province,
+            projectName: projectData.projectName || "",
+            identifier: projectData.identifier || "",
+            addressDescription: projectData.addressDescription || "",
+            address: projectData.address || "",
+            block: projectData.block || "",
+            unit: projectData.unit || "",
+            zipCode: projectData.zipCode || "",
+            province: projectData.province || "",
             startDate: moment().format("YYYY-MM-DD"),
             endDate: moment().format("YYYY-MM-DD"),
-            map: projectData.map,
-            projectDescription: projectData.projectDescription,
-            typeOfWork: projectData.typeOfWork,
-            constructionType: projectData.constructionType,
-            sections: projectData.sections,
-            hiringCompany: projectData.hiringCompany,
-            createTask: projectData.createTask,
+            map: projectData.map || "",
+            projectDescription: projectData.projectDescription || "",
+            typeOfWork: projectData.typeOfWork || "",
+            constructionType: projectData.constructionType || "",
+            sections: projectData.sections || "",
+            hiringCompany: projectData.hiringCompany || "",
+            createTask: projectData.createTask || "",
+            image: projectData.image || "" ,
+            status: body.status || "noIniciado" 
+           
         };
 
         projectObj = await removeUndefinedKeys(projectObj);

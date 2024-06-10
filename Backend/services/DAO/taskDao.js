@@ -9,7 +9,7 @@ taskDao.addTask = async (sectionKey, taskData) => {
   try {
     conn = await db.createConnection();
     const sql = "INSERT INTO tasks (projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const params = [projectId, sectionKey, taskName, taskDescription, startDate, endDate, JSON.stringify(prevImages), JSON.stringify(finalImages), status, employeeId, employeeName, JSON.stringify(pdf)];
+    const params = [projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, JSON.stringify(pdf)];
     const result = await db.query(sql, params, "insert", conn);
     return result;
   } catch (error) {

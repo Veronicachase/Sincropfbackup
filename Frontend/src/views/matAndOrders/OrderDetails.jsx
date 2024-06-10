@@ -96,7 +96,6 @@ export default function OrderDetails() {
               width: "100%",
               maxWidth: "800px",
               margin: "2em auto",
-              padding: "2em",
               boxShadow: 3,
               borderRadius: "10px",
               backgroundColor: "#fff",
@@ -107,6 +106,7 @@ export default function OrderDetails() {
               },
             }}
           >
+          <Box width={"90%"} margin={"auto"}> 
             <Box sx={{ marginBottom: "2em", borderRadius: "10px" }}>
               <Typography variant="h5" gutterBottom>
                 Editar Pedido
@@ -320,6 +320,7 @@ export default function OrderDetails() {
                     paddingLeft: "1em",
                     paddingRight: "1em",
                     borderRadius: "10px",
+                    marginBottom:"2em",
                     ":hover": {
                       backgroundColor: "#76b0a0",
                       transform: "scale(1.02)",
@@ -332,6 +333,7 @@ export default function OrderDetails() {
                 </Button>
               </Grid>
             </Grid>
+            </Box>
           </Box>
         </Form>
       )}
