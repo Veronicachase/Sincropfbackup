@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { SectionsAndTasks } from "../../components/SectionsAndTask";
 import { getProjectById } from "../../api/getProjectById";
 import { getTaskBySection } from "../../api/getTaskBySection";
-import { handleUpdateSection } from "../../api/handleUpdateSection";
+import { handleSubmitSection } from "../../api/handleSubmitSection";
 import { sectionMapping } from "../../components/SectionMappingIcons";
 import { AddButton } from '../../components/AddButton';
 
@@ -176,19 +176,28 @@ const ProjectInfo = () => {
             fullWidth
             value={newSection}
             onChange={(e) => setNewSection(e.target.value)}
+           
           />
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleUpdateSection} color="primary">
-            Agregar
-          </Button>
+          <Button 
+  onClick={async () => {
+    await handleSubmitSection(projectId, newSection); 
+    handleClose(); 
+    console.log(newSection);
+  }} 
+  color="primary">
+  Agregar
+</Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
+ 
 };
 
 export default ProjectInfo;

@@ -27,6 +27,7 @@ import ForgotPassword from './views/forgotPassword/ForgotPassword';
 import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 import ProjectInfoData  from "./views/projects/ProjectInfoData"
 import ResetPassword from "./views/forgotPassword/ResetPassword";
+import { Toaster } from 'react-hot-toast';
 import "./App.css";
 
 
@@ -34,6 +35,7 @@ export default function App() {
   return (
     //<AuthContextProvider>
       <CreatePdfContextProvider>
+      <Toaster />
         <Routes>
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm />} />

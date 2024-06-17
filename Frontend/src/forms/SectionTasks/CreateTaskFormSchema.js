@@ -19,7 +19,7 @@ export const CreateTaskFormSchema = yup.object().shape({
       yup.ref("startDate"),
       "La fecha de entrega debe ser después de la fecha de inicio"
     ),
-  status: yup.string().oneOf(["noIniciado", "iniciado", "terminado"]),
+  status: yup.string().oneOf(['noIniciado', 'iniciado', 'terminado']),
   pdf: yup.array().of(yup.string().url()),
   prevImages: yup.array().of(yup.string().url()),
   finalImages: yup.array().of(yup.string().url()),

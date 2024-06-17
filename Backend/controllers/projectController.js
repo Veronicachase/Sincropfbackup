@@ -3,40 +3,48 @@ const path = require("path");
 const uploadImage = require('../public/cloudinary/uploadImage');
 
 
+
 const addProject = async (req, res) => {
+    console.log("Request body:", req.body); 
     try {
-        const { body, file } = req;
-
-        let imageUrl = '';
-       
-        if (file) {
-            const result = await uploadImage(file.path);
-            console.log('Cloudinary response: esto es lo que me trae de cloudinary', result);
-            imageUrl = result.secure_url;
-        }
-
-        const projectData = {
-            ...body,
-            image: imageUrl
-         
-
-        };
-
-        const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
-        
-        if (!projectData.sections) {
-            projectData.sections = defaultSections;
-        } else {
-            projectData.sections = projectData.sections.concat(defaultSections);
-        }
-        
-        const projectId = await projectDao.addProject(projectData);
-        res.status(201).json({ message: "proyecto creado exitosamente", projectId });
+      const { body, file } = req;
+  
+      let imageUrl = '';
+      if (file) {
+      
+        const result = await uploadImage(file.path);
+        imageUrl = result.secure_url;
+      }
+  
+      
+      let sections;
+      try {
+        sections = body.sections ? JSON.parse(body.sections) : [];
+      } catch (err) {
+        throw new Error('Invalid sections JSON format');
+      }
+  
+   
+      const projectData = { ...body, sections, image: imageUrl };
+      
+    
+      const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+      if (!projectData.sections.length) {
+        projectData.sections = defaultSections;
+      } else {
+        projectData.sections = projectData.sections.concat(defaultSections);
+      }
+  
+   
+      const projectId = await projectDao.addProject(projectData);
+      res.status(201).json({ message: "proyecto creado exitosamente", projectId });
     } catch (error) {
-        console.error("Error al agregar el proyecto:", error.message);
-        res.status(500).json({ error: error.message });
+      console.error("Error al agregar el proyecto:", error.message);
+      res.status(500).json({ error: error.message });
     }
-};
+  };
+  
+
 
 const getProject = async (req, res) => {
     try {
@@ -101,7 +109,7 @@ const deleteSection = async (req, res) => {
         }
         const sections = JSON.parse(project.sections);
         delete sections[sectionKey];
-        await projectDao.updateSection(projectId, sections);
+        await projectDao.deleteSection(projectId, sections);
         res.json({ message: "Sección eliminada exitosamente" });
     } catch (error) {
         console.error("Error al eliminar la sección:", error.message);
@@ -119,7 +127,7 @@ const updateSection = async (req, res) => {
         }
         const sections = JSON.parse(project.sections);
         sections[sectionKey] = sectionData; 
-        await projectDao.updateSection(projectId, sections);
+        await projectDao.updateSection(projectId, JSON.stringify(sections));
         res.json({ message: "Sección actualizada exitosamente" });
     } catch (error) {
         console.error("Error al actualizar la sección:", error.message);
@@ -128,10 +136,39 @@ const updateSection = async (req, res) => {
 };
 const addSection = async (req, res) => {
     const { projectId } = req.params;
-    const newSectionData = req.body; 
+    const { section: newSectionData } = req.body;
+
     try {
-        await projectDao.addSection(projectId, newSectionData);
-        res.status(201).json({ message: "Sección agregada exitosamente" });
+        const project = await projectDao.getProject(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+
+        console.log("Project sections before parsing:", project.sections);
+
+        let sections = [];
+        if (project.sections) {
+            try {
+                sections = JSON.parse(project.sections);
+            } catch (error) {
+                console.error("Error parsing sections:", error.message);
+                return res.status(500).json({ error: "Error parsing sections" });
+            }
+        }
+
+        if (!sections.includes(newSectionData)) {
+            sections.push(newSectionData); 
+
+            try {
+                await projectDao.updateSection(projectId, sections); 
+                res.status(201).json({ message: "Sección agregada exitosamente" });
+            } catch (error) {
+                console.error("Error al actualizar las secciones:", error.message);
+                res.status(500).json({ error: error.message });
+            }
+        } else {
+            res.status(409).json({ message: "La sección ya existe" });
+        }
     } catch (error) {
         console.error("Error al agregar la sección:", error.message);
         res.status(500).json({ error: error.message });
@@ -139,6 +176,15 @@ const addSection = async (req, res) => {
 };
 
 
+const getSections = async (req, res) => {
+    try {
+        const sections = await projectDao.getSections();
+        res.status(201).json({ sections });
+    } catch (error) {
+        console.error("Error al traer las secciones:", error.message);
+      res.status(500).json({ error: error.message });
+    }
+}
 
 
-module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection };
+module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections };

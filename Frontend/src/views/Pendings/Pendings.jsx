@@ -4,20 +4,12 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import { getAllTasks } from "../../api/getAllTasks";
 import { addPending } from "../../api/addPending";
-import { deleteTask } from "../../api/deleteTask";
-import { deletePending } from "../../api/deletePending";
 import { getAllOrders } from "../../api/getAllOrders";
 import { getEmployees } from "../../api/getEmployees";
 import { getAllPendings } from "../../api/getAllPendings";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VoiceInputNoFormik from "../../components/VoiceInputNoFormik";
-import {
-  Button,
-  TextField,
-  IconButton,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Button, TextField, IconButton, Box, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function Pendings() {
@@ -45,7 +37,7 @@ export default function Pendings() {
         const employeesData = await getEmployees();
         setEmployees(
           employeesData.filter(
-            (employee) => employee.mandatoryEquipment !== "entregado"
+            (employee) => employee.mandatoryEquipment !== "si"
           )
         );
       } catch (error) {
@@ -104,36 +96,32 @@ export default function Pendings() {
     }
   };
 
-  const handleDeleteTask = async (taskId) => {
-    try {
-      await deleteTask(taskId);
-      setTasks(tasks.filter((task) => task.taskId !== taskId));
-    } catch (error) {
-      console.error("Failed to delete task:", error);
-    }
+  const handleDeleteLocal = (setState, id) => {
+    setState((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const handleDeletePending = async (pendingId) => {
-    try {
-      await deletePending(pendingId);
-      setPendings(
-        pendings.filter((pending) => pending.pendingId !== pendingId)
-      );
-    } catch (error) {
-      console.error("Failed to delete pending:", error);
-    }
+  const handleDeleteLocalTask = (taskId) => {
+    setTasks(tasks.filter((task) => task.taskId !== taskId));
   };
 
-  const navigateToDetail = (employeeId, type) => {
+  const handleDeleteLocalEmployee = (employeeId) => {
+    setEmployees(employees.filter((employee) => employee.employeeId !== employeeId));
+  };
+
+  const handleDeleteLocalOrder = (orderId) => {
+    setPendingOrders(pendingOrders.filter((order) => order.orderId !== orderId));
+  };
+
+  const navigateToDetail = (id, type) => {
     switch (type) {
       case "task":
-        navigate(`/edit-task/${employeeId}`);
+        navigate(`/edit-task/${id}`);
         break;
       case "employee":
-        navigate(`/employee/${employeeId}`);
+        navigate(`/employee/${id}`);
         break;
       case "order":
-        navigate(`/order-details/${employeeId}`);
+        navigate(`/order-details/${id}`);
         break;
       default:
         break;
@@ -195,8 +183,8 @@ export default function Pendings() {
                     marginTop: 2,
                     ":hover": { backgroundColor: "primary.dark" },
                   }}
-                  disabled={isSubmitting
-                  }>
+                  disabled={isSubmitting}
+                >
                   Agregar Pendiente
                 </Button>
               </Form>
@@ -239,14 +227,14 @@ export default function Pendings() {
                 ":hover": { backgroundColor: "#f9f9f9" },
               }}
             >
-              <Typography sx={{textAlign:"left"}}>
+              <Typography sx={{ textAlign: "left" }}>
                 {pending.date} - {pending.details}
               </Typography>
               <IconButton
                 sx={{ color: "red" }}
                 edge="end"
                 aria-label="delete"
-                onClick={() => handleDeletePending(pending.pendingId)}
+                onClick={() => handleDeleteLocal(setPendings, pending.pendingId)}
               >
                 <DeleteForeverIcon />
               </IconButton>
@@ -286,7 +274,7 @@ export default function Pendings() {
                 ":hover": { backgroundColor: "#f9f9f9" },
               }}
             >
-              <Typography sx={{textAlign:"left"}}>
+              <Typography sx={{ textAlign: "left" }}>
                 {employee.name} - {employee.position}
               </Typography>
               <Box>
@@ -301,7 +289,7 @@ export default function Pendings() {
                   sx={{ color: "red" }}
                   edge="end"
                   aria-label="delete"
-                  onClick={() => handleDeleteTask(employee.employeeId)}
+                  onClick={() => handleDeleteLocalEmployee(employee.employeeId)}
                 >
                   <DeleteForeverIcon />
                 </IconButton>
@@ -342,7 +330,9 @@ export default function Pendings() {
                 ":hover": { backgroundColor: "#f9f9f9" },
               }}
             >
-              <Typography sx={{textAlign:"left"}}>{order.productName}</Typography>
+              <Typography sx={{ textAlign: "left" }}>
+                {order.productName}
+              </Typography>
               <Box>
                 <IconButton
                   onClick={() => navigateToDetail(order.orderId, "order")}
@@ -353,7 +343,7 @@ export default function Pendings() {
                   sx={{ color: "red" }}
                   edge="end"
                   aria-label="delete"
-                  onClick={() => handleDeleteTask(order.orderId)}
+                  onClick={() => handleDeleteLocalOrder(order.orderId)}
                 >
                   <DeleteForeverIcon />
                 </IconButton>

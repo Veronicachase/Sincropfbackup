@@ -23,7 +23,7 @@ app.use(logger("dev"));
 app.use(express.json({limit: '50mb'}));
 app.use(express.text());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true,limit: '50mb'  })); 
+app.use(express.urlencoded({ extended: true  })); 
 
 
 
@@ -36,7 +36,7 @@ app.use ("/contacts",contactRouter)
 app.use ("/orders",orderRouter)
 app.use ("/hours",hoursRouter)
 app.use ("/pendings",pendingRouter)
-app.use("/sections", sectionsRouter)
+
 
 
 //servidor

@@ -35,6 +35,23 @@ taskDao.getTaskById = async (taskId) => {
   }
 };
 
+
+taskDao.getAllTasks = async () => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const sql = "SELECT * FROM tasks";
+    const result = await db.query(sql, null, "select", conn);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener todas las tareas:", error.message);
+    throw error;
+  } finally {
+    if (conn) await conn.end();
+  }
+};
+
+
 taskDao.getTasksBySection = async (projectId, sectionKey) => {
   let conn = null;
   try {
@@ -54,10 +71,10 @@ taskDao.updateTask = async (taskId, taskData) => {
   const { taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf } = taskData;
   let conn = null;
   try {
-    conn = await db.createConnection();
+    conn = await db.createConnection(dbConfig);
     const sql = "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, pdf = ? WHERE taskId = ?";
-    const params = [taskName, taskDescription, startDate, endDate, JSON.stringify(prevImages), JSON.stringify(finalImages), status, employeeId, employeeName, JSON.stringify(pdf), taskId];
-    await db.query(sql, params, "update", conn);
+    const params = [taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, JSON.stringify(pdf), taskId];
+    await conn.execute(sql, params);
   } catch (error) {
     console.error("Error al actualizar la tarea:", error.message);
     throw error;

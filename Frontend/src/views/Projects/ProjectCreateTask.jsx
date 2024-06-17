@@ -8,7 +8,9 @@ import { getProjectById } from "../../api/getProjectById";
 import { handleSubmitTask } from "../../api/handleSubmitTask";
 import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
-import { previewFiles } from "../../utils/previewFiles";
+import { initialValues } from "../../forms/SectionTasks/InitialValues";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
@@ -62,40 +64,27 @@ export default function ProjectCreateTask() {
 
   return (
     <Box>
-      <Box sx={{ marginTop: "1em" }}>
+      <Box sx={{ marginTop: "3em" }}>
         <div>
-          {projectData.projectName} {projectData.constructionType}{" "}
+          {projectData.projectName} {"- "} {projectData.constructionType}{" "}
           {projectData.section}
         </div>
       </Box>
       <Formik
-        initialValues={{
-          taskName: "",
-          employeeId: "",
-          employeeName: "",
-          taskDescription: "",
-          projectId: projectId,
-          sectionKey: projectData ? projectData.section : "",
-          startDate: "",
-          endDate: "",
-          status: "noIniciado",
-          pdf: [],
-          prevImages: [],
-          finalImages: [],
-        }}
+        initialValues={initialValues}
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
+          values.projectId = projectId;
           values.prevImages = prevImages;
           values.finalImages = finalImages;
           console.log("Values", values);
           try {
             await handleSubmitTask(values, sectionKey);
-            navigate(-1);
+            toast.success('Tarea creada con éxito!');
+            navigate(-1); // Navegar hacia atrás o donde necesites
           } catch (error) {
-            console.error(
-              "Error durante el proceso de creación de tarea en projectCreateTask: ",
-              error
-            );
+            console.error("Error durante el proceso de creación de tarea: ", error);
+            toast.error('Error al crear la tarea');
             actions.setSubmitting(false);
           }
         }}
@@ -208,14 +197,9 @@ export default function ProjectCreateTask() {
                     multiple
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <input
-                    type="file"
-                    name="finalImages"
-                    onChange={(e) => handleFileUpload(e, setFinalImages)}
-                    multiple
-                  />
-                </Grid>
+               
+               
+            
                 <Grid item xs={12}>
                   <Button
                     type="submit"
@@ -234,8 +218,15 @@ export default function ProjectCreateTask() {
           </Form>
         )}
       </Formik>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+      
     </Box>
+    
   );
+  
 }
 
 

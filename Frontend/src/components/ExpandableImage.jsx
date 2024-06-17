@@ -1,5 +1,6 @@
 import  { useState } from 'react';
 import { Box } from '@mui/material';
+import PropTypes from 'prop-types';
 
  const ExpandableImage = ({ src, alt }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -22,6 +23,11 @@ import { Box } from '@mui/material';
       }}
     />
   );
+};
+
+ExpandableImage.propTypes = {
+  src: PropTypes.string,
+  alt: PropTypes.string,
 };
 
 export default ExpandableImage

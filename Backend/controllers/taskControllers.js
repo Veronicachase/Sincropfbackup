@@ -12,6 +12,10 @@ const addTask = async (req, res) => {
     const prevImagesUrls = [];
     const finalImagesUrls = [];
 
+    if (!taskData.status) {
+      taskData.status = 'noIniciado';
+    }
+
     // Manejo de prevImages
     if (taskData && taskData.prevImages) {
       for (const image of taskData.prevImages) {
@@ -167,19 +171,50 @@ const getTasksBySection = async (req, res) => {
 //   }
 // };
 
+
 const updateTask = async (req, res) => {
   try {
-    const { files } = req;
     const { taskId } = req.params;
     const taskData = { ...req.body };
 
-    if (files) {
-      if (files.prevImages) {
-        taskData.prevImages = files.prevImages.map((file) => file.path);
+    const prevImagesUrls = [];
+    const finalImagesUrls = [];
+
+    if (!taskData.status) {
+      taskData.status = 'noIniciado';
+    }
+
+
+    // Manejo de prevImages
+    if (taskData.prevImages) {
+      for (const image of taskData.prevImages) {
+        if (image.startsWith('data:image')) {
+          const uploadedImage = await cloudinary.uploader.upload(image, {
+            upload_preset: "presets",
+            allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
+          });
+          prevImagesUrls.push(uploadedImage.secure_url);
+        } else {
+          prevImagesUrls.push(image);
+        }
       }
-      if (files.finalImages) {
-        taskData.finalImages = files.finalImages.map((file) => file.path);
+      taskData.prevImages = JSON.stringify(prevImagesUrls);
+    }
+
+    // Manejo de finalImages
+    if (taskData.finalImages) {
+      for (const image of taskData.finalImages) {
+        if (image.startsWith('data:image')) {
+          const uploadedImage = await cloudinary.uploader.upload(image, {
+            upload_preset: "presets",
+            allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
+          });
+          finalImagesUrls.push(uploadedImage.secure_url);
+        } else {
+          finalImagesUrls.push(image);
+        }
       }
+      taskData.finalImages = JSON.stringify(finalImagesUrls);
     }
 
     await taskDao.updateTask(taskId, taskData);
