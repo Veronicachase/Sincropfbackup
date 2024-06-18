@@ -38,7 +38,11 @@ const addHours = async (req, res) => {
     const newHours = await HoursDao.addHours(employeeId, hoursData);
     if (newHours && newHours.insertId) {
       return res.status(201).send(`Horas añadidas con ID: ${newHours.insertId}`);
-    } else {
+    } else if (newHours && newHours.insertId === undefined) {
+      return res.status(201).send("Horas añadidas correctamente (sin ID)");
+    } 
+    
+    else {
       return res.status(500).send("Error al agregar las horas, ID no disponible.");
     }
   } catch (e) {

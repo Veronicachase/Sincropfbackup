@@ -243,6 +243,7 @@ export default function Employee() {
         validationSchema={ValidationSchemaHours}
         onSubmit={async (values, { setSubmitting }) => {
           try {
+            console.log('Submitting values:', values); 
             await addHours(employeeId, {
               date: new Date().toISOString().split('T')[0],
               regularHours: values.regularHours,
