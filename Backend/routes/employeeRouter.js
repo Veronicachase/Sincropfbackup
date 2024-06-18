@@ -16,7 +16,7 @@ employeeRouter.get("/:employeeId", getEmployeeById);
 
 employeeRouter.get("/", getAllEmployees);
 
-employeeRouter.put("/:employeeId", updateEmployee);
+employeeRouter.patch("/:employeeId", updateEmployee);
 
 employeeRouter.delete("/:employeeId", deleteEmployee);
 

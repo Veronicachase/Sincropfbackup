@@ -31,7 +31,7 @@ projectDao.addProject = async (projectData) => {
       hiringCompany: projectData.hiringCompany || "",
       createTask: projectData.createTask || "",
       image: projectData.image || "",
-      status: req.body.status || "noIniciado",
+      status: projectData.status || "noIniciado",
     };
 
     projectObj = await removeUndefinedKeys(projectObj);

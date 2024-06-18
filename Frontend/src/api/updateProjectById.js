@@ -1,11 +1,9 @@
-export const updateProjectById = async (projectId, projectData) => {
+export const updateProjectById = async (projectId, formData) => {
   try {
     const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(projectData)
+      body: formData,
+     
     });
 
     if (!response.ok) {

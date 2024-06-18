@@ -2,6 +2,7 @@
 const { jwtVerify } = require("jose");
 const HoursDao = require("../services/DAO/hoursDao");
 const employeeDao = require("../services/DAO/employeeDao"); 
+const moment = require('moment');
 
 const getHoursByEmployeeId = async (req, res) => {
   try {
@@ -26,7 +27,7 @@ const addHours = async (req, res) => {
     }
 
     const hoursData = {
-      date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      date: moment().format("YYYY-MM-DD"),
       regularHours,
       regularMinutes,
       extraHours,

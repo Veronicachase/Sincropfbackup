@@ -19,7 +19,7 @@ projectRouter.get("/:projectId", getProject);
 projectRouter.get("/", getAllProjects);
 projectRouter.post("/", upload.single("image"), addProject);
 projectRouter.delete("/:projectId", deleteProject);
-projectRouter.patch("/:projectId", updateProject);
+projectRouter.patch("/:projectId",upload.single("image"), updateProject);
 /* Estas rutas son específicas para manejar las secciones (editar, borrar y agragar una sección (JSON) dentro de projects) */
 projectRouter.post("/:projectId/sections", addSection);
 projectRouter.patch("/:projectId/sections/:sectionKey", updateSection);

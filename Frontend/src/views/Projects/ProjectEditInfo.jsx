@@ -1,4 +1,3 @@
-
 import { Formik, Form } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -6,10 +5,9 @@ import { initialValues as defaultInitialValues } from "../../forms/Proyectos/Cre
 import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
 import { getProjectById } from "../../api/getProjectById";
 import { updateProjectById } from "../../api/updateProjectById";
-import { TranslateSectionName } from "../../components/translateSectionName";
 import { getLabel } from "../../components/getLabel";
+import toast, { Toaster } from "react-hot-toast";
 import MapView from "../../components/MapView";
-
 
 import {
   Button,
@@ -21,22 +19,19 @@ import {
   InputLabel,
   FormControl,
   TextField,
- 
 } from "@mui/material";
-
 
 export default function ProjectEditInfo() {
   const { projectId } = useParams();
   const [formValues, setFormValues] = useState(defaultInitialValues);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
- 
-  const navigate = useNavigate();
-
+  const [fileName, setFileName] = useState('');
   const [imageUrls, setImageUrls] = useState({
     prevImages: [],
-    finalImages: [],
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (projectId) {
@@ -67,35 +62,39 @@ export default function ProjectEditInfo() {
     }
   }, [projectId]);
 
-  
-
-
-  const handleFileChange = (event, type) => {
-    const files = Array.from(event.target.files);
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setImageUrls((prev) => ({
-      ...prev,
-      [type]: urls,
-    }));
+  const handleFileChange = (event, setFieldValue) => {
+    const file = event.target.files[0]; // Solo toma el primer archivo
+    if (file) {
+      setFieldValue("prevImage", file); // Actualiza el estado de Formik
+      const url = URL.createObjectURL(file);
+      setImageUrls((prev) => ({
+        ...prev,
+        prevImages: [url], // Actualiza el estado con la URL de previsualización
+      }));
+      setFileName(file.name); // Actualiza el estado con el nombre del archivo
+    }
   };
 
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
-        if (Array.isArray(values[key])) {
-          values[key].forEach((file) => {
-            formData.append(key, file);
-          });
+        if (values[key] instanceof File) {
+          formData.append(key, values[key], values[key].name);
         } else {
           formData.append(key, values[key]);
         }
       });
-      await updateProjectById(projectId, formData);
-      alert("Datos actualizados");
+
+      const response = await updateProjectById(projectId, formData);
+      if (response.success) {
+        toast.success("Datos actualizados");
+      } else {
+        throw new Error(response.message);
+      }
     } catch (error) {
-      alert(
-        "Error al editar. Por favor, intenta de nuevo. Esto viene del handleSubmit y si esto para revisar updateProjectById"
+      toast.error(
+        "Error al editar. Por favor, intenta de nuevo: " + error.message
       );
     }
   };
@@ -127,7 +126,7 @@ export default function ProjectEditInfo() {
         validationSchema={NewProjectFormSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, setFieldValue, }) => (
+        {({ values, setFieldValue }) => (
           <Form>
             {Object.entries(values)
               .filter(
@@ -207,38 +206,17 @@ export default function ProjectEditInfo() {
                   marginBottom: { xs: 2, sm: 0 },
                 }}
               >
-                Agregar Imágen inicial
+                Cambiar Imagen Inicial
                 <input
                   type="file"
-                  name="prevImages"
-                  multiple
+                  name="prevImage"
                   hidden
-                  onChange={(e) => {
-                    setFieldValue("prevImages", Array.from(e.target.files));
-                    handleFileChange(e, "prevImages");
-                  }}
-                />
-              </Button>
-              <Button variant="outlined" component="label">
-                Agregar Imágen Final
-                <input
-                  type="file"
-                  name="finalImages"
-                  multiple
-                  hidden
-                  onChange={(e) => {
-                    setFieldValue("finalImages", Array.from(e.target.files));
-                    handleFileChange(e, "finalImages");
-                  }}
+                  onChange={(e) => handleFileChange(e, setFieldValue)} // Usa la función de manejo de archivos simplificada
                 />
               </Button>
             </Box>
 
-            
-
             <Box sx={{ textAlign: "center", marginTop: 3 }}>
-             
-
               <Button
                 variant="outlined"
                 onClick={() => navigate("/my-projects")}
@@ -266,8 +244,6 @@ export default function ProjectEditInfo() {
           </Form>
         )}
       </Formik>
-
-      
     </Box>
   );
 }

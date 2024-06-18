@@ -26,18 +26,21 @@ HoursDao.addHours = async (employeeId, hoursData) => {
   try {
     conn = await db.createConnection();
     let hoursObj = {
-      date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      date: hoursData.date,
       regularHours: hoursData.regularHours,
       extraHours: hoursData.extraHours,
       extraMinutes: hoursData.extraMinutes,
       regularMinutes: hoursData.regularMinutes,
       employeeId: employeeId
     };
+    console.log("Objeto horas para insertar en la DB:", hoursObj); 
     hoursObj = await removeUndefinedKeys(hoursObj);
     const result = await db.query("INSERT INTO hours SET ?", hoursObj, "insert", conn);
+    console.log("Resultado de la inserción en la DB:", result);
     return result; 
   } catch (e) {
     throw new Error(e);
+    console.error("Error al insertar en la DB:", error.message); 
   } finally {
     conn && (await conn.end());
   }

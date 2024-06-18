@@ -42,6 +42,8 @@ export default function Employee() {
   const [endDate, setEndDate] = useState("");
   const [hoursWorked, setHoursWorked] = useState([]);
   const isMobile = useMediaQuery("(max-width:600px)");
+ 
+ 
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
@@ -87,9 +89,15 @@ export default function Employee() {
   const handleFetchHours = async () => {
     try {
       const fetchedHours = await getHoursWorked(employeeId, startDate, endDate);
-      setHoursWorked(fetchedHours);
+     
+      const sanitizedHours = fetchedHours.map(hour => ({
+        ...hour,
+        regularMinutes: hour.regularMinutes || 0,
+        extraMinutes: hour.extraMinutes || 0,
+      }));
+      setHoursWorked(sanitizedHours);
     } catch (error) {
-      console.log("Failed to fetch hours worked", error);
+      console.log('Failed to fetch hours worked', error);
       setHoursWorked([]);
     }
   };
@@ -227,18 +235,19 @@ export default function Employee() {
 
       <Formik
         initialValues={{
-          regularHour: 0,
+          regularHours: 0,
           regularMinutes: 0,
-          extraHour: 0,
+          extraHours: 0,
           extraMinutes: 0,
         }}
         validationSchema={ValidationSchemaHours}
         onSubmit={async (values, { setSubmitting }) => {
           try {
             await addHours(employeeId, {
-              regularHours: values.regularHour,
+              date: new Date().toISOString().split('T')[0],
+              regularHours: values.regularHours,
               regularMinutes: values.regularMinutes,
-              extraHours: values.extraHour,
+              extraHours: values.extraHours,
               extraMinutes: values.extraMinutes,
             });
             toast.success("Horas trabajadas agregadas exitosamente.");
@@ -279,19 +288,19 @@ export default function Employee() {
               >
                 <Field
                   as={TextField}
-                  name="regularHour"
+                  name="regularHours"
                   label="Horas regulares"
-                  placeholder="Horas Regulares"
+                  placeholder="0"
                   margin="normal"
-                  error={touched.regularHour && Boolean(errors.regularHour)}
-                  helperText={touched.regularHour && errors.regularHour}
+                  error={touched.regularHours && Boolean(errors.regularHours)}
+                  helperText={touched.regularHours && errors.regularHours}
                   sx={{ flex: "0 0 48%", backgroundColor: "#fff" }}
                 />
                 <Field
                   as={TextField}
                   name="regularMinutes"
                   label="Minutos regulares"
-                  placeholder="Minutos Regulares"
+                  placeholder="0"
                   margin="normal"
                   error={
                     touched.regularMinutes && Boolean(errors.regularMinutes)
@@ -301,19 +310,19 @@ export default function Employee() {
                 />
                 <Field
                   as={TextField}
-                  name="extraHour"
+                  name="extraHours"
                   label="Horas extra"
-                  placeholder="Horas Extras"
+                  placeholder="0"
                   margin="normal"
-                  error={touched.extraHour && Boolean(errors.extraHour)}
-                  helperText={touched.extraHour && errors.extraHour}
+                  error={touched.extraHours && Boolean(errors.extraHours)}
+                  helperText={touched.extraHours && errors.extraHours}
                   sx={{ flex: "0 0 48%", backgroundColor: "#fff" }}
                 />
                 <Field
                   as={TextField}
                   name="extraMinutes"
                   label="Minutos Extra"
-                  placeholder="Minutos Extras"
+                  placeholder="0"
                   margin="normal"
                   error={touched.extraMinutes && Boolean(errors.extraMinutes)}
                   helperText={touched.extraMinutes && errors.extraMinutes}
@@ -431,23 +440,20 @@ const HoursTable = ({ hoursWorked }) => {
             {hoursWorked.map((entry, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
-                  {new Date(entry.date).toLocaleDateString("es-ES", {
-                    weekday: "short",
-                    day: "numeric",
+                  {new Date(entry.date).toLocaleDateString('es-ES', {
+                    weekday: 'short',
+                    day: 'numeric',
                   })}
                 </TableCell>
                 <TableCell align="right">
-                  {entry.regularHours.toFixed(1)}h {entry.regularMinutes}m
+                  {entry.regularHours.toFixed(1)}h {entry.regularMinutes || 0}m
                 </TableCell>
                 <TableCell align="right">
-                  {(entry.extraHours || 0).toFixed(1)}h{" "}
-                  {entry.extraMinutes || 0}m
+                  {(entry.extraHours || 0).toFixed(1)}h {entry.extraMinutes || 0}m
                 </TableCell>
                 <TableCell align="right">
-                  {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h{" "}
-                  {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) %
-                    60}
-                  m
+                  {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h{' '}
+                  {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) % 60}m
                 </TableCell>
               </TableRow>
             ))}
@@ -457,19 +463,19 @@ const HoursTable = ({ hoursWorked }) => {
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalRegularHours.toFixed(1)}h{" "}
+                  {totals.totalRegularHours.toFixed(1)}h{' '}
                   {totals.totalRegularMinutes}m
                 </strong>
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalExtraHours.toFixed(1)}h{" "}
+                  {totals.totalExtraHours.toFixed(1)}h{' '}
                   {totals.totalExtraMinutes}m
                 </strong>
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalFinalHours.toFixed(1)}h{" "}
+                  {totals.totalFinalHours.toFixed(1)}h{' '}
                   {totals.totalFinalMinutes}m
                 </strong>
               </TableCell>
@@ -488,10 +494,20 @@ HoursTable.propTypes = {
   hoursWorked: PropTypes.arrayOf(
     PropTypes.shape({
       date: PropTypes.string.isRequired,
-      regularHours: PropTypes.number.isRequired,
-      regularMinutes: PropTypes.number.isRequired,
+      regularHours: PropTypes.number,
+      regularMinutes: PropTypes.number,
       extraHours: PropTypes.number,
       extraMinutes: PropTypes.number,
     })
   ).isRequired,
 };
+
+
+
+
+
+
+
+
+    
+           
