@@ -9,9 +9,9 @@ const {
   updateSection,
   deleteSection,
   addSection,
+  getSections
 } = require("../controllers/projectController");
-const { getSections } = require("../controllers/sectionsController");
-const sectionsRouter = express.Router();
+
 
 const projectRouter = express.Router();
 
@@ -24,5 +24,5 @@ projectRouter.patch("/:projectId",upload.single("image"), updateProject);
 projectRouter.post("/:projectId/sections", addSection);
 projectRouter.patch("/:projectId/sections/:sectionKey", updateSection);
 projectRouter.delete("/:projectId/sections/:sectionKey", deleteSection);
-sectionsRouter.get("/:projectId",getSections );
+projectRouter.get("/:projectId",getSections );
 module.exports = projectRouter;

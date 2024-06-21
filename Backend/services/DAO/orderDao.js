@@ -1,7 +1,7 @@
 
 const db = require("../db")
 const moment = require("moment");
-const {removeUndefinedKeys} = require("../../utils/removeUndefinedkeys")
+const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys")
 const orderDao = {};
 
 orderDao.addOrder = async (orderData) => {
@@ -9,17 +9,22 @@ orderDao.addOrder = async (orderData) => {
     try {
         conn = await db.createConnection();
         let orderObj = {
+
+            date: moment().format("YYYY-MM-DD"),
             orderId:orderData.orderId,
-            productName:orderData.productName,
-            providor:orderData.providor,
-            brand:orderData.brand,
-            amount:orderData.amount,
-            details:orderData.details,
-            date:orderData.date
-            
+            productName: orderData.productName,
+            providor: orderData.providor,
+            brand: orderData.brand,
+            amount: orderData.amount,
+            details: orderData.details,
+            typeOfWork:orderData.typeOfWork ,
+            section: orderData.section,
+            status:orderData.status,
+            image:orderData.image,
+            projectName:orderData.projectName   
         }
               
-        orderObj = await removeUndefinedKeys(orderObj);
+        orderObj = removeUndefinedKeys(orderObj);
         await db.query("INSERT INTO orders SET ?",   orderObj,"insert", conn);
         return orderObj.orderId; 
     } catch (e) {
@@ -29,8 +34,6 @@ orderDao.addOrder = async (orderData) => {
         if (conn) await conn.end();
     }
 };
-
-
 
 orderDao.getOrder = async (orderId) => {
     let conn = null;
@@ -94,7 +97,7 @@ orderDao.updateOrder = async (orderId, data) => {
       
         conn = await db.createConnection();
         const cleanData=removeUndefinedKeys(data)
-        await db.query("UPDATE orders SET ? WHERE orderId = ?", [data, orderId],"update", conn);
+        await db.query("UPDATE orders SET ? WHERE orderId = ?", [cleanData, orderId],"update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;

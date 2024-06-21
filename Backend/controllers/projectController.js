@@ -78,14 +78,31 @@ const getAllProjects = async (req, res) => {
 const updateProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
-        const updatedData = req.body;
+        const { body, file } = req;
+
+        let imageUrl = '';
+        if (file) {
+            const result = await uploadImage(file.path);
+            imageUrl = result.secure_url;
+        }
+
+        let sections;
+        try {
+            sections = body.sections ? JSON.parse(body.sections) : [];
+        } catch (err) {
+            throw new Error('Formato json invalido');
+        }
+
+        const updatedData = { ...body, sections, image: imageUrl };
+
         await projectDao.updateProject(projectId, updatedData);
-        res.json({ message: "project actualizado exitosamente" });
+        res.json({ message: "Proyecto actualizado correctamente" });
     } catch (error) {
         console.error("Error al actualizar el proyecto:", error.message);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 const deleteProject = async (req, res) => {
     try {
@@ -119,62 +136,56 @@ const deleteSection = async (req, res) => {
 
 const updateSection = async (req, res) => {
     const { projectId, sectionKey } = req.params;
-    const sectionData = req.body; 
+  
     try {
         const project = await projectDao.getProject(projectId);
         if (!project) {
             return res.status(404).json({ message: "Proyecto no encontrado" });
         }
-        const sections = JSON.parse(project.sections);
-        sections[sectionKey] = sectionData; 
-        await projectDao.updateSection(projectId, JSON.stringify(sections));
+        let sections = JSON.parse(project.sections);
+        if (!sections.includes(sectionKey)) {
+            sections.push(sectionKey); 
+        } else {
+            return res.status(409).json({ message: "La sección ya existe" });
+        }
+        await projectDao.updateSection(projectId, sections);
         res.json({ message: "Sección actualizada exitosamente" });
     } catch (error) {
         console.error("Error al actualizar la sección:", error.message);
         res.status(500).json({ error: error.message });
     }
 };
+
+
+
 const addSection = async (req, res) => {
     const { projectId } = req.params;
     const { section: newSectionData } = req.body;
-
+  
     try {
-        const project = await projectDao.getProject(projectId);
-        if (!project) {
-            return res.status(404).json({ message: "Proyecto no encontrado" });
-        }
-
-        console.log("Project sections before parsing:", project.sections);
-
-        let sections = [];
-        if (project.sections) {
-            try {
-                sections = JSON.parse(project.sections);
-            } catch (error) {
-                console.error("Error parsing sections:", error.message);
-                return res.status(500).json({ error: "Error parsing sections" });
-            }
-        }
-
-        if (!sections.includes(newSectionData)) {
-            sections.push(newSectionData); 
-
-            try {
-                await projectDao.updateSection(projectId, sections); 
-                res.status(201).json({ message: "Sección agregada exitosamente" });
-            } catch (error) {
-                console.error("Error al actualizar las secciones:", error.message);
-                res.status(500).json({ error: error.message });
-            }
-        } else {
-            res.status(409).json({ message: "La sección ya existe" });
-        }
+      const project = await projectDao.getProject(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Proyecto no encontrado" });
+      }
+  
+      let sections = [];
+      if (project.sections) {
+        sections = JSON.parse(project.sections);
+      }
+  
+      if (!sections.includes(newSectionData)) {
+        sections.push(newSectionData);
+        await projectDao.updateSection(projectId, sections); 
+        res.status(201).json({ message: "Sección agregada exitosamente" });
+      } else {
+        res.status(409).json({ message: "La sección ya existe" });
+      }
     } catch (error) {
-        console.error("Error al agregar la sección:", error.message);
-        res.status(500).json({ error: error.message });
+      console.error("Error al agregar la sección:", error.message);
+      res.status(500).json({ error: error.message });
     }
-};
-
+  };
+  
 
 const getSections = async (req, res) => {
     try {

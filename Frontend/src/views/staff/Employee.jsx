@@ -251,6 +251,7 @@ export default function Employee() {
               extraHours: values.extraHours,
               extraMinutes: values.extraMinutes,
             });
+            
             toast.success("Horas trabajadas agregadas exitosamente.");
           } catch (error) {
             console.error("Failed to update hours worked", error);

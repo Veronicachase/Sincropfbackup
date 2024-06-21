@@ -52,7 +52,7 @@ HoursDao.updateHours = async (employeeId, hoursData) => {
   try {
     conn = await db.createConnection();
     let hoursObj = {
-      date: moment().format("YYYY-MM-DD "),
+      date: moment().format("YYYY-MM-DD"),
       regularHours: hoursData.regularHours,
       extraHours: hoursData.extraHours,
       extraMinutes: hoursData.extraMinutes,
@@ -60,7 +60,7 @@ HoursDao.updateHours = async (employeeId, hoursData) => {
       employeeId: employeeId
     };
     hoursObj = await removeUndefinedKeys(hoursObj);
-    return await db.query("UPDATE hours SET ? WHERE employeeId = ?", [hoursObj, employeeId], "update", conn);
+    return await db.query("UPDATE hours SET ? WHERE employeeId = ?", [employeeId, hoursObj ], "update", conn);
   } catch (e) {
     throw new Error(e);
   } finally {

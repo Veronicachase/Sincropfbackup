@@ -8,9 +8,9 @@ export const getProjectById = async (projectId) => {
       const data = await response.json();
       console.log("Proyecto obtenido correctamente:", data);
 
-      if (typeof data.sections === 'string') {
-        data.sections = JSON.parse(data.sections);  
-      }
+      // if (typeof data.sections === 'string') {
+      //   data.sections = JSON.parse(data.sections);  
+      // }
       return data;
     } else {
       throw new Error('Failed to get project with status: ' + response.status);

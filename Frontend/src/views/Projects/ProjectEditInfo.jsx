@@ -63,41 +63,44 @@ export default function ProjectEditInfo() {
   }, [projectId]);
 
   const handleFileChange = (event, setFieldValue) => {
-    const file = event.target.files[0]; // Solo toma el primer archivo
+    const file = event.target.files[0]; 
     if (file) {
-      setFieldValue("prevImage", file); // Actualiza el estado de Formik
+      setFieldValue("prevImage", file); 
       const url = URL.createObjectURL(file);
       setImageUrls((prev) => ({
         ...prev,
-        prevImages: [url], // Actualiza el estado con la URL de previsualización
+        prevImages: [url], 
       }));
-      setFileName(file.name); // Actualiza el estado con el nombre del archivo
+      setFileName(file.name);
     }
   };
 
   const handleSubmit = async (values) => {
     try {
-      const formData = new FormData();
-      Object.keys(values).forEach((key) => {
-        if (values[key] instanceof File) {
-          formData.append(key, values[key], values[key].name);
-        } else {
-          formData.append(key, values[key]);
-        }
-      });
+        const formData = new FormData();
+        Object.keys(values).forEach((key) => {
+            if (key === "sections") {
+                formData.append(key, JSON.stringify(values[key]));
+            } else if (values[key] instanceof File) {
+                formData.append(key, values[key], values[key].name);
+            } else {
+                formData.append(key, values[key]);
+            }
+        });
 
-      const response = await updateProjectById(projectId, formData);
-      if (response.success) {
-        toast.success("Datos actualizados");
-      } else {
-        throw new Error(response.message);
-      }
+        const response = await updateProjectById(projectId, formData);
+        if (response.success) {
+            toast.success("Datos actualizados");
+        } else {
+            throw new Error(response.message);
+        }
     } catch (error) {
-      toast.error(
-        "Error al editar. Por favor, intenta de nuevo: " + error.message
-      );
+        toast.error(
+            "Error al editar. Por favor, intenta de nuevo: " + error.message
+        );
     }
-  };
+};
+
 
   if (loading) {
     return <p>Cargando proyecto...</p>;

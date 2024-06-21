@@ -32,7 +32,7 @@ const ProjectInfo = () => {
           const data = await getProjectById(projectId);
           setProject(data);
           if (data.sections && Array.isArray(data.sections)) {
-            setSelectedSectionKey(data.sections[0]); // Pre-select the first section
+            setSelectedSectionKey(data.sections[0]);
           }
         } catch (error) {
           console.error("Error fetching project data:", error);
@@ -74,6 +74,24 @@ const ProjectInfo = () => {
       setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
     } else {
       setSelectedSectionKey(section);
+    }
+  };
+
+  const handleAddSection = async () => {
+    try {
+      const result = await handleSubmitSection(projectId, newSection);
+      
+      if (result) { 
+        setProject((prevProject) => ({
+          ...prevProject,
+          sections: [...prevProject.sections, newSection],
+        }));
+        handleClose();
+      } else {
+        console.error('Error: No se pudo agregar la sección');
+      }
+    } catch (error) {
+      console.error('Error al agregar la sección:', error);
     }
   };
 
@@ -176,31 +194,22 @@ const ProjectInfo = () => {
             fullWidth
             value={newSection}
             onChange={(e) => setNewSection(e.target.value)}
-           
           />
-          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
           <Button 
-  onClick={async () => {
-    await handleSubmitSection(projectId, newSection); 
-    handleClose(); 
-    console.log(newSection);
-  }} 
-  color="primary">
-  Agregar
-</Button>
+            onClick={handleAddSection} 
+            color="primary">
+            Agregar
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
   );
- 
 };
 
 export default ProjectInfo;
 
-
- 

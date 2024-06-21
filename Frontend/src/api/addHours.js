@@ -10,7 +10,7 @@ export const addHours = async (employeeId, hoursData) => {
 
     if (!response.ok) {
       throw new Error('No se han podido actualizar las horas');
-    }
+    } 
 
     return await response.json();
   } catch (error) {

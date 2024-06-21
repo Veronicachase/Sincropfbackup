@@ -1,24 +1,18 @@
 import * as yup from 'yup';
 
  export const OrderFormSchema = yup.object().shape({
+  date: yup.date(),
   productName: yup.string(),
   providor: yup.string(),
   brand: yup.string(),
   amount: yup.string(),
   details: yup.string(),
-  TypeOfWork: yup.string().oneOf(["construction", "finishings", "installations", "pool", "SolarPanels", "other"]),
-  status: yup.string(),
-  date: yup.date(),
-  section: yup.object().shape({}).test(
-    'is-valid-sections',
-    'sections must be an object with boolean values',
-    value => {
-      if (typeof value !== 'object' || value === null) {
-        return false;
-      }
-      return Object.values(value).every(val => val === true);
-    }
-  ),
+  typeOfWork: yup.string().oneOf(["construction", "finishings", "instalations", "solarPanels", "other"]),
+  section: yup.string(),
+  status:yup.string().oneOf(["pendiente", "recibido"]),
+  image:yup.string(),
+  projectName:yup.string()
+
 });
 
 

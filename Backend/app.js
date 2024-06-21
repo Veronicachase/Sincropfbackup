@@ -11,7 +11,7 @@ const orderRouter = require("./routes/OrderRouter");
 const hoursRouter = require ("./routes/hoursRouter");
 const pendingRouter = require ("./routes/pendingRouter");
 const cors = require('cors');
-const sectionsRouter = require("./routes/sectionsRouter");
+
 dotenv.config();
 
 const app = express();
