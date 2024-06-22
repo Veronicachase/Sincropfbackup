@@ -5,23 +5,18 @@ export const handleSubmitSection = async (projectId, newSection) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        
         body: JSON.stringify({ section: newSection }),
+        
       });
   
         if (!response.ok) {
             throw new Error('No se pudo agregar la nueva sección');
         }
-  
+
         const result = await response.json();
         console.log('Nueva sección agregada exitosamente:', result);
-  
-        // Actualizar el estado del proyecto con la nueva sección
-        setProject((prevProject) => ({
-            ...prevProject,
-            sections: [...prevProject.sections, newSection],
-        }));
-  
-        handleClose();
+        return result;
     } catch (error) {
         console.error('Error al agregar la sección:', error);
     }

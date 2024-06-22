@@ -2,8 +2,8 @@ const removeUndefinedKeys = async (obj) => {
   try {
     // Itera sobre todas las claves del objeto
     Object.keys(obj).forEach((key) => {
-      // Si el valor de la clave es undefined o una cadena vacía, elimina la clave del objeto
-      if (obj[key] === undefined || obj[key] === "") {
+      // Si el valor de la clave es undefined, una cadena vacía o un array vacío, elimina la clave del objeto
+      if (obj[key] === undefined || obj[key] === "" || (Array.isArray(obj[key]) && obj[key].length === 0)) {
         delete obj[key];
       }
     });
@@ -12,4 +12,5 @@ const removeUndefinedKeys = async (obj) => {
     throw new Error(error.message);
   }
 };
+
 module.exports = { removeUndefinedKeys };

@@ -80,7 +80,7 @@ export default function ProjectEditInfo() {
         const formData = new FormData();
         Object.keys(values).forEach((key) => {
             if (key === "sections") {
-                formData.append(key, JSON.stringify(values[key]));
+                console.log("hola")
             } else if (values[key] instanceof File) {
                 formData.append(key, values[key], values[key].name);
             } else {
@@ -89,7 +89,7 @@ export default function ProjectEditInfo() {
         });
 
         const response = await updateProjectById(projectId, formData);
-        if (response.success) {
+        if (response.ok) {
             toast.success("Datos actualizados");
         } else {
             throw new Error(response.message);

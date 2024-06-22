@@ -103,10 +103,6 @@ projectDao.updateProject = async (projectId, data) => {
   try {
     console.log("Data: ", data);
 
-    if (data.sections && typeof data.sections ==='string') {
-      data.sections = JSON.stringify(data.sections);
-    }
-
     console.log("Data antes de remove", data);
 
     const cleanData = await removeUndefinedKeys(data);

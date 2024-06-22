@@ -6,6 +6,8 @@ export const updateProjectById = async (projectId, formData) => {
      
     });
 
+    console.log("respuesta", response)
+
     if (!response.ok) {
       throw new Error('No se han podido actualizar los cambios updateProjectById, revisar mi ProjectData, Si no hay respuespuesta al hacer el fetch. '); 
     }

@@ -71,10 +71,10 @@ taskDao.updateTask = async (taskId, taskData) => {
   const { taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf } = taskData;
   let conn = null;
   try {
-    conn = await db.createConnection(dbConfig);
+    conn = await db.createConnection();
     const sql = "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, pdf = ? WHERE taskId = ?";
     const params = [taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, JSON.stringify(pdf), taskId];
-    await conn.execute(sql, params);
+    await db.query(sql, params, 'update', conn)
   } catch (error) {
     console.error("Error al actualizar la tarea:", error.message);
     throw error;

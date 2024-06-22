@@ -164,6 +164,10 @@ const updateTask = async (req, res) => {
 
     // Manejo de prevImages
     if (taskData.prevImages) {
+      if (!Array.isArray(taskData.prevImages)) {
+        taskData.prevImages = [taskData.prevImages];
+      }
+
       for (const image of taskData.prevImages) {
         if (image.startsWith('data:image')) {
           const uploadedImage = await cloudinary.uploader.upload(image, {
@@ -180,6 +184,10 @@ const updateTask = async (req, res) => {
 
     // Manejo de finalImages
     if (taskData.finalImages) {
+      if (!Array.isArray(taskData.finalImages)) {
+        taskData.finalImages = [taskData.finalImages];
+      }
+
       for (const image of taskData.finalImages) {
         if (image.startsWith('data:image')) {
           const uploadedImage = await cloudinary.uploader.upload(image, {

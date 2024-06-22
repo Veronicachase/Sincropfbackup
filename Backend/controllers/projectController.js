@@ -170,7 +170,7 @@ const addSection = async (req, res) => {
   
       let sections = [];
       if (project.sections) {
-        sections = JSON.parse(project.sections);
+        sections = project.sections;
       }
   
       if (!sections.includes(newSectionData)) {
