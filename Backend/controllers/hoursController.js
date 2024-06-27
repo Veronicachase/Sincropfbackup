@@ -20,7 +20,7 @@ const getHoursByEmployeeId = async (req, res) => {
 const addHours = async (req, res) => {
   try {
     const { employeeId } = req.params; 
-    const { regularHours, regularMinutes, extraHours, extraMinutes } = req.body; 
+    const { date, regularHours, regularMinutes, extraHours, extraMinutes } = req.body; 
 
     if (!employeeId) {
       return res.status(400).send("ID del empleado es requerido");
@@ -37,17 +37,15 @@ const addHours = async (req, res) => {
 
     const newHours = await HoursDao.addHours(employeeId, hoursData);
     if (newHours && newHours.insertId) {
-      return res.status(201).send(`Horas añadidas con ID: ${newHours.insertId}`);
+      return res.status(201).json({ message: `Horas añadidas con ID: ${newHours.insertId}` });
     } else if (newHours && newHours.insertId === undefined) {
-      return res.status(201).send("Horas añadidas correctamente (sin ID)");
-    } 
-    
-    else {
-      return res.status(500).send("Error al agregar las horas, ID no disponible.");
+      return res.status(201).json({ message: "Horas añadidas correctamente (sin ID)" });
+    } else {
+      return res.status(500).json({ message: "Error al agregar las horas, ID no disponible." });
     }
   } catch (e) {
     console.error('Error al agregar las horas:', e.message);
-    return res.status(500).send("Error interno del servidor");
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 

@@ -7,33 +7,55 @@ const orderDao = {};
 orderDao.addOrder = async (orderData) => {
     let conn = null;
     try {
-        conn = await db.createConnection();
-        let orderObj = {
-
-            date: moment().format("YYYY-MM-DD"),
-            orderId:orderData.orderId,
-            productName: orderData.productName,
-            providor: orderData.providor,
-            brand: orderData.brand,
-            amount: orderData.amount,
-            details: orderData.details,
-            typeOfWork:orderData.typeOfWork ,
-            section: orderData.section,
-            status:orderData.status,
-            image:orderData.image,
-            projectName:orderData.projectName   
-        }
-              
-        orderObj = removeUndefinedKeys(orderObj);
-        await db.query("INSERT INTO orders SET ?",   orderObj,"insert", conn);
-        return orderObj.orderId; 
+      conn = await db.createConnection();
+      let orderObj = {
+        date: orderData.date || moment().format("YYYY-MM-DD"),
+        productName: orderData.productName,
+        provider: orderData.provider || null,
+        brand: orderData.brand || null,
+        amount: orderData.amount || null,
+        details: orderData.details || null,
+        status: orderData.status || 'pendiente',
+        image: orderData.image || null,
+        projectName: orderData.projectName || null,
+        projectId: orderData.projectId,
+      };
+  
+      console.log("Datos del pedido a insertar dao:", orderObj);
+      orderObj = removeUndefinedKeys(orderObj);
+      console.log("Datos del pedido a insertar dao después de limpiar:", orderObj);
+      // Construcción explícita de la consulta SQL
+      const query = `
+        INSERT INTO orders (
+          date, productName, provider, brand, amount, details, status, image, projectName, projectId
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
+        const parameters = [
+            orderObj.date,
+            orderObj.productName,
+            orderObj.provider,
+            orderObj.brand,
+            orderObj.amount,
+            orderObj.details,
+            orderObj.status,
+            orderObj.image,
+            orderObj.projectName,
+            orderObj.projectId
+          ];
+  
+      console.log("Query:", query);
+      console.log("Parámetros:", parameters);
+  
+      const result = await db.query(query, parameters, "insert", conn);
+      return result;
     } catch (e) {
-        console.error(e.message);
-        throw e;
+      console.error(e.message);
+      throw e;
     } finally {
-        if (conn) await conn.end();
+      if (conn) await conn.end();
     }
-};
+  };
+  
 
 orderDao.getOrder = async (orderId) => {
     let conn = null;
@@ -91,13 +113,13 @@ orderDao.getAllOrdersByIdProject = async (projectId) => {
 
 
 
-orderDao.updateOrder = async (orderId, data) => {
+orderDao.updateOrder = async ( orderId, data ) => {
     let conn = null;
     try {
       
         conn = await db.createConnection();
         const cleanData=removeUndefinedKeys(data)
-        await db.query("UPDATE orders SET ? WHERE orderId = ?", [cleanData, orderId],"update", conn);
+        await db.query("UPDATE orders SET ? WHERE orderId = ?", [cleanData, orderId ],"update", conn);
     } catch (e) {
         console.error(e.message);
         throw e;

@@ -1,6 +1,6 @@
 export const deleteOrder = async (orderId) => {
     try {
-      const response = await fetch(`http:localhost:3000/orders/${orderId}`, {
+      const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

@@ -6,7 +6,7 @@ export function getLabelOrder(key) {
       return "Nombre del producto";
     case "projectId":
       return "Id del proyecto";
-    case "providor":
+    case "provider":
       return "Proveedor";
     case "brand":
       return "Marca del producto";

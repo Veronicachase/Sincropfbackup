@@ -33,6 +33,7 @@ export default function Contacts() {
         // Agrupar contactos por categoría
         const groupedContacts = allContacts.reduce((acc, contact) => {
           const category = contact.category;
+          console.log(category)
           if (!acc[category]) {
             acc[category] = [];
           }
@@ -86,7 +87,7 @@ export default function Contacts() {
 
       <Box display="flex" justifyContent="center" alignItems="center">
         <Box sx={{ width: "80%" }}>
-          {Object.keys(data).map((category) => (
+          {Object.keys(data).sort().map((category) => (
             <Paper
               key={category}
               sx={{
@@ -113,7 +114,7 @@ export default function Contacts() {
                 }}
               >
                 <Typography variant="h6">
-                  {ContactMapping[category] ? ContactMapping[category].name : category}
+                {ContactMapping[category]?.name || category}
                 </Typography>
                 <IconButton>
                   {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}

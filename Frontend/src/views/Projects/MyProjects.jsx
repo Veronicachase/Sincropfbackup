@@ -109,7 +109,7 @@ export default function MyProjects() {
           </Box>
 
           {projects.length > 0 ? (
-            projects.map((project) => (
+            projects.sort((a,b)=>new Date(b.startDate)-new Date (a.startDate)).map((project) => (
               <Box
                 key={project.projectId}
                 sx={{

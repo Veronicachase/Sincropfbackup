@@ -72,33 +72,56 @@ export default function TaskInfoAndEdit() {
   };
 
   const handleImageSave = (type, uri) => {
+    console.log(`Saving image in ${type}:`, uri);
     if (type === "prevImages") {
-      setPrevImages((prev) => [...prev, uri]);
+      setPrevImages((prev) => {
+        const updatedImages = [...prev];
+        const index = updatedImages.indexOf(uri);
+        if (index !== -1) {
+          updatedImages[index] = uri;
+        } else {
+          updatedImages.push(uri);
+        }
+        return updatedImages;
+      });
     } else if (type === "finalImages") {
-      setFinalImages((prev) => [...prev, uri]);
+      setFinalImages((prev) => {
+        const updatedImages = [...prev];
+        const index = updatedImages.indexOf(uri);
+        if (index !== -1) {
+          updatedImages[index] = uri;
+        } else {
+          updatedImages.push(uri);
+        }
+        return updatedImages;
+      });
     }
   };
-
-  const handleFileChange = (event, setFieldValue, field) => {
+  
+  const handleFileChange = async (event, setFieldValue, field) => {
     const files = Array.from(event.currentTarget.files);
-    const fileReaders = [];
-
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        fileReaders.push(reader.result);
-        if (fileReaders.length === files.length) {
-          if (field === "prevImages") {
-            setPrevImages((prev) => [...prev, ...fileReaders]);
-          } else if (field === "finalImages") {
-            setFinalImages((prev) => [...prev, ...fileReaders]);
-          }
-          setFieldValue(field, [...fileReaders]);
-        }
-      };
+    console.log(`Files selected for ${field}:`, files);
+  
+    const fileReaders = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
     });
+  
+    const fileUrls = await Promise.all(fileReaders);
+    console.log(`File URLs for ${field}:`, fileUrls);
+  
+    if (field === "prevImages") {
+      setPrevImages((prev) => [...prev, ...fileUrls]);
+    } else if (field === "finalImages") {
+      setFinalImages((prev) => [...prev, ...fileUrls]);
+    }
+  
+    setFieldValue(field, (prev) => [...prev, ...fileUrls]);
   };
+  
 
   if (loading) return <p>Cargando...</p>;
   if (!task) return <p>No se encontró la tarea</p>;

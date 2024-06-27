@@ -29,11 +29,8 @@ import CurrentDate from "../../components/CurrentDate";
 import { calculateTotalHours } from "../../components/CalculatedTotalHours";
 import CreateEmployeePDFButton from "../../components/CreateEmployeePDFButton";
 import toast, { Toaster } from "react-hot-toast";
-import { ValidationSchemaHours } from "../../forms/Trabajadores/trabajador/ValidationSchemaHours"
-import { ValidationSchemaEmployee} from "../../forms/Trabajadores/trabajador/ValidationSchemaEmployee"
-
-
-
+import { ValidationSchemaHours } from "../../forms/Trabajadores/trabajador/ValidationSchemaHours";
+import { ValidationSchemaEmployee } from "../../forms/Trabajadores/trabajador/ValidationSchemaEmployee";
 
 export default function Employee() {
   const { employeeId } = useParams();
@@ -42,8 +39,7 @@ export default function Employee() {
   const [endDate, setEndDate] = useState("");
   const [hoursWorked, setHoursWorked] = useState([]);
   const isMobile = useMediaQuery("(max-width:600px)");
- 
- 
+
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
@@ -89,15 +85,15 @@ export default function Employee() {
   const handleFetchHours = async () => {
     try {
       const fetchedHours = await getHoursWorked(employeeId, startDate, endDate);
-     
-      const sanitizedHours = fetchedHours.map(hour => ({
+
+      const sanitizedHours = fetchedHours.map((hour) => ({
         ...hour,
         regularMinutes: hour.regularMinutes || 0,
         extraMinutes: hour.extraMinutes || 0,
       }));
       setHoursWorked(sanitizedHours);
     } catch (error) {
-      console.log('Failed to fetch hours worked', error);
+      console.log("Failed to fetch hours worked", error);
       setHoursWorked([]);
     }
   };
@@ -235,6 +231,7 @@ export default function Employee() {
 
       <Formik
         initialValues={{
+          date: new Date().toISOString().split("T")[0],
           regularHours: 0,
           regularMinutes: 0,
           extraHours: 0,
@@ -242,16 +239,19 @@ export default function Employee() {
         }}
         validationSchema={ValidationSchemaHours}
         onSubmit={async (values, { setSubmitting }) => {
+          console.log("Enviando valores desde el formulario:", values);
+          setSubmitting(false);
+
           try {
-            console.log('Submitting values:', values); 
+            console.log("Enviando valores desde el formulario:", values);
             await addHours(employeeId, {
-              date: new Date().toISOString().split('T')[0],
+              date: new Date().toISOString().split("T")[0],
               regularHours: values.regularHours,
               regularMinutes: values.regularMinutes,
               extraHours: values.extraHours,
               extraMinutes: values.extraMinutes,
             });
-            
+
             toast.success("Horas trabajadas agregadas exitosamente.");
           } catch (error) {
             console.error("Failed to update hours worked", error);
@@ -442,20 +442,23 @@ const HoursTable = ({ hoursWorked }) => {
             {hoursWorked.map((entry, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
-                  {new Date(entry.date).toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
+                  {new Date(entry.date).toLocaleDateString("es-ES", {
+                    weekday: "short",
+                    day: "numeric",
                   })}
                 </TableCell>
                 <TableCell align="right">
                   {entry.regularHours.toFixed(1)}h {entry.regularMinutes || 0}m
                 </TableCell>
                 <TableCell align="right">
-                  {(entry.extraHours || 0).toFixed(1)}h {entry.extraMinutes || 0}m
+                  {(entry.extraHours || 0).toFixed(1)}h{" "}
+                  {entry.extraMinutes || 0}m
                 </TableCell>
                 <TableCell align="right">
-                  {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h{' '}
-                  {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) % 60}m
+                  {(entry.regularHours + (entry.extraHours || 0)).toFixed(1)}h{" "}
+                  {((entry.regularMinutes || 0) + (entry.extraMinutes || 0)) %
+                    60}
+                  m
                 </TableCell>
               </TableRow>
             ))}
@@ -465,19 +468,19 @@ const HoursTable = ({ hoursWorked }) => {
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalRegularHours.toFixed(1)}h{' '}
+                  {totals.totalRegularHours.toFixed(1)}h{" "}
                   {totals.totalRegularMinutes}m
                 </strong>
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalExtraHours.toFixed(1)}h{' '}
+                  {totals.totalExtraHours.toFixed(1)}h{" "}
                   {totals.totalExtraMinutes}m
                 </strong>
               </TableCell>
               <TableCell align="right">
                 <strong>
-                  {totals.totalFinalHours.toFixed(1)}h{' '}
+                  {totals.totalFinalHours.toFixed(1)}h{" "}
                   {totals.totalFinalMinutes}m
                 </strong>
               </TableCell>
@@ -503,13 +506,3 @@ HoursTable.propTypes = {
     })
   ).isRequired,
 };
-
-
-
-
-
-
-
-
-    
-           

@@ -147,7 +147,7 @@ export const SectionsAndTasks = ({
                 >
                   {task.taskName}
                 </Typography>
-                <Box></Box>
+               
               </Box>
               <Box
                 display={isMobile ? "flex" : "block"}

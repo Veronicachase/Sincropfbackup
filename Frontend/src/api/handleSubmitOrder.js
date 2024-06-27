@@ -1,9 +1,9 @@
 // aquí tengo que crear mi handleSubmitOrder y conectarla con mi 
 //backend 
 export const handleSubmitOrder = async (values) => {
-    const formData = {...values};
+    const formData = {...values, status:'pendiente'};
     delete formData.files;
-  
+    console.log("Datos que se envían desde el front fetch:", formData);
     try {
       const response = await fetch("http://localhost:3000/orders", {
         method: "POST",

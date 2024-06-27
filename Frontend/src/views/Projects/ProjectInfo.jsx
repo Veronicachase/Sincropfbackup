@@ -134,8 +134,8 @@ const ProjectInfo = () => {
           </div>
         ))}
       </List>
-      <Box sx={{ marginTop: "2em", display: "flex", width: isMobile ? "200px" : "100%", justifyContent: "center" }}>
-        <AddButton buttonText={isMobile ? "" : "Agregar Sección"} onClick={handleClickOpen} />
+      <Box sx={{ marginTop: "2em", display: "flex", width: isMobile ? "250px" : "100%", justifyContent: "center"  }}>
+        <AddButton buttonText="Agregar Sección" onClick={handleClickOpen} />
       </Box>
     </Box>
   );

@@ -1,9 +1,8 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Box,
-  Typography,
   Button,
   MenuItem,
   Select,
@@ -23,7 +22,7 @@ export default function CreateContact() {
       onSubmit={(values, actions) => {
         handleSubmitContact(values)
           .then(() => {
-            console.log(values);
+            console.log("estos son los valores enviados", values);
             actions.setSubmitting(false);
             actions.resetForm();
             toast.success("Contacto creado correctamente!");
@@ -35,7 +34,7 @@ export default function CreateContact() {
           });
       }}
     >
-      {({ isSubmitting, setFieldValue, values, errors }) => (
+      {({ isSubmitting, setFieldValue, values, errors, touched }) => (
         <Form>
           <Box
             sx={{
@@ -154,6 +153,8 @@ export default function CreateContact() {
                         },
                       },
                     }}
+                    error={touched.email && Boolean(errors.email)}
+                    helperText={<ErrorMessage name="email" />}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -171,6 +172,8 @@ export default function CreateContact() {
                         },
                       },
                     }}
+                    error={touched.phone && Boolean(errors.phone)}
+                    helperText={<ErrorMessage name="phone" />}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -188,6 +191,8 @@ export default function CreateContact() {
                         },
                       },
                     }}
+                    error={touched.mobile && Boolean(errors.mobile)}
+                    helperText={<ErrorMessage name="mobile" />}
                   />
                 </Grid>
                 <Grid item xs={12}>

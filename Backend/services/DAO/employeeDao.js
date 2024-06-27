@@ -76,19 +76,11 @@ employeeDao.updateEmployee = async (employeeId, employeeData) => {
   try {
     conn = await db.createConnection();
    
-      let employeeObj = {
-        date: moment().format("YYYY-MM-DD"),
-        name: employeeData.name,
-        position: employeeData.position,
-        project: employeeData.project,
-        mandatoryEquipment: employeeData.mandatoryEquipment,
-        comments: employeeData.comments
-    };
     
-    employeeObj = await removeUndefinedKeys(employeeObj);
+    employeeData = await removeUndefinedKeys(employeeData);
     return await db.query(
       "UPDATE employees SET ? WHERE employeeId = ?",
-      [employeeObj, employeeId],
+      [employeeData, employeeId],
       "update",
       conn
     );

@@ -1,4 +1,4 @@
-  export const updateOrder = async (orderId, orderData) => {
+  export const updateOrder = async (orderId, orderData ) => {
     try {
       const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
         method: 'PATCH',
