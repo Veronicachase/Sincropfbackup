@@ -4,12 +4,12 @@ const db = require("../db");
 const taskDao = {};
 
 taskDao.addTask = async (sectionKey, taskData) => {
-  const { projectId, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf } = taskData;
+  const { projectId, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName } = taskData;
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "INSERT INTO tasks (projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const params = [projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, JSON.stringify(pdf)];
+    const sql = "INSERT INTO tasks (projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const params = [projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName];
     const result = await db.query(sql, params, "insert", conn);
     return result;
   } catch (error) {
@@ -68,12 +68,12 @@ taskDao.getTasksBySection = async (projectId, sectionKey) => {
 };
 
 taskDao.updateTask = async (taskId, taskData) => {
-  const { taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, pdf } = taskData;
+  const { taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, projectId, sectionKey } = taskData;
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, pdf = ? WHERE taskId = ?";
-    const params = [taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, JSON.stringify(pdf), taskId];
+    const sql = "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, projectId = ?, sectionKey = ? WHERE taskId = ?";
+    const params = [taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, projectId, sectionKey, taskId];
     await db.query(sql, params, 'update', conn)
   } catch (error) {
     console.error("Error al actualizar la tarea:", error.message);
@@ -82,6 +82,7 @@ taskDao.updateTask = async (taskId, taskData) => {
     if (conn) await conn.end();
   }
 };
+
 
 taskDao.deleteTask = async (taskId) => {
   let conn = null;

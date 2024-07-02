@@ -161,7 +161,6 @@ const updateTask = async (req, res) => {
       taskData.status = 'noIniciado';
     }
 
-
     // Manejo de prevImages
     if (taskData.prevImages) {
       if (!Array.isArray(taskData.prevImages)) {

@@ -143,7 +143,7 @@ function CreateOrder() {
 
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel id="project-label">Proyecto</InputLabel>
+                      
                       <Field
                         name="projectName"
                         as={Select}

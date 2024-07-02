@@ -32,6 +32,7 @@ projectDao.addProject = async (projectData) => {
       createTask: projectData.createTask || "",
       image: projectData.image || "",
       status: projectData.status || "noIniciado",
+      reports: JSON.stringify([]),
     };
 
     projectObj = await removeUndefinedKeys(projectObj);
@@ -64,11 +65,18 @@ projectDao.getProject = async (projectId) => {
       "select",
       conn
     );
+
     if (results.length) {
+      try {
+        results[0].reports = JSON.parse(results[0].reports);
+      } catch (error) {
+        results[0].reports = []; 
+      }
       return results[0];
     }
     return null;
   } catch (e) {
+    
     console.error(e.message);
     throw e;
   } finally {
@@ -106,7 +114,11 @@ projectDao.updateProject = async (projectId, data) => {
     console.log("Data antes de remove", data);
 
     const cleanData = await removeUndefinedKeys(data);
-    console.log("Clean data", cleanData);
+    console.log("datos limpios despues de filtrar por el removeUndefinedKeys", cleanData);
+    if (cleanData.reports) {
+      cleanData.reports = JSON.stringify(cleanData.reports);
+    }
+
     conn = await db.createConnection();
 
     await db.query(

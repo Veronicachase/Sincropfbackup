@@ -316,6 +316,7 @@ export default function ProjectinfoData() {
           project={project}
           tasks={tasks}
           fileName={`reporte_Proyecto_${project.projectName}.pdf`}
+          projectId={projectId} 
         />
       </Box>
     </>

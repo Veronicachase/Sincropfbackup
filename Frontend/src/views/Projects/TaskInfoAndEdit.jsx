@@ -1,3 +1,6 @@
+
+
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -57,9 +60,10 @@ export default function TaskInfoAndEdit() {
   }, [taskId]);
 
   const handleSubmit = async (values, actions) => {
+    console.log("Valores antes de enviar:", values);
     values.prevImages = prevImages;
     values.finalImages = finalImages;
-
+    console.log("Valores después de ajustar imágenes:", values);
     try {
       await updateTaskById(taskId, values);
       toast.success("Datos actualizados!");
@@ -71,36 +75,56 @@ export default function TaskInfoAndEdit() {
     }
   };
 
-  const handleImageSave = (type, uri) => {
+  const handleImageSave = (type, uri, setFieldValue) => {
     console.log(`Saving image in ${type}:`, uri);
     if (type === "prevImages") {
       setPrevImages((prev) => {
-        const updatedImages = [...prev];
-        const index = updatedImages.indexOf(uri);
-        if (index !== -1) {
-          updatedImages[index] = uri;
-        } else {
-          updatedImages.push(uri);
-        }
+        const updatedImages = [...prev, uri];
+        setFieldValue("prevImages", updatedImages); 
         return updatedImages;
       });
     } else if (type === "finalImages") {
       setFinalImages((prev) => {
-        const updatedImages = [...prev];
-        const index = updatedImages.indexOf(uri);
-        if (index !== -1) {
-          updatedImages[index] = uri;
-        } else {
-          updatedImages.push(uri);
-        }
+        const updatedImages = [...prev, uri];
+        setFieldValue("finalImages", updatedImages); 
         return updatedImages;
       });
     }
   };
   
+
+  // const handleImageSave = (type, uri) => {
+  //   console.log(`Guardando imagen en ${type}:`, uri);
+  //   if (type === "prevImages") {
+  //     setPrevImages((prev) => {
+  //       const updatedImages = [...prev];
+  //       const index = updatedImages.indexOf(uri);
+  //       if (index !== -1) {
+  //         updatedImages[index] = uri;
+  //       } else {
+  //         updatedImages.push(uri);
+  //       }
+  //       return updatedImages;
+  //     });
+  //   } else if (type === "finalImages") {
+  //     setFinalImages((prev) => {
+  //       const updatedImages = [...prev];
+  //       const index = updatedImages.indexOf(uri);
+  //       if (index !== -1) {
+  //         updatedImages[index] = uri;
+  //       } else {
+  //         updatedImages.push(uri);
+  //       }
+  //       return updatedImages;
+  //     });
+  //   }
+  // };
+  
+
+
   const handleFileChange = async (event, setFieldValue, field) => {
     const files = Array.from(event.currentTarget.files);
-    console.log(`Files selected for ${field}:`, files);
+    console.log(`Archivos seleccionados para ${field}: en handleFileChange`, files);
   
     const fileReaders = files.map((file) => {
       return new Promise((resolve) => {
@@ -111,7 +135,7 @@ export default function TaskInfoAndEdit() {
     });
   
     const fileUrls = await Promise.all(fileReaders);
-    console.log(`File URLs for ${field}:`, fileUrls);
+    console.log(`Archivos URLs para ${field} despues de filesURls y la promesa promiseAll:`, fileUrls);
   
     if (field === "prevImages") {
       setPrevImages((prev) => [...prev, ...fileUrls]);
@@ -245,11 +269,11 @@ export default function TaskInfoAndEdit() {
                   <Grid item xs={12}>
                     {prevImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {prevImages.map((img, index) => (
+                        {prevImages.map((img) => (
                           <EditableImage
-                            key={index}
+                            key={img}
                             src={img}
-                            onSave={(uri) => handleImageSave("prevImages", uri)}
+                            onSave={(uri) => handleImageSave("prevImages", uri, setFieldValue)}
                           />
                         ))}
                       </Box>
@@ -277,11 +301,11 @@ export default function TaskInfoAndEdit() {
                   <Grid item xs={12}>
                     {finalImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {finalImages.map((img, index) => (
+                        {finalImages.map((img) => (
                           <EditableImage
-                            key={index}
+                            key={img}
                             src={img}
-                            onSave={(uri) => handleImageSave("finalImages", uri)}
+                            onSave={(uri) => handleImageSave("finalImages", uri, setFieldValue)}
                           />
                         ))}
                       </Box>

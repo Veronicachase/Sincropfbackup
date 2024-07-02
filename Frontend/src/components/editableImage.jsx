@@ -67,6 +67,7 @@ const EditableImage = ({ src, onSave }) => {
 
   const handleSave = () => {
     const uri = stageRef.current.toDataURL();
+    console.log("URI generado por Konva:", uri); 
     onSave(uri); 
     handleCloseModal();
   };

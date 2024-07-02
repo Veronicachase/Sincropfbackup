@@ -11,7 +11,6 @@ export const initialValues = (task = {}, projectData) => ({
   startDate: task?.startDate || moment().format("YYYY-MM-DD"),
   endDate: task?.endDate || moment().format("YYYY-MM-DD"),
   status: task?.status || 'noIniciado',
-  pdf: task?.pdf || [],
   prevImages: task?.prevImages || [],
   finalImages: task?.finalImages || [],
 });

@@ -15,7 +15,7 @@ import ContactDetails from './views/contacts/ContactDetails';
 import CreateEmployee from './views/staff/CreateEmployee';
 import StaffList from './views/staff/StaffList';
 import Employee from './views/staff/Employee';
-import Reports from './views/reports/Reports';
+import ReportList  from './views/reports/Reports';
 import Layout from './components/Layout';
 import LoginForm from './views/login/LoginForm';
 import Register from './views/register/Register';
@@ -63,7 +63,7 @@ export default function App() {
             <Route path="/staff-list" element={<StaffList />} />
             <Route path="/create-employee" element={<CreateEmployee />} />
             <Route path="/employee/:employeeId" element={<Employee />} />
-            <Route path="/reports" element={<Reports />} />
+            <Route path="/reports" element={<ReportList />} />
             {/* </Route> */}
           </Route>
         </Routes>

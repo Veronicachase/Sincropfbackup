@@ -186,6 +186,7 @@ function OrderList() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  gap:2
                 }}
               >
                 <Typography variant="h6">
@@ -232,7 +233,7 @@ function OrderList() {
                         >
                           <Box sx={{ display: "flex", gap: 2 }}>
                             <Box sx={{ display: "flex" }}>
-                              <IconColorsOrder />
+                              <IconColorsOrder status={order.status}  />
                               {/*<Typography variant="body2">
                               {formatDate(order.date)}
                             </Typography> */}

@@ -1,31 +1,29 @@
-import jsPDF from "jspdf";
-import PropTypes from "prop-types";
-import { Button } from "@mui/material";
-import { sectionMapping } from "./SectionMappingIcons";
+import jsPDF from 'jspdf';
+import PropTypes from 'prop-types';
+import { Button } from '@mui/material';
 
-const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
-  const generatePDF = () => {
+const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
+  const generatePDF = async () => {
     const doc = new jsPDF();
     const imageWidth = 50;
     const imageHeight = 50;
     const imagesPerRow = 3;
 
-    // Helper function to check if there is enough space on the current page
     const checkPageSpace = (doc, currentY, requiredSpace) => {
       if (currentY + requiredSpace > 270) {
         doc.addPage();
-        return 10; // Reset y to the top margin of the new page
+        return 10;
       }
       return currentY;
     };
 
     // Datos generales del proyecto
     doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text("DATOS DEL PROYECTO", 10, 10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DATOS DEL PROYECTO', 10, 10);
     let y = 20;
 
-    doc.setFont("helvetica", "normal");
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.text(`Nombre del proyecto: ${project.projectName}`, 10, y);
     y += 10;
@@ -44,13 +42,12 @@ const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
     doc.text(`Fecha de entrega: ${project.endDate}`, 10, y);
     y += 10;
     doc.text(`Estado: ${project.status}`, 10, y);
-    y += 20; // Espacio extra antes de la sección de dirección
+    y += 20;
 
-    // Dirección del proyecto
-    doc.setFont("helvetica", "bold");
-    doc.text("DIRECCIÓN DEL PROYECTO", 10, y);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DIRECCIÓN DEL PROYECTO', 10, y);
     y += 10;
-    doc.setFont("helvetica", "normal");
+    doc.setFont('helvetica', 'normal');
     doc.text(`Dirección: ${project.addressDescription}`, 10, y);
     y += 10;
     doc.text(`Bloque: ${project.block}`, 10, y);
@@ -58,28 +55,26 @@ const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
     doc.text(`No.: ${project.unit}`, 10, y);
     y += 10;
     doc.text(`Provincia: ${project.province}`, 10, y);
-    y += 20; // Espacio extra antes de las secciones y tareas
+    y += 20;
 
-    // Verificar que tasks esté definido
     if (!tasks) {
-      console.error("tasks no está definido");
+      console.error('tasks no está definido');
       return;
     }
 
-    // Secciones y tareas
     const sectionsWithTasks = Object.keys(tasks).filter(
       (section) => tasks[section] && tasks[section].length > 0
     );
 
     sectionsWithTasks.forEach((section) => {
       y = checkPageSpace(doc, y, 20);
-      doc.setFont("helvetica", "bold");
-      doc.text(sectionMapping[section]?.name || section, 10, y);
+      doc.setFont('helvetica', 'bold');
+      doc.text(section, 10, y);
       y += 10;
 
       tasks[section].forEach((task) => {
         y = checkPageSpace(doc, y, 40);
-        doc.setFont("helvetica", "normal");
+        doc.setFont('helvetica', 'normal');
         doc.text(`Tarea: ${task.taskName}`, 10, y);
         y += 10;
         doc.text(`Descripción: ${task.taskDescription}`, 10, y);
@@ -87,9 +82,8 @@ const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
         doc.text(`Fecha de inicio: ${task.startDate}, Fecha de terminación: ${task.endDate}`, 10, y);
         y += 10;
 
-        // Imágenes anteriores
         if (task.prevImages && task.prevImages.length > 0) {
-          doc.text("Imágenes anteriores:", 10, y);
+          doc.text('Imágenes anteriores:', 10, y);
           y += 10;
           let imageRowIndex = 0;
           task.prevImages.forEach((image, index) => {
@@ -105,12 +99,11 @@ const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
             doc.addImage(image, 'JPEG', 10 + imageRowIndex * (imageWidth + 10), y, imageWidth, imageHeight);
             imageRowIndex++;
           });
-          y += imageHeight + 10; // Espacio extra después de las imágenes
+          y += imageHeight + 10;
         }
 
-        // Imágenes finales
         if (task.finalImages && task.finalImages.length > 0) {
-          doc.text("Imágenes finales:", 10, y);
+          doc.text('Imágenes finales:', 10, y);
           y += 10;
           let imageRowIndex = 0;
           task.finalImages.forEach((image, index) => {
@@ -126,15 +119,39 @@ const CreatePDFButtonPData = ({ project, tasks, fileName }) => {
             doc.addImage(image, 'JPEG', 10 + imageRowIndex * (imageWidth + 10), y, imageWidth, imageHeight);
             imageRowIndex++;
           });
-          y += imageHeight + 10; // Espacio extra después de las imágenes
+          y += imageHeight + 10;
         }
 
-        y += 20; // Espacio extra antes de la siguiente tarea
+        y += 20;
       });
     });
 
-    // Guardar el PDF
-    doc.save(fileName);
+    // Convertir el PDF a Blob
+    const pdfBlob = doc.output('blob');
+    const currentDate = new Date().toISOString().split('T')[0];
+    const fileName = `reporte_${project.projectName}_${currentDate}.pdf`;
+    const pdfFile = new File([pdfBlob], fileName, { type: pdfBlob.type });
+
+    // Crear un FormData para enviar el PDF
+    const formData = new FormData();
+    formData.append('file', pdfFile);
+    formData.append('projectId', projectId);  
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    try {
+      // Subir el PDF a Cloudinary
+      const response = await fetch(`http://localhost:3000/projects/${projectId}/upload-report`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      console.log('PDF subido con éxito:', result);
+    } catch (error) {
+      console.error('Error subiendo el PDF:', error);
+    }
   };
 
   return <Button variant="contained" onClick={generatePDF}>Crear PDF</Button>;
@@ -144,6 +161,7 @@ CreatePDFButtonPData.propTypes = {
   project: PropTypes.object,
   tasks: PropTypes.object,
   fileName: PropTypes.string,
+  projectId: PropTypes.string.isRequired,  
 };
 
 export default CreatePDFButtonPData;

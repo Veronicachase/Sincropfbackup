@@ -3,23 +3,26 @@ const { SignJWT, jwtVerify } = require("jose");
 const md5 = require("md5");
 
 const addUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, surname, company, email, password } = req.body;
   // Si no alguno de estos campos recibidos por el body devolvemos un 400 (bad request)
   if (!name || !email || !password)
-    return res.status(400).send("Error al recibir el body");
+    return res.status(400).json({ message: "Error al recibir el body" });
+
   // Buscamos el usuario en la base de datos
   try {
     const user = await userDao.getUserByEmail(email);
     // Si existe el usuario respondemos con un 409 (conflict)
-    if (user.length > 0) return res.status(409).send("usuario ya registrado");
+    if (user.length > 0) return res.status(409).json("usuario ya registrado");
     // Si no existe lo registramos
     const userId = await userDao.addUser(req.body);
-    if (userId) return res.send(`Usuario ${name} con id: ${userId} registrado`);
+    if (userId) return res.json(`Usuario ${name} con id: ${userId} registrado`);
   } catch (e) {
     console.log(e.message);
+    res.status(500).json({ message: "Error al registrar el usuario" });
     throw new Error(e);
   }
 };
+
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -100,16 +103,16 @@ const updateUser = async (req, res) => {
   try {
     // Si no nos llega ningún campo por el body devolvemos un 400 (bad request)
     if (Object.entries(req.body).length === 0)
-      return res.status(400).send("Error al recibir el body");
+      return res.status(400).json("Error al recibir el body");
     const userId = req.params.id;
     // Buscamos si el id del usuario existe en la base de datos
     const user = await userDao.getUserbyId(userId);
     // Si no existe devolvemos un 404 (not found)
-    if (user.length === 0) return res.status(404).send("el usuario no existe");
+    if (user.length === 0) return res.status(404).json("el usuario no existe");
     // Actualizamos el usuario
     const isUserUpdated = await userDao.updateUser(userId, req.body);
     if (!isUserUpdated)
-      return res.status(500).send("Error al actualizar el usuario");
+      return res.status(500).json("Error al actualizar el usuario");
 
     return res.send(`Usuario con id ${userId} actualizado`);
   } catch (e) {

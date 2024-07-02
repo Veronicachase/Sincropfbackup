@@ -1,6 +1,7 @@
 const projectDao = require("../services/DAO/projectDao");
 const path = require("path");
 const uploadImage = require('../public/cloudinary/uploadImage');
+const cloudinary = require('cloudinary').v2;
 
 
 
@@ -27,7 +28,6 @@ const addProject = async (req, res) => {
    
       const projectData = { ...body, sections, image: imageUrl };
       
-    
       const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
       if (!projectData.sections.length) {
         projectData.sections = defaultSections;
@@ -157,7 +157,6 @@ const updateSection = async (req, res) => {
 };
 
 
-
 const addSection = async (req, res) => {
     const { projectId } = req.params;
     const { section: newSectionData } = req.body;
@@ -198,4 +197,93 @@ const getSections = async (req, res) => {
 }
 
 
-module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections };
+const uploadPDF = async (req, res) => {
+  try {
+    console.log('req.params:', req.params); 
+    console.log('req.body:', req.body);
+    const { projectId } = req.params;
+    const file = req.file;
+
+    // Encuentra el proyecto y actualiza su campo reports
+    const project = await projectDao.getProject(projectId);
+    if (!project) {
+      return res.status(404).json({ error: 'Proyecto no encontrado/ uplaodPDF' });
+    }
+    if (!project.reports) {
+      project.reports = [];
+    }
+
+    // Subir el PDF a Cloudinary
+    const result = await cloudinary.uploader.upload(file.path, {
+      resource_type: 'raw', 
+    });
+    console.log('Resultado de lo subido a Cloudinary:', result);
+
+    const newReport = {
+      id: Date.now().toString(),
+      url: result.secure_url,
+      createdAt: new Date(),
+      original_filename: result.original_filename
+    };
+    project.reports.push(newReport);
+    await projectDao.updateProject(projectId, { reports: project.reports });
+
+    res.status(201).json({ message: 'Reporte subido exitosamente', url: result.secure_url });
+    console.log('Resultado de los datos recibidos desde newReport:', newReport);
+  } catch (error) {
+    console.error('Error al subir el reporte:', error);
+    res.status(500).json({ error: 'Error al subir el reporte' });
+  }
+};
+
+const deleteReport = async (req, res) => {
+  try {
+    const { projectId, reportId } = req.params;
+    const project = await projectDao.getProject(projectId);
+    if (!project) {
+      return res.status(404).json({ error: 'Proyecto no encontrado' });
+    }
+
+    const reportIndex = project.reports.findIndex((report) => report.id === reportId);
+    if (reportIndex === -1) {
+      return res.status(404).json({ error: 'Reporte no encontrado' });
+    }
+
+    const publicId = project.reports[reportIndex].url.split('/').pop().split('.')[0];
+    await cloudinary.uploader.destroy(publicId);
+
+    project.reports.splice(reportIndex, 1);
+    await projectDao.updateProject(projectId, { reports: project.reports });
+
+    res.status(200).json({ message: 'Reporte eliminado' });
+  } catch (error) {
+    console.error('Error al eliminar el reporte:', error);
+    res.status(500).json({ error: 'Error al eliminar el reporte' });
+  }
+};
+
+const getAllReports = async (req, res) => {
+  try {
+    const projects = await projectDao.getAllProjects();
+    let allReports = [];
+    
+    projects.forEach(project => {
+      if (project.reports && project.reports.length > 0) {
+        allReports = [...allReports, ...project.reports];
+      }
+    });
+
+    res.status(200).json(allReports);
+  } catch (error) {
+    console.error('Error al obtener todos los reportes:', error);
+    res.status(500).json({ error: 'Error al obtener todos los reportes' });
+  }
+};
+
+
+
+
+
+
+
+module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections, uploadPDF, deleteReport,getAllReports   };

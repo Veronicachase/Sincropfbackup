@@ -1,15 +1,26 @@
 /* eslint-disable no-unused-vars */
-import { TextField, Box, Typography, Button } from "@mui/material";
-import Logo from "../../assets/images/logo2.png"
+import { TextField, Box, Typography, Button, IconButton, InputAdornment } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Logo from "../../assets/images/logo2.png";
 import { useFormik } from "formik";
 import { RegisterFormSchema } from "../../forms/LoginAndRegister/RegisterFormSchema";
 import { useNavigate, Link } from "react-router-dom";
+import { placeHolderText } from "../../components/PlaceHolderTextRegister";
+import { handleSubmitRegister } from "../../api/handleSubmitRegister";
 import toast, { Toaster } from 'react-hot-toast';
 import "../../assets/styles/estilosGenerales.css";
 import "./register.css";
+import { useState, useEffect } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -22,59 +33,15 @@ const Register = () => {
     validationSchema: RegisterFormSchema,
     onSubmit: async (values, actions) => {
       const { confirmPassword, ...userData } = values;
+     
       console.log("Enviando datos al servidor:", userData);
-      
-      try {
-        const response = await fetch("http://localhost:3000/users", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          toast.success('Te has registrado correctamente, inicia sesión para entrar!')
-         
-          navigate("/login");
-        } else {
-          console.error("Error en el registro", data);
-          actions.setFieldError(
-            "general",
-            data.message || "Error en el registro"
-          );
-        }
-        actions.setSubmitting(false);
-        actions.resetForm();
-      } catch (error) {
-        console.error("Error de conexión:", error);
-        actions.setFieldError("general", "No se puede conectar al servidor");
-        actions.setSubmitting(false);
-      }
+      await handleSubmitRegister(userData, actions, navigate);
     },
   });
-  function placeHolderText(field) {
-    switch (field) {
-      case "name":
-        return "Nombre";
-      case "surname":
-        return "Apellido";
-      case "company":
-        return "Empresa";
-      case "email":
-        return "Email";
-      case "password":
-        return "Contraseña";
-      case "confirmPassword":
-        return "Confirme la contraseña";
-      default:
-        return "Campo no indicado";
-    }
-  }
 
   return (
     <Box
-      display={{ flexGrow: 1, width: "100%", maxwidth: "700px" }}
+      display={{ flexGrow: 1, width: "100%", maxWidth: "700px" }}
       flexDirection={"column"}
       margin={"auto"}
     >
@@ -105,19 +72,34 @@ const Register = () => {
             ].map((field) => (
               <TextField
                 key={field}
-                type={field.includes("password") ? "password" : "text"}
+                type={
+                  (field === "password" && showPassword) || 
+                  (field === "confirmPassword" && showConfirmPassword) 
+                    ? "text" 
+                    : field.includes("password") 
+                      ? "password" 
+                      : "text"
+                }
                 name={field}
                 value={formik.values[field]}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={placeHolderText(field)}
+                error={formik.errors[field] && formik.touched[field] ? true : false}
+                helperText={formik.errors[field] && formik.touched[field] ? formik.errors[field] : ""}
                 sx={{ marginBottom: "1em" }}
-                className={
-                  formik.errors[field] && formik.touched[field]
-                    ? "input-error"
-                    : ""
-                }
                 InputProps={{
+                  endAdornment: field.includes("password") ? (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={`toggle ${field} visibility`}
+                        onClick={field === "password" ? handleClickShowPassword : handleClickShowConfirmPassword}
+                        edge="end"
+                      >
+                        {(field === "password" && showPassword) || (field === "confirmPassword" && showConfirmPassword) ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ) : null,
                   style: {
                     borderRadius: 10,
                     backgroundColor: "#fff",
@@ -127,22 +109,29 @@ const Register = () => {
               />
             ))}
             <Button 
-  variant="contained" 
-  sx={{
-    backgroundColor: "#1976D2",
-    marginBottom: "1em",
-    '&:active': {
-      backgroundColor: "#A9A9A9 !important" 
-    },
-    '&:hover': {
-      backgroundColor: "#1976d28e", 
-    }
-  }} 
-  disabled={formik.isSubmitting}
->
-  Registrar
-</Button>
+            type="submit"
+              variant="contained" 
+              sx={{
+                backgroundColor: "#1976D2",
+                marginBottom: "1em",
+                '&:active': {
+                  backgroundColor: "#A9A9A9 !important" 
+                },
+                '&:hover': {
+                  backgroundColor: "#1976d28e", 
+                }
+              }} 
+              disabled={formik.isSubmitting}
+            >
+              Registrar
+            </Button>
           </Box>
+
+          {formik.errors.general && (
+            <Typography color="error" variant="body2">
+              {formik.errors.general}
+            </Typography>
+          )}
 
           <Typography variant="body2">
             ¿Ya tienes una cuenta?
