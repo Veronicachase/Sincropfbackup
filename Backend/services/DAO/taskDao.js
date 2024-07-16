@@ -1,15 +1,40 @@
 const db = require("../db");
 
-
 const taskDao = {};
 
 taskDao.addTask = async (sectionKey, taskData) => {
-  const { projectId, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName } = taskData;
+  const {
+    projectId,
+    taskName,
+    taskDescription,
+    startDate,
+    endDate,
+    prevImages,
+    finalImages,
+    status,
+    employeeId,
+    employeeName,
+    userId,
+  } = taskData;
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "INSERT INTO tasks (projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const params = [projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName];
+    const sql =
+      "INSERT INTO tasks (projectId, sectionKey, taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const params = [
+      projectId,
+      sectionKey,
+      taskName,
+      taskDescription,
+      startDate,
+      endDate,
+      JSON.stringify(prevImages),
+      JSON.stringify(finalImages),
+      status,
+      employeeId,
+      employeeName,
+      userId,
+    ];
     const result = await db.query(sql, params, "insert", conn);
     return result;
   } catch (error) {
@@ -20,13 +45,19 @@ taskDao.addTask = async (sectionKey, taskData) => {
   }
 };
 
-taskDao.getTaskById = async (taskId) => {
+taskDao.getTaskById = async (taskId, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "SELECT * FROM tasks WHERE taskId = ?";
-    const result = await db.query(sql, [taskId], "select", conn);
-    return result.length ? result[0] : null;
+    const sql = "SELECT * FROM tasks WHERE taskId = ? AND userId = ?";
+    const result = await db.query(sql, [taskId, userId], "select", conn);
+    if (result.length) {
+      const task = result[0];
+      task.prevImages = JSON.parse(task.prevImages || "[]");
+      task.finalImages = JSON.parse(task.finalImages || "[]");
+      return task;
+    }
+    return null;
   } catch (error) {
     console.error("Error al obtener la tarea:", error.message);
     throw error;
@@ -34,7 +65,6 @@ taskDao.getTaskById = async (taskId) => {
     if (conn) await conn.end();
   }
 };
-
 
 taskDao.getAllTasks = async () => {
   let conn = null;
@@ -51,13 +81,18 @@ taskDao.getAllTasks = async () => {
   }
 };
 
-
-taskDao.getTasksBySection = async (projectId, sectionKey) => {
+taskDao.getTasksBySection = async (projectId, sectionKey, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "SELECT * FROM tasks WHERE projectId = ? AND sectionKey = ?";
-    const result = await db.query(sql, [projectId, sectionKey], "select", conn);
+    const sql =
+      "SELECT * FROM tasks WHERE projectId = ? AND sectionKey = ? AND userId = ?";
+    const result = await db.query(
+      sql,
+      [projectId, sectionKey, userId],
+      "select",
+      conn
+    );
     return result;
   } catch (error) {
     console.error("Error al obtener las tareas:", error.message);
@@ -68,13 +103,41 @@ taskDao.getTasksBySection = async (projectId, sectionKey) => {
 };
 
 taskDao.updateTask = async (taskId, taskData) => {
-  const { taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, projectId, sectionKey } = taskData;
+  const {
+    taskName,
+    taskDescription,
+    startDate,
+    endDate,
+    prevImages,
+    finalImages,
+    status,
+    employeeId,
+    employeeName,
+    projectId,
+    sectionKey,
+    userId,
+  } = taskData;
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, projectId = ?, sectionKey = ? WHERE taskId = ?";
-    const params = [taskName, taskDescription, startDate, endDate, prevImages, finalImages, status, employeeId, employeeName, projectId, sectionKey, taskId];
-    await db.query(sql, params, 'update', conn)
+    const sql =
+      "UPDATE tasks SET taskName = ?, taskDescription = ?, startDate = ?, endDate = ?, prevImages = ?, finalImages = ?, status = ?, employeeId = ?, employeeName = ?, projectId = ?, sectionKey = ?, userId = ? WHERE taskId = ?";
+    const params = [
+      taskName,
+      taskDescription,
+      startDate,
+      endDate,
+      JSON.stringify(prevImages || []), 
+      JSON.stringify(finalImages || []), 
+      status,
+      employeeId,
+      employeeName,
+      projectId,
+      sectionKey,
+      userId,
+      taskId,
+    ];
+    await db.query(sql, params, "update", conn);
   } catch (error) {
     console.error("Error al actualizar la tarea:", error.message);
     throw error;
@@ -83,13 +146,12 @@ taskDao.updateTask = async (taskId, taskData) => {
   }
 };
 
-
-taskDao.deleteTask = async (taskId) => {
+taskDao.deleteTask = async (taskId, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const sql = "DELETE FROM tasks WHERE taskId = ?";
-    await db.query(sql, [taskId], "delete", conn);
+    const sql = "DELETE FROM tasks WHERE taskId = ? AND userId = ?";
+    await db.query(sql, [taskId, userId], "delete", conn);
   } catch (error) {
     console.error("Error al eliminar la tarea:", error.message);
     throw error;
@@ -99,151 +161,3 @@ taskDao.deleteTask = async (taskId) => {
 };
 
 module.exports = taskDao;
-
-
-
-// const db = require("../db")
-// const moment = require("moment");
-// const {removeUndefinedKeys} = require("../../utils/removeUndefinedkeys")
-// const taskDao = {};
-
-// taskDao.addTask = async (sectionKey, taskData) => {
-//     let conn = null;
-//     try {
-//         conn = await db.createConnection();
-      
-//         let taskObj = {
-//             taskName: taskData.taskName,
-//             employeeId: taskData.employeeId,
-//             employeeName: taskData.employeeName,
-//             projectId: taskData.projectId,
-//             status: taskData.status,
-//             sectionKey: sectionKey || '',
-//             taskDescription: taskData.taskDescription,
-//             startDate: taskData.startDate ? moment(taskData.startDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
-//             endDate: taskData.endDate ? moment(taskData.endDate).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
-//             pdf: JSON.stringify(taskData.prevImages || []), 
-//             prevImages: JSON.stringify(taskData.prevImages || []),  
-//             finalImages: JSON.stringify(taskData.finalImages || [])
-//         };
-        
-//         taskObj = await removeUndefinedKeys(taskObj);
-
-        
-//         const sql = "INSERT INTO tasks SET ?";
-
-//         const result = await db.query(sql, taskObj, "insert", conn);
-//         return result.insertId;
-//     } catch (e) {
-//         console.error("Error during task creation: ", e.message);
-//         throw e;
-//     } finally {
-//         if (conn) await conn.end();
-//     }
-// };
-
-// taskDao.getAllTasks = async () => {
-//     let conn =null;
-//     try {
-//         conn = await db.createConnection();
-//         const results = await db.query("SELECT * FROM tasks ",null, "select" ,conn);
-//         if (results.length) {
-//             return results || [];
-//         }
-//         return null;
-//     } catch (e) {
-//         console.error(e.message);
-//         throw e;
-//     } finally {
-//         if (conn) await conn.end();
-//     }
-// };
-
-// taskDao.getTasksBySection = async (projectId, sectionKey) => {
-//     let conn = null;
-//     try {
-//         conn = await db.createConnection();
-//         const sql = `
-//             SELECT tasks.*
-//             FROM tasks 
-//             JOIN projects ON tasks.projectId = projects.projectId
-//             WHERE projects.projectId = ? 
-//               AND JSON_CONTAINS(projects.sections, JSON_QUOTE(?), '$')
-//         `;
-//         const results = await db.query(sql, [projectId, sectionKey], "select", conn);
-//         return results;
-//     } catch (e) {
-//         console.error("Error al obtener tareas por sección:", e.message);
-//         throw e;
-//     } finally {
-//         if (conn) {
-//             await conn.end();
-//         }
-//     }
-// };
-
-
-// taskDao.getTaskById = async (taskId) => {
-//     let conn = null;
-//     try {
-//         conn = await db.createConnection();
-//         const results = await db.query("SELECT * FROM tasks WHERE taskId = ?", [taskId],"select", conn);
-//         if (results.length) {
-//             return results[0];
-//         }
-//         return null;
-//     } catch (e) {
-//         console.error(e.message);
-//         throw e;
-//     } finally {
-//         if (conn) await conn.end();
-//     }
-// };
-
-// taskDao.updateTask = async (taskId, data) => {
-//     let conn = null;
-//     try {
-//         if (data.sections) {
-//             data.sections = JSON.stringify(data.sections);
-//         }
-//         if (data.pdf) {
-//             data.pdf = JSON.stringify(data.pdf);
-//         }
-//         if (data.prevImages) {
-//             data.prevImages = JSON.stringify(data.prevImages);
-//         }
-//         if (data.finalImages) {
-//             data.finalImages = JSON.stringify(data.finalImages);
-//         }
-
-//         if (data.sectionKey === undefined) {
-//             data.sectionKey = '';
-//         }
-//         conn = await db.createConnection();
-//         const cleanData = await removeUndefinedKeys(data);
-//         const sql = "UPDATE tasks SET ? WHERE taskId = ?";
-//         await db.query(sql, [cleanData, parseInt(taskId)], "update", conn);
-//     } catch (e) {
-//         console.error(e.message);
-//         throw e;
-//     } finally {
-//         if (conn) await conn.end();
-//     }
-// };
-
-
-// taskDao.deleteTask = async (taskId) => {
-//     let conn = null;
-//     try {
-//         conn = await db.createConnection();
-//         await db.query("DELETE FROM tasks WHERE taskId = ?", [taskId],"delete", conn);
-//     } catch (e) {
-//         console.error(e.message);
-//         throw e;
-//     } finally {
-//         if (conn) await conn.end();
-//     }
-// };
-
-// module.exports = taskDao;
-

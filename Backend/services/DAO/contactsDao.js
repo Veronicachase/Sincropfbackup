@@ -16,6 +16,7 @@ contactDao.addContact = async (contactData) => {
       phone: contactData.phone,
       mobile:contactData.mobile,
       comments: contactData.comments,
+      userId: contactData.userId,
     };
     contactObj = await removeUndefinedKeys(contactObj);
     await db.query("INSERT INTO contacts SET ?", contactObj, "insert", conn);
@@ -28,13 +29,13 @@ contactDao.addContact = async (contactData) => {
   }
 };
 
-contactDao.getContactById = async (contactId) => {
+contactDao.getContactById = async (contactId, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const results = await db.query(
-      "SELECT * FROM contacts WHERE contactId = ?",
-      [contactId],
+      "SELECT * FROM contacts WHERE contactId = ? AND userId = ?",
+      [contactId, userId],
       "select",
       conn
     );
@@ -50,13 +51,13 @@ contactDao.getContactById = async (contactId) => {
   }
 };
 
-contactDao.getAllContacts = async () => {
+contactDao.getAllContacts = async (userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const results = await db.query("SELECT * FROM contacts ",null, "select", conn);
+    const results = await db.query("SELECT * FROM contacts WHERE userId = ?", [userId], "select", conn);
     if (results.length) {
-      return results || [];
+      return results ;
     }
     return null;
   } catch (e) {
@@ -67,14 +68,14 @@ contactDao.getAllContacts = async () => {
   }
 };
 
-contactDao.updateContact = async (contactId, data) => {
+contactDao.updateContact = async (userId, contactId, data) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const cleanData = removeUndefinedKeys(data);
     await db.query(
-      "UPDATE contacts SET ? WHERE contactId = ?",
-      [data, contactId],
+      "UPDATE contacts SET ? WHERE contactId = ? AND userId = ?",
+      [cleanData, contactId, userId],
       "update",
       conn
     );
@@ -86,13 +87,13 @@ contactDao.updateContact = async (contactId, data) => {
   }
 };
 
-contactDao.deleteContact = async (contactId) => {
+contactDao.deleteContact = async (userId, contactId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     await db.query(
-      "DELETE FROM contacts WHERE contactId = ?",
-      [contactId],
+      "DELETE FROM contacts WHERE contactId = ? AND userId = ?",
+      [contactId, userId],
       "delete",
       conn
     );

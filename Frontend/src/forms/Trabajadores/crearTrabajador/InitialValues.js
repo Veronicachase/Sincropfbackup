@@ -1,5 +1,6 @@
+import moment from 'moment'
 export const initialValues = {
-    date: new Date(),
+    date: moment().format('YYYY-MM-DD'),
     name:"",
     position:"",
     project:"",

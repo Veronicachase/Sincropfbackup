@@ -1,9 +1,5 @@
-
-
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
 import {
   Box,
   Button,
@@ -22,11 +18,9 @@ import { getTaskById } from "../../api/getTaskById";
 import { updateTaskById } from "../../api/updateTaskById";
 import IconColors from "../../components/IconColors";
 import { getEmployees } from "../../api/getEmployees";
-import EditableImage from "../../components/editableImage";
 import toast from 'react-hot-toast';
 import { initialValues } from "../../forms/SectionTasks/InitialValues";
-import {capitalizeFirstLetter } from "../../components/CapitalizedFirstLetter"
-
+import { capitalizeFirstLetter } from "../../components/CapitalizedFirstLetter";
 
 export default function TaskInfoAndEdit() {
   const { taskId } = useParams();
@@ -37,7 +31,6 @@ export default function TaskInfoAndEdit() {
   const [finalImages, setFinalImages] = useState([]);
   const [editInitialValues, setEditInitialValues] = useState(initialValues());
   const isMobile = useMediaQuery("(max-width:600px)");
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,11 +54,26 @@ export default function TaskInfoAndEdit() {
 
   const handleSubmit = async (values, actions) => {
     console.log("Valores antes de enviar:", values);
-    values.prevImages = prevImages;
-    values.finalImages = finalImages;
-    console.log("Valores después de ajustar imágenes:", values);
+    const formData = new FormData();
+
+    // Añadir campos de texto
+    Object.keys(values).forEach(key => {
+      if (key !== 'prevImages' && key !== 'finalImages') {
+        formData.append(key, values[key]);
+      }
+    });
+
+    // Añadir archivos
+    prevImages.forEach((file) => {
+      formData.append('prevImages', file);
+    });
+
+    finalImages.forEach((file) => {
+      formData.append('finalImages', file);
+    });
+
     try {
-      await updateTaskById(taskId, values);
+      await updateTaskById(taskId, formData);
       toast.success("Datos actualizados!");
     } catch (error) {
       toast.error("Error al editar. Por favor, intenta de nuevo.");
@@ -75,84 +83,25 @@ export default function TaskInfoAndEdit() {
     }
   };
 
-  const handleImageSave = (type, uri, setFieldValue) => {
-    console.log(`Saving image in ${type}:`, uri);
-    if (type === "prevImages") {
-      setPrevImages((prev) => {
-        const updatedImages = [...prev, uri];
-        setFieldValue("prevImages", updatedImages); 
-        return updatedImages;
-      });
-    } else if (type === "finalImages") {
-      setFinalImages((prev) => {
-        const updatedImages = [...prev, uri];
-        setFieldValue("finalImages", updatedImages); 
-        return updatedImages;
-      });
-    }
-  };
-  
-
-  // const handleImageSave = (type, uri) => {
-  //   console.log(`Guardando imagen en ${type}:`, uri);
-  //   if (type === "prevImages") {
-  //     setPrevImages((prev) => {
-  //       const updatedImages = [...prev];
-  //       const index = updatedImages.indexOf(uri);
-  //       if (index !== -1) {
-  //         updatedImages[index] = uri;
-  //       } else {
-  //         updatedImages.push(uri);
-  //       }
-  //       return updatedImages;
-  //     });
-  //   } else if (type === "finalImages") {
-  //     setFinalImages((prev) => {
-  //       const updatedImages = [...prev];
-  //       const index = updatedImages.indexOf(uri);
-  //       if (index !== -1) {
-  //         updatedImages[index] = uri;
-  //       } else {
-  //         updatedImages.push(uri);
-  //       }
-  //       return updatedImages;
-  //     });
-  //   }
-  // };
-  
-
-
-  const handleFileChange = async (event, setFieldValue, field) => {
+  const handleFileChange = (event, setFieldValue, field) => {
     const files = Array.from(event.currentTarget.files);
     console.log(`Archivos seleccionados para ${field}: en handleFileChange`, files);
-  
-    const fileReaders = files.map((file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
-    });
-  
-    const fileUrls = await Promise.all(fileReaders);
-    console.log(`Archivos URLs para ${field} despues de filesURls y la promesa promiseAll:`, fileUrls);
-  
+
     if (field === "prevImages") {
-      setPrevImages((prev) => [...prev, ...fileUrls]);
+      setPrevImages((prev) => [...prev, ...files]);
     } else if (field === "finalImages") {
-      setFinalImages((prev) => [...prev, ...fileUrls]);
+      setFinalImages((prev) => [...prev, ...files]);
     }
-  
-    setFieldValue(field, (prev) => [...prev, ...fileUrls]);
+
+    setFieldValue(field, (prev) => [...prev, ...files]);
   };
-  
 
   if (loading) return <p>Cargando...</p>;
   if (!task) return <p>No se encontró la tarea</p>;
 
   return (
     <Box display={"flex"} sx={{ paddingTop: "2em", borderRadius: "10px" }}>
-      <Box sx={{ width: "100%", padding: isMobile? "2em auto": "2em" }}>
+      <Box sx={{ width: "100%", padding: isMobile ? "2em auto" : "2em" }}>
         <Typography>Editar Tarea</Typography>
         <Typography>{capitalizeFirstLetter(task.sectionKey)}</Typography>
         <Box
@@ -269,11 +218,12 @@ export default function TaskInfoAndEdit() {
                   <Grid item xs={12}>
                     {prevImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {prevImages.map((img) => (
-                          <EditableImage
-                            key={img}
-                            src={img}
-                            onSave={(uri) => handleImageSave("prevImages", uri, setFieldValue)}
+                        {prevImages.map((img, index) => (
+                          <img
+                            key={index}
+                            src={typeof img === 'string' ? img : URL.createObjectURL(img)}
+                            alt={`prev-${index}`}
+                            style={{ width: '100px', height: '100px' }}
                           />
                         ))}
                       </Box>
@@ -283,7 +233,7 @@ export default function TaskInfoAndEdit() {
                       name="prevImages"
                       onChange={(e) => handleFileChange(e, setFieldValue, "prevImages")}
                       multiple
-                      style={{ marginTop: "1em", width:isMobile?"300px":"100% "}}
+                      style={{ marginTop: "1em", width: isMobile ? "300px" : "100%" }}
                     />
                   </Grid>
                 </Box>
@@ -301,11 +251,12 @@ export default function TaskInfoAndEdit() {
                   <Grid item xs={12}>
                     {finalImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {finalImages.map((img) => (
-                          <EditableImage
-                            key={img}
-                            src={img}
-                            onSave={(uri) => handleImageSave("finalImages", uri, setFieldValue)}
+                        {finalImages.map((img, index) => (
+                          <img
+                            key={index}
+                            src={typeof img === 'string' ? img : URL.createObjectURL(img)}
+                            alt={`final-${index}`}
+                            style={{ width: '100px', height: '100px' }}
                           />
                         ))}
                       </Box>
@@ -347,8 +298,3 @@ export default function TaskInfoAndEdit() {
     </Box>
   );
 }
-
-
-
-
-

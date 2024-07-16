@@ -1,7 +1,12 @@
-export const deleteReport = async (reportId) => {
+export const deleteReport = async (projectId, reportId) => {
     try {
-      const response = await fetch(`http://localhost:3000/projects/reports/${reportId}`, {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/projects/${projectId}/reports/${reportId}`, {
         method: 'DELETE',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
       });
       if (!response.ok) {
         throw new Error('Fallo en eliminar el reporte: ' + response.status);

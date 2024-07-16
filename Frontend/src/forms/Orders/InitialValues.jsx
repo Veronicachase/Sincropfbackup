@@ -5,7 +5,7 @@ export const InitialValues = (order) => ({
   productName: order?.productName || "",
   provider: order?.provider || "",
   brand: order?.brand || "",
-  amount: order?.amount || "",
+  amount: order?.amount || 0,
   details: order?.details || "",
   status: order?.status || "pendiente",
   date: order?.date || new Date().toISOString().slice(0, 10),

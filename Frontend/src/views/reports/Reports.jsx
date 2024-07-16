@@ -7,9 +7,11 @@ import { deleteReport } from '../../api/deleteReport'
 import ShareIcon from '@mui/icons-material/Share';
 
 
+
 const ReportList = () => {
   const [reports, setReports] = useState([]);
-
+  
+  
   const fetchReports = useCallback(async () => {
     try {
       const data = await getAllReportsFromProjects();
@@ -43,6 +45,12 @@ const ReportList = () => {
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
+ 
+  const formatFilename = (filename) => {
+    // Decodifica la URL y luego remueve números y caracteres especiales, y reemplaza guiones bajos y guiones con espacios
+    const decodedFilename = decodeURIComponent(filename);
+    return decodedFilename.replace(/^\d+-/, '').replace(/_/g, ' ').replace(/-/g, ' ');
+  };
 
   return (
     <> 
@@ -50,10 +58,15 @@ const ReportList = () => {
     <List>
       {reports.map((report) => (
         <ListItem key={report.id}>
-          <ListItemText primary={
-            <a href={report.url} target="_blank" rel="noopener noreferrer">
-            {report.original_filename}
-            </a>
+        <ListItemText primary={
+          <a 
+            href={report.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            download={formatFilename(report.original_filename)}
+            >
+              {formatFilename(report.original_filename)}
+          </a>
           } />
           <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteReport(report.id)}>
             <DeleteIcon />

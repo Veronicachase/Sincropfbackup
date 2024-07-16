@@ -6,7 +6,8 @@ const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys");
 
 const projectDao = {};
 
-projectDao.addProject = async (projectData) => {
+projectDao.addProject = async (userId, projectData) => {
+ 
   let conn = null;
   try {
     console.log(projectData.sections, "projectData");
@@ -33,6 +34,7 @@ projectDao.addProject = async (projectData) => {
       image: projectData.image || "",
       status: projectData.status || "noIniciado",
       reports: JSON.stringify([]),
+      userId: userId,
     };
 
     projectObj = await removeUndefinedKeys(projectObj);
@@ -55,13 +57,13 @@ projectDao.addProject = async (projectData) => {
   }
 };
 
-projectDao.getProject = async (projectId) => {
+projectDao.getProject = async (projectId, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const results = await db.query(
-      "SELECT * FROM projects WHERE projectId = ?",
-      [projectId],
+      "SELECT * FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
       "select",
       conn
     );
@@ -84,13 +86,13 @@ projectDao.getProject = async (projectId) => {
   }
 };
 
-projectDao.getAllProjects = async () => {
+projectDao.getAllProjects = async (userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const results = await db.query(
-      "SELECT * FROM projects",
-      null,
+      "SELECT * FROM projects WHERE userId = ?",
+      [userId],
       "select",
       conn
     );
@@ -106,7 +108,7 @@ projectDao.getAllProjects = async () => {
   }
 };
 
-projectDao.updateProject = async (projectId, data) => {
+projectDao.updateProject = async (projectId, userId, data) => {
   let conn = null;
   try {
     console.log("Data: ", data);
@@ -122,8 +124,8 @@ projectDao.updateProject = async (projectId, data) => {
     conn = await db.createConnection();
 
     await db.query(
-      "UPDATE projects SET ? WHERE projectId = ?",
-      [cleanData, parseInt(projectId)],
+      "UPDATE projects SET ? WHERE projectId = ? AND userId = ?",
+      [cleanData, parseInt(projectId), userId],
       "update",
       conn
     );
@@ -135,13 +137,13 @@ projectDao.updateProject = async (projectId, data) => {
   }
 };
 
-projectDao.deleteProject = async (projectId) => {
+projectDao.deleteProject = async (projectId, userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     await db.query(
-      "DELETE FROM projects WHERE projectId = ?",
-      [projectId],
+      "DELETE FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
       "delete",
       conn
     );
@@ -153,13 +155,13 @@ projectDao.deleteProject = async (projectId) => {
   }
 };
 
-projectDao.addSectionToProject = async (projectId, newSection) => {
+projectDao.addSectionToProject = async (projectId, userId, newSection) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const project = await db.query(
-      "SELECT sections FROM projects WHERE projectId = ?",
-      [projectId],
+      "SELECT sections FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
       "select",
       conn
     );
@@ -169,8 +171,8 @@ projectDao.addSectionToProject = async (projectId, newSection) => {
       if (!sections.includes(newSection)) {
         sections.push(newSection);
         await db.query(
-          "UPDATE projects SET sections = ? WHERE projectId = ?",
-          [JSON.stringify(sections), projectId],
+          "UPDATE projects SET sections = ? WHERE projectId = ? AND userId = ?",
+          [JSON.stringify(sections), projectId, userId],
           "update",
           conn
         );
@@ -184,14 +186,14 @@ projectDao.addSectionToProject = async (projectId, newSection) => {
   }
 };
 
-projectDao.updateSection = async (projectId, newSection) => {
+projectDao.updateSection = async (projectId, userId, newSection) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     console.log("Sections before updating in DB:", newSection);
     await db.query(
       "UPDATE projects SET sections = ? WHERE projectId = ?",
-      [JSON.stringify(newSection), projectId],
+      [JSON.stringify(newSection),projectId, userId],
       "update",
       conn
     );
@@ -203,13 +205,13 @@ projectDao.updateSection = async (projectId, newSection) => {
   }
 };
 
-projectDao.removeSectionFromProject = async (projectId, sectionToRemove) => {
+projectDao.removeSectionFromProject = async (projectId, userId, sectionToRemove) => {
   let conn = null;
   try {
     conn = await db.createConnection();
     const project = await db.query(
-      "SELECT sections FROM projects WHERE projectId = ?",
-      [projectId],
+      "SELECT sections FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
       "select",
       conn
     );
@@ -219,7 +221,7 @@ projectDao.removeSectionFromProject = async (projectId, sectionToRemove) => {
       sections = sections.filter((section) => section !== sectionToRemove);
       await db.query(
         "UPDATE projects SET sections = ? WHERE projectId = ?",
-        [JSON.stringify(sections), projectId],
+        [JSON.stringify(sections), projectId, userId],
         "update",
         conn
       );

@@ -28,7 +28,7 @@ const getPendingById = async (req, res) => {
 
 const getAllPendings = async (req, res) => {
     try {
-        const pendings = await pendingDao.getAllPendings();
+        const pendings = await pendingDao.getAllPendings(userId);
         if (pendings) {
             res.json(pendings);
         } else {

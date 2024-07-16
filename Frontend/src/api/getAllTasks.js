@@ -1,7 +1,12 @@
 export const getAllTasks = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/tasks/`, {
         method: "GET",
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
       });
       if (response.ok) {
         const data = await response.json();

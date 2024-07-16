@@ -86,7 +86,7 @@ function CreateOrder() {
             });
         }}
       >
-        {({ isSubmitting, setFieldValue, values, errors }) => (
+        {({ isSubmitting, setFieldValue, values }) => (
           <Form>
             <Box
               sx={{

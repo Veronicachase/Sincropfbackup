@@ -1,9 +1,11 @@
 export const updateTaskStatus = async (taskId, status) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/tasks/${taskId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ status }),
       });

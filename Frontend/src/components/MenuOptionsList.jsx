@@ -7,6 +7,7 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SummarizeIcon from "@mui/icons-material/Summarize";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export const MenuOptionsList = [
     {
@@ -17,6 +18,7 @@ export const MenuOptionsList = [
     { name: "Contactos", path: "/allContacts", icon: <ContactPhoneIcon sx={{color:"#29BADE", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
     { name: "Personal", path: "/staff-list", icon: <BadgeIcon sx={{color:"#84C7AE", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}}/> },
     { name: "Reportes", path: "/reports", icon: <SummarizeIcon sx={{color:"#AD6DF1", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
+    { name: "Salir", path: "/login", icon: <LogoutIcon sx={{color:"#AD6DF1", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
   ];
 
   

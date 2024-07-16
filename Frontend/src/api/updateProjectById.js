@@ -1,24 +1,29 @@
 export const updateProjectById = async (projectId, formData) => {
   try {
-    const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
-      method: 'PATCH',
-      body: formData,
-     
-    });
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `http://localhost:3000/projects/${projectId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
 
-    console.log("respuesta", response)
+    console.log("respuesta", response);
 
     if (!response.ok) {
-      throw new Error('No se han podido actualizar los cambios updateProjectById, revisar mi ProjectData, Si no hay respuespuesta al hacer el fetch. '); 
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || "No se han podido actualizar los cambios."
+      );
     }
-    const responseData = await response.json(); 
-    return responseData;
-    
-  
+    const responseData = await response.json();
+    return { ok: response.ok, responseData };
   } catch (error) {
-    console.error('Error al hacer los cambios, fetch updateProjectById, no llega la info :', error);
-   
-
+    console.error("Error al hacer los cambios:", error);
+    throw error;
   }
 };
-

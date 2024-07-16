@@ -1,10 +1,12 @@
 const addFilesToDb = async (image) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/files`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Agregar el token de autorización en el encabezado
+      },
         body: JSON.stringify({ imageUrl: image }) 
       });
   

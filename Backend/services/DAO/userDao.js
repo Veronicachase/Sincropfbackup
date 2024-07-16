@@ -67,7 +67,7 @@ userDao.deleteUser = async (id) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    return await db.query("DELETE FROM users WHERE id = ?", id, "delete", conn);
+    return await db.query("DELETE FROM users WHERE userId = ?", id, "delete", conn);
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -92,7 +92,7 @@ userDao.updateUser = async (id, userData) => {
     // Eliminamos los campos que no se van a modificar (no llegan por el body)
     userObj = await removeUndefinedKeys(userObj);
     return await db.query(
-      "UPDATE users SET ? WHERE id = ?",
+      "UPDATE users SET ? WHERE userId = ?",
       [userObj, id],
       "update",
       conn

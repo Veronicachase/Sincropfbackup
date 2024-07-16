@@ -1,9 +1,11 @@
 export const handleSubmitSection = async (projectId, newSection) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/projects/${projectId}/sections`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         
         body: JSON.stringify({ section: newSection }),

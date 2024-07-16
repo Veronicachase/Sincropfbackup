@@ -1,10 +1,13 @@
 export const deleteTask = async (taskId) => {
     try {
+      
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
-        },
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       });
   
       if (!response.ok) {

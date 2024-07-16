@@ -1,7 +1,12 @@
 export const getFilesById = async (filesId) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/files/${filesId}`, {
         method: "GET",
+        headers: {
+       
+        'Authorization': `Bearer ${token}` 
+      },
       });
       if (response.ok) {
         const data = await response.json();

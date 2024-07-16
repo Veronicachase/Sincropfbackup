@@ -7,6 +7,7 @@ import VoiceInput from '../../components/VoiceInput';
 import { CrearTrabajadorFormSchema } from '../../forms/Trabajadores/crearTrabajador/CrearTrabajadorFormSchema';
 import { getAllProjects } from '../../api/getAllProjects';
 import { initialValues } from '../../forms/Trabajadores/crearTrabajador/InitialValues';
+import { handleSubmitEmployee } from '../../api/handleSubmitEmployee';
 
 const CrearTrabajador = () => {
   const [selected, setSelected] = useState('');
@@ -33,15 +34,20 @@ const CrearTrabajador = () => {
 
   return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={CrearTrabajadorFormSchema}
-      onSubmit={(values, actions) => {
+    initialValues={initialValues}
+    validationSchema={CrearTrabajadorFormSchema}
+    onSubmit={async (values, actions) => {
+      try {
+        await handleSubmitEmployee(values);
         console.log(values);
         actions.setSubmitting(false);
         actions.resetForm();
-      }}
+      } catch (error) {
+        console.error("Error al enviar datos del formulario:", error);
+      }
+    }}
     >
-      {({ isSubmitting, setFieldValue }) => (
+      {({ isSubmitting }) => (
         <Form>
           <Box
             sx={{
@@ -148,7 +154,7 @@ const CrearTrabajador = () => {
                 >
                   <option value="">Seleccione un proyecto</option>
                   {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
+                    <option key={project.projectId} value={project.projectId}>
                       {project.projectName}
                     </option>
                   ))}

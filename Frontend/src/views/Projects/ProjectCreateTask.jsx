@@ -1,4 +1,3 @@
-
 import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
@@ -10,7 +9,6 @@ import { getEmployees } from "../../api/getEmployees";
 import VoiceInput from "../../components/VoiceInput";
 import { initialValues } from "../../forms/SectionTasks/InitialValues";
 import toast, { Toaster } from 'react-hot-toast';
-
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
@@ -44,18 +42,8 @@ export default function ProjectCreateTask() {
   }, [projectId]);
 
   const handleFileUpload = (event, setImages) => {
-    const files = event.target.files;
-    const imagesArray = [];
-    for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader();
-      reader.readAsDataURL(files[i]);
-      reader.onload = () => {
-        imagesArray.push(reader.result);
-        if (imagesArray.length === files.length) {
-          setImages(imagesArray);
-        }
-      };
-    }
+  const files = Array.from(event.target.files);
+    setImages(Array.from(files));
   };
 
   if (!projectData) {
@@ -71,17 +59,36 @@ export default function ProjectCreateTask() {
         </div>
       </Box>
       <Formik
-        initialValues={initialValues}
+        initialValues={initialValues()}
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
-          values.projectId = projectId;
-          values.prevImages = prevImages;
-          values.finalImages = finalImages;
+          const formData = new FormData();
+          formData.append('projectId', projectId);
+          formData.append('taskName', values.taskName);
+          formData.append('employeeId', values.employeeId);
+          formData.append('employeeName', values.employeeName);
+          formData.append('taskDescription', values.taskDescription);
+          formData.append('startDate', values.startDate);
+          formData.append('endDate', values.endDate);
+
+          prevImages.forEach((file) => {
+            formData.append('prevImages', file);
+          });
+
+          finalImages.forEach((file) => {
+            formData.append('finalImages', file);
+          });
           console.log("Values", values);
+          
+          console.log("FormData entries:");
+          formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+          });
+
           try {
-            await handleSubmitTask(values, sectionKey);
+            await handleSubmitTask(formData, sectionKey);
             toast.success('Tarea creada con éxito!');
-            navigate(-1); // Navegar hacia atrás o donde necesites
+            navigate(-1); 
           } catch (error) {
             console.error("Error durante el proceso de creación de tarea: ", error);
             toast.error('Error al crear la tarea');
@@ -89,7 +96,7 @@ export default function ProjectCreateTask() {
           }
         }}
       >
-        {({ isSubmitting, setFieldValue }) => (
+        {({ isSubmitting, setFieldValue, values }) => (
           <Form>
             <Box
               sx={{
@@ -117,6 +124,7 @@ export default function ProjectCreateTask() {
                   <Field
                     as={Select}
                     name="employeeId"
+                    value={values.employeeId || ''}
                     sx={{ backgroundColor: "#fff", marginTop: ".5em" }}
                     fullWidth
                     displayEmpty
@@ -197,9 +205,14 @@ export default function ProjectCreateTask() {
                     multiple
                   />
                 </Grid>
-               
-               
-            
+                <Grid item xs={12}>
+                  <input
+                    type="file"
+                    name="finalImages"
+                    onChange={(e) => handleFileUpload(e, setFinalImages)}
+                    multiple
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <Button
                     type="submit"
@@ -222,11 +235,6 @@ export default function ProjectCreateTask() {
         position="top-right"
         reverseOrder={false}
       />
-      
     </Box>
-    
   );
-  
 }
-
-

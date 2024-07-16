@@ -1,43 +1,36 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
+// Crear el contexto de autenticación
+const AuthContext = createContext(null);
 
-const AuthContext = createContext();
-
+// Hook para usar el contexto de autenticación
 export function useAuthContext() {
   return useContext(AuthContext);
 }
 
+// Proveedor de contexto de autenticación
 export default function AuthContextProvider({ children }) {
-  let userStorage = JSON.parse(localStorage.getItem("user") )||null;
-  const [auth, setAuth] = useState(userStorage);
+  const [auth, setAuth] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-  console.log(localStorage.getItem("user"));
-
-  useEffect(() => {
-    
-    if (auth) {
-      localStorage.setItem("user", JSON.stringify(auth));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [auth]);
-
+  // Función para iniciar sesión
   async function login(email, password) {
     try {
       const response = await fetch('http://localhost:3000/users/login', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
       const data = await response.json();
-      console.log(data, "soy el resultado de data de auth")
       if (response.ok) {
-        setAuth(data); 
-        localStorage.setItem("user", JSON.stringify(data)); 
+        localStorage.setItem('token', data.token);
+        setAuth(data.user);
         setErrorMessage("");
+        navigate("/home"); 
       } else {
         throw new Error(data.message || 'Error de autenticación');
       }
@@ -47,16 +40,130 @@ export default function AuthContextProvider({ children }) {
       setAuth(null);
     }
   }
-  
-  function logout() {
-    setAuth(null);
-    localStorage.removeItem("user");
+
+  // Función para cerrar sesión
+  async function logout() {
+    try {
+      localStorage.removeItem('token');
+      setAuth(null);
+      navigate("/login"); 
+    } catch (error) {
+      console.error('Error al intentar cerrar sesión:', error);
+      setErrorMessage(error.message);
+    }
   }
+
+  // Función para verificar la autenticación
+  async function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+    try {
+      const response = await fetch('http://localhost:3000/users/verify-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setAuth(data.user);
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      logout();
+    }
+  }
+
+  // Valor del contexto
   const value = {
     auth,
     login,
     logout,
     errorMessage,
+    checkAuth,
   };
-  return <AuthContext.Provider value={value}> {children}</AuthContext.Provider>;
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+
+
+
+
+
+
+
+// /* eslint-disable react-refresh/only-export-components */
+// /* eslint-disable react/prop-types */
+// import { createContext, useState, useContext } from "react";
+
+// // Crear el contexto de autenticación
+// const AuthContext = createContext(null);
+
+// // Hook para usar el contexto de autenticación
+// export function useAuthContext() {
+//     return useContext(AuthContext);
+// }
+
+// // Proveedor de contexto de autenticación
+// export default function AuthContextProvider({ children }) {
+//     // Estado para la autenticación
+//     const [auth, setAuth] = useState(null);
+//     const [errorMessage, setErrorMessage] = useState("");
+
+//     // Función para iniciar sesión
+//     async function login(email, password) {
+//         try {
+//             const response = await fetch('http://localhost:3000/users/login', {
+//                 method: 'POST',
+//                 headers: {'Content-Type': 'application/json'},
+              
+//                 body: JSON.stringify({ email, password })
+//             });
+//             const data = await response.json();
+//             if (response.ok) {
+//                 setAuth(data);
+//                 setErrorMessage("");
+//             } else {
+//                 throw new Error(data.message || 'Error de autenticación');
+//             }
+//         } catch (error) {
+//             console.error('Error al intentar iniciar sesión:', error);
+//             setErrorMessage(error.message);
+//             setAuth(null);
+//         }
+//     }
+
+//     // Función para cerrar sesión
+//     async function logout() {
+//         try {
+//             const response = await fetch('http://localhost:3000/users/logout', {
+//                 method: 'POST',
+//                 credentials: 'include', // Incluir credenciales (cookies)
+//             });
+//             if (response.ok) {
+//                 setAuth(null);
+//             } else {
+//                 throw new Error('Error al intentar cerrar sesión');
+//             }
+//         } catch (error) {
+//             console.error('Error al intentar cerrar sesión:', error);
+//             setErrorMessage(error.message);
+//         }
+//     }
+
+//     // Valor del contexto
+//     const value = {
+//         auth,
+//         login,
+//         logout,
+//         errorMessage,
+//     };
+
+//     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+// }

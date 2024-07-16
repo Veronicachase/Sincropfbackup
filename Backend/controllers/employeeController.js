@@ -1,10 +1,8 @@
 const employeeDao = require("../services/DAO/employeeDao");
-const { jwtVerify } = require("jose");
-
+const moment = require("moment");
 
 const getEmployeeById = async (req, res) => {
   try {
- 
     const { employeeId } = req.params; 
     const employee = await employeeDao.getEmployeeById(employeeId);
     if (!employee) return res.status(404).send("Trabajador no encontrado");
@@ -14,14 +12,12 @@ const getEmployeeById = async (req, res) => {
   }
 };
 
-
 const getAllEmployees = async (req, res) => {
   try {
       const employees = await employeeDao.getAllEmployees();
-      console.log(employees)
+      console.log(employees);
       if (employees) {
           res.json(employees);
-          
       } else {
           res.status(404).json({ message: "No hay Trabajadores creados" });
       }
@@ -32,25 +28,21 @@ const getAllEmployees = async (req, res) => {
 };
 
 const addEmployee = async (req, res) => {
-  const { authorization } = req.headers;
-  if (!authorization) return res.sendStatus(401); 
-  const token = authorization.split(" ")[1];
-
   try {
-    const encoder = new TextEncoder();
-    const { payload } = await jwtVerify(token, encoder.encode(process.env.JWT_SECRET));
-
+    const userId = req.user.userId; 
+    
     const employeeData = {
-      date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-      name: payload.name, 
+      date: moment().format('YYYY-MM-DD'),
+      name: req.body.name, 
       position: req.body.position,
-      employee: req.body.name,
+      project: req.body.project,
       mandatoryEquipment: req.body.mandatoryEquipment,
       comments: req.body.comments,
+      userId, 
     };
 
-    const nuevoEmployee = await employeeDao.addEmployee(employeeData);
-    return res.status(201).send(`trabajador añadido con ID: ${nuevoEmployee.insertId}`);
+    const nuevoEmployee = await employeeDao.addEmployee(userId, employeeData);
+    return res.status(201).json(`Trabajador añadido con ID: ${nuevoEmployee.insertId}`);
   } catch (e) {
     console.error(e.message);
     return res.status(500).send("Internal Server Error");
@@ -74,11 +66,11 @@ const deleteEmployee = async (req, res) => {
   try {
     const { employeeId } = req.params; 
     const result = await employeeDao.deleteEmployee(employeeId);
-    if (result.affectedRows === 0) return res.status(404).send("employee no encontrado");
+    if (result.affectedRows === 0) return res.status(404).send("Trabajador no encontrado");
     return res.status(200).send("Trabajador eliminado correctamente");
   } catch (e) {
     return res.status(500).send("Error al eliminar Trabajador");
   }
 };
 
-module.exports = { getEmployeeById,getAllEmployees, addEmployee, updateEmployee, deleteEmployee };
+module.exports = { getEmployeeById, getAllEmployees, addEmployee, updateEmployee, deleteEmployee };

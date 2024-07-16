@@ -41,7 +41,7 @@ employeeDao.getAllEmployees = async () => {
 
 
 
-employeeDao.addEmployee = async (employeeData) => {
+employeeDao.addEmployee = async (userId, employeeData) => {
  
   let conn = null;
   try {
@@ -53,7 +53,9 @@ employeeDao.addEmployee = async (employeeData) => {
       position: employeeData.position,
       project: employeeData.project,
       mandatoryEquipment: employeeData.mandatoryEquipment,
-      comments: employeeData.comments
+      comments: employeeData.comments,
+      userId: userId,
+      userId: employeeData.userId,
     };
    
     employeeObj = await removeUndefinedKeys(employeeObj);

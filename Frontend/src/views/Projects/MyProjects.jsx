@@ -15,17 +15,19 @@ import SideMenu from "../../components/SideMenu";
 import { getAllProjects } from "../../api/getAllProjects";
 import { deleteProject } from "../../api/deleteProject";
 import { useEffect, useState } from "react";
+import { useAuthContext } from '../../context/AuthContext';
 
 export default function MyProjects() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { auth } = useAuthContext();
   const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const projectsData = await getAllProjects();
+        const projectsData = await getAllProjects(auth.jwt);
         setProjects(projectsData);
       } catch (error) {
         console.error("Error de conexión:", error);
@@ -34,7 +36,7 @@ export default function MyProjects() {
     };
 
     fetchProjects();
-  }, []);
+  }, [auth]);
 
   const handleClickProject = (projectId) => {
     navigate(`/project-info/${projectId}`);

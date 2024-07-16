@@ -1,10 +1,12 @@
 export const getHoursWorked = async (employeeId, startDate, endDate) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/hours/${employeeId}?start=${startDate}&end=${endDate}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
       });
   
       if (!response.ok) {

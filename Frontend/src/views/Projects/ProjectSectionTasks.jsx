@@ -7,10 +7,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteTask } from "../../api/deleteTask";
 import { getTaskBySection } from "../../api/getTaskBySection";
-
+import { SectionsAndTasks } from '../../components/SectionsAndTask'
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
-import { AdvancedImage } from "@cloudinary/react";
 import Img from "../../ui/CloudinaryImg";
 
 export default function ProjectSectionTasks() {
@@ -76,7 +75,7 @@ export default function ProjectSectionTasks() {
       </Box>
       <Box display={"flex"} justifyContent={"space-evenly"}>
         <Box padding={"2em"} borderRadius={"10px"}>
-          <SectionsAndTask />{" "}
+          <SectionsAndTasks />{" "}
         </Box>
         <Box backgroundColor="#ffffff4d" padding={"2em"} borderRadius={"10px"}>
           <Box marginBottom="2em">

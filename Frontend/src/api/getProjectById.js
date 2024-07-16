@@ -1,8 +1,14 @@
 
 export const getProjectById = async (projectId) => {
+
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
       method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
     });
     if (response.ok) {
       const data = await response.json();

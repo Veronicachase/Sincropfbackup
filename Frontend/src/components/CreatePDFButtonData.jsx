@@ -1,6 +1,6 @@
-import jsPDF from 'jspdf';
-import PropTypes from 'prop-types';
-import { Button } from '@mui/material';
+import jsPDF from "jspdf";
+import PropTypes from "prop-types";
+import { Button } from "@mui/material";
 
 const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
   const generatePDF = async () => {
@@ -19,11 +19,11 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
 
     // Datos generales del proyecto
     doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('DATOS DEL PROYECTO', 10, 10);
+    doc.setFont("helvetica", "bold");
+    doc.text("DATOS DEL PROYECTO", 10, 10);
     let y = 20;
 
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text(`Nombre del proyecto: ${project.projectName}`, 10, y);
     y += 10;
@@ -35,7 +35,11 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
     y += 10;
     doc.text(`Tipo de construcción: ${project.constructionType}`, 10, y);
     y += 10;
-    doc.text(`Descripción general del proyecto: ${project.projectDescription}`, 10, y);
+    doc.text(
+      `Descripción general del proyecto: ${project.projectDescription}`,
+      10,
+      y
+    );
     y += 10;
     doc.text(`Fecha de inicio: ${project.startDate}`, 10, y);
     y += 10;
@@ -44,10 +48,10 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
     doc.text(`Estado: ${project.status}`, 10, y);
     y += 20;
 
-    doc.setFont('helvetica', 'bold');
-    doc.text('DIRECCIÓN DEL PROYECTO', 10, y);
+    doc.setFont("helvetica", "bold");
+    doc.text("DIRECCIÓN DEL PROYECTO", 10, y);
     y += 10;
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     doc.text(`Dirección: ${project.addressDescription}`, 10, y);
     y += 10;
     doc.text(`Bloque: ${project.block}`, 10, y);
@@ -58,7 +62,7 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
     y += 20;
 
     if (!tasks) {
-      console.error('tasks no está definido');
+      console.error("tasks no está definido");
       return;
     }
 
@@ -68,22 +72,26 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
 
     sectionsWithTasks.forEach((section) => {
       y = checkPageSpace(doc, y, 20);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
       doc.text(section, 10, y);
       y += 10;
 
       tasks[section].forEach((task) => {
         y = checkPageSpace(doc, y, 40);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont("helvetica", "normal");
         doc.text(`Tarea: ${task.taskName}`, 10, y);
         y += 10;
         doc.text(`Descripción: ${task.taskDescription}`, 10, y);
         y += 10;
-        doc.text(`Fecha de inicio: ${task.startDate}, Fecha de terminación: ${task.endDate}`, 10, y);
+        doc.text(
+          `Fecha de inicio: ${task.startDate}, Fecha de terminación: ${task.endDate}`,
+          10,
+          y
+        );
         y += 10;
 
         if (task.prevImages && task.prevImages.length > 0) {
-          doc.text('Imágenes anteriores:', 10, y);
+          doc.text("Imágenes anteriores:", 10, y);
           y += 10;
           let imageRowIndex = 0;
           task.prevImages.forEach((image, index) => {
@@ -96,14 +104,21 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
               doc.addPage();
               y = 10;
             }
-            doc.addImage(image, 'JPEG', 10 + imageRowIndex * (imageWidth + 10), y, imageWidth, imageHeight);
+            doc.addImage(
+              image,
+              "JPEG",
+              10 + imageRowIndex * (imageWidth + 10),
+              y,
+              imageWidth,
+              imageHeight
+            );
             imageRowIndex++;
           });
           y += imageHeight + 10;
         }
 
         if (task.finalImages && task.finalImages.length > 0) {
-          doc.text('Imágenes finales:', 10, y);
+          doc.text("Imágenes finales:", 10, y);
           y += 10;
           let imageRowIndex = 0;
           task.finalImages.forEach((image, index) => {
@@ -116,7 +131,14 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
               doc.addPage();
               y = 10;
             }
-            doc.addImage(image, 'JPEG', 10 + imageRowIndex * (imageWidth + 10), y, imageWidth, imageHeight);
+            doc.addImage(
+              image,
+              "JPEG",
+              10 + imageRowIndex * (imageWidth + 10),
+              y,
+              imageWidth,
+              imageHeight
+            );
             imageRowIndex++;
           });
           y += imageHeight + 10;
@@ -127,41 +149,56 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
     });
 
     // Convertir el PDF a Blob
-    const pdfBlob = doc.output('blob');
-    const currentDate = new Date().toISOString().split('T')[0];
+    const pdfBlob = doc.output("blob");
+    const currentDate = new Date().toISOString().split("T")[0];
     const fileName = `reporte_${project.projectName}_${currentDate}.pdf`;
     const pdfFile = new File([pdfBlob], fileName, { type: pdfBlob.type });
 
     // Crear un FormData para enviar el PDF
     const formData = new FormData();
-    formData.append('file', pdfFile);
-    formData.append('projectId', projectId);  
+    formData.append("file", pdfFile);
+    formData.append("projectId", projectId);
     for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
+      console.log(pair[0] + ": " + pair[1]);
     }
 
     try {
       // Subir el PDF a Cloudinary
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/upload-report`, {
-        method: 'POST',
-        body: formData,
-      });
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:3000/projects/${projectId}/upload-report`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: formData,
+        }
+      );
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
 
       const result = await response.json();
-      console.log('PDF subido con éxito:', result);
+      console.log("PDF subido con éxito:", result);
     } catch (error) {
-      console.error('Error subiendo el PDF:', error);
+      console.error("Error subiendo el PDF:", error);
     }
   };
 
-  return <Button variant="contained" onClick={generatePDF}>Crear PDF</Button>;
+  return (
+    <Button variant="contained" onClick={generatePDF}>
+      Crear PDF
+    </Button>
+  );
 };
 
 CreatePDFButtonPData.propTypes = {
   project: PropTypes.object,
   tasks: PropTypes.object,
   fileName: PropTypes.string,
-  projectId: PropTypes.string.isRequired,  
+  projectId: PropTypes.string.isRequired,
 };
 
 export default CreatePDFButtonPData;

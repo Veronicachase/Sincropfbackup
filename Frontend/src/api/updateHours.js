@@ -1,9 +1,11 @@
 export const updateHours = async (employeeId, orderData) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/hours/${employeeId}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body:JSON.stringify(orderData)
       });

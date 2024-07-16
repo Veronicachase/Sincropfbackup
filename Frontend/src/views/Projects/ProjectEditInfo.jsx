@@ -6,7 +6,7 @@ import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema
 import { getProjectById } from "../../api/getProjectById";
 import { updateProjectById } from "../../api/updateProjectById";
 import { getLabel } from "../../components/getLabel";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import MapView from "../../components/MapView";
 
 import {
@@ -19,6 +19,7 @@ import {
   InputLabel,
   FormControl,
   TextField,
+  CardMedia,
 } from "@mui/material";
 
 export default function ProjectEditInfo() {
@@ -26,10 +27,8 @@ export default function ProjectEditInfo() {
   const [formValues, setFormValues] = useState(defaultInitialValues);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [fileName, setFileName] = useState('');
-  const [imageUrls, setImageUrls] = useState({
-    prevImages: [],
-  });
+  const [fileName, setFileName] = useState("");
+  const [imageUrls, setImageUrls] = useState("");
 
   const navigate = useNavigate();
 
@@ -46,6 +45,7 @@ export default function ProjectEditInfo() {
             );
             setFormValues({ ...defaultInitialValues, ...sanitizedProjectData });
             setProject(sanitizedProjectData);
+            setImageUrls(sanitizedProjectData.image);
           } else {
             console.error(
               "Error, si esto se muestra es porque no se pudieron traer los datos del getProjectById Frontend"
@@ -63,44 +63,40 @@ export default function ProjectEditInfo() {
   }, [projectId]);
 
   const handleFileChange = (event, setFieldValue) => {
-    const file = event.target.files[0]; 
+    const file = event.target.files[0];
     if (file) {
-      setFieldValue("prevImage", file); 
+      setFieldValue("image", file);
       const url = URL.createObjectURL(file);
-      setImageUrls((prev) => ({
-        ...prev,
-        prevImages: [url], 
-      }));
+      setImageUrls(url);
       setFileName(file.name);
     }
   };
 
   const handleSubmit = async (values) => {
     try {
-        const formData = new FormData();
-        Object.keys(values).forEach((key) => {
-            if (key === "sections") {
-                console.log("hola")
-            } else if (values[key] instanceof File) {
-                formData.append(key, values[key], values[key].name);
-            } else {
-                formData.append(key, values[key]);
-            }
-        });
-
-        const response = await updateProjectById(projectId, formData);
-        if (response.ok) {
-            toast.success("Datos actualizados");
+      const formData = new FormData();
+      Object.keys(values).forEach((key) => {
+        if (key === "sections") {
+          console.log("hola");
+        } else if (values[key] instanceof File) {
+          formData.append(key, values[key], values[key].name);
         } else {
-            throw new Error(response.message);
+          formData.append(key, values[key]);
         }
-    } catch (error) {
-        toast.error(
-            "Error al editar. Por favor, intenta de nuevo: " + error.message
-        );
-    }
-};
+      });
 
+      const response = await updateProjectById(projectId, formData);
+      if (response.ok) {
+        toast.success("Datos actualizados");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      toast.error(
+        "Error al editar. Por favor, intenta de nuevo: " + error.message
+      );
+    }
+  };
 
   if (loading) {
     return <p>Cargando proyecto...</p>;
@@ -152,7 +148,9 @@ export default function ProjectEditInfo() {
                 <Box key={key} sx={{ marginBottom: 2 }}>
                   {key !== "typeOfWork" &&
                     key !== "constructionType" &&
-                    key !== "status" && (
+                    key !== "status" &&
+                    key !== "startDate" &&
+                    key !== "endDate" && (
                       <TextField
                         fullWidth
                         variant="outlined"
@@ -186,8 +184,48 @@ export default function ProjectEditInfo() {
                       >
                         <MenuItem value="finishings">Repasos</MenuItem>
                         <MenuItem value="construction">Construcción</MenuItem>
+                        <MenuItem value="installations">
+                          Instalaciones
+                        </MenuItem>
+                        <MenuItem value="solarPanels">
+                          Paneles solares
+                        </MenuItem>
+                        <MenuItem value="other">Otras</MenuItem>
                       </Select>
                     </FormControl>
+                  )}
+
+                  {key === "startDate" && (
+                    <Box sx={{ marginBottom: 2 }}>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label={getLabel(key)}
+                        name={key}
+                        type="date"
+                        value={values[key]}
+                        onChange={(e) => setFieldValue(key, e.target.value)}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Box>
+                  )}
+                  {key === "endDate" && (
+                    <Box sx={{ marginBottom: 2 }}>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label={getLabel(key)}
+                        name={key}
+                        type="date"
+                        value={values[key]}
+                        onChange={(e) => setFieldValue(key, e.target.value)}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Box>
                   )}
                 </Box>
               ))}
@@ -197,14 +235,27 @@ export default function ProjectEditInfo() {
                 marginTop: 2,
                 display: "flex",
                 justifyContent: "center",
-                flexDirection: { xs: "column", sm: "row" },
+                flexDirection: "column", 
                 marginBottom: { xs: "2em", sm: "0" },
+                boxShadow:"0 2px 2px #ccc"
               }}
             >
+            <Box>
+            {imageUrls && (
+              <CardMedia
+                component="img"
+                height="auto"
+                image={imageUrls}
+                alt="Imagen del Proyecto"
+              />
+            )}
+          </Box>
+        
               <Button
                 variant="outlined"
                 component="label"
                 sx={{
+                  marginTop: 2,
                   marginRight: { xs: 0, sm: 2 },
                   marginBottom: { xs: 2, sm: 0 },
                 }}
@@ -214,7 +265,7 @@ export default function ProjectEditInfo() {
                   type="file"
                   name="prevImage"
                   hidden
-                  onChange={(e) => handleFileChange(e, setFieldValue)} // Usa la función de manejo de archivos simplificada
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
                 />
               </Button>
             </Box>

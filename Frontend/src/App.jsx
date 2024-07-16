@@ -1,6 +1,6 @@
 
 import { Routes, Route, Navigate } from "react-router-dom";
-//import AuthContextProvider from './context/AuthContext';
+import AuthContextProvider from './context/AuthContext';
 import { CreatePdfContextProvider } from "./context/CreatePdfContext";
 import CreateNewProject from './views/projects/CreateNewProject';
 import MyProjects from './views/projects/MyProjects';
@@ -27,24 +27,26 @@ import ForgotPassword from './views/forgotPassword/ForgotPassword';
 import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 import ProjectInfoData  from "./views/projects/ProjectInfoData"
 import ResetPassword from "./views/forgotPassword/ResetPassword";
+import RequireAuth from "./components/RequireAuth"
 import { Toaster } from 'react-hot-toast';
 import "./App.css";
 
 
 export default function App() {
   return (
-    //<AuthContextProvider>
+    <AuthContextProvider>
       <CreatePdfContextProvider>
+      
       <Toaster />
         <Routes>
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword/>} />
           <Route element={<Layout />}>
-            {/*<Route element={<RequireAuth />}>*/}
+            <Route element={<RequireAuth />}>
+            <Route path="/home" element={<Home />} />
             <Route path="/create-new-project" element={<CreateNewProject />} />
             <Route path="/my-projects" element={<MyProjects />} />
             <Route path="/project-info/:projectId" element={<ProjectInfo />} />
@@ -64,11 +66,12 @@ export default function App() {
             <Route path="/create-employee" element={<CreateEmployee />} />
             <Route path="/employee/:employeeId" element={<Employee />} />
             <Route path="/reports" element={<ReportList />} />
-            {/* </Route> */}
+            </Route> 
           </Route>
         </Routes>
+      
       </CreatePdfContextProvider>
-    //</AuthContextProvider>
+    </AuthContextProvider>
   );
 }
 

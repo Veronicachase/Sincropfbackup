@@ -1,7 +1,13 @@
 export const getTaskBySection = async (projectId, sectionKey) => {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:3000/tasks/${projectId}/${sectionKey}`, {
       method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
+    
     });
 
     if (response.ok) {
@@ -11,7 +17,7 @@ export const getTaskBySection = async (projectId, sectionKey) => {
       console.log("Tareas obtenidas correctamente:", tasks);
 
       
-      // return tasks.filter(task => task.sectionKey === sectionKey && task.sectionIsActive);
+       //return tasks.filter(task => task.sectionKey === sectionKey && task.sectionIsActive);
       return tasks;
     } else {
       throw new Error('Ha habido un fallo al obtener el estatus de la tarea: ' + response.status);

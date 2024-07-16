@@ -17,6 +17,3 @@ export const NewContactFormSchema = yup.object().shape({
 
 
 
-
-
-

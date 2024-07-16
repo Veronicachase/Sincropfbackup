@@ -21,7 +21,9 @@ import { CreatePDFButton } from "../components/CreatePDFButton";
 import { getProjectById } from "../api/getProjectById";
 import VoiceInputNoFormik from "../components/VoiceInputNoFormik";
 import ExpandableImage from "../components/ExpandableImage";
+import { sectionMapping } from "./SectionMappingIcons";
 import IconColors from "./IconColors";
+import toast from "react-hot-toast";
 
 export const SectionsAndTasks = ({
   projectId,
@@ -62,11 +64,16 @@ export const SectionsAndTasks = ({
   }, [projectId, sectionKey, setTaskData]);
 
   const handleDeleteTask = async (taskId) => {
+    const confirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta tarea?"
+    );
+    if (!confirmed) return;
     try {
       await deleteTask(taskId);
       setTaskData((prevTasks) =>
         prevTasks.filter((task) => task.taskId !== taskId)
       );
+      toast.success('Tarea eliminada exitosamente');
     } catch (error) {
       console.error("Error eliminando la tarea:", error);
     }
@@ -108,7 +115,7 @@ export const SectionsAndTasks = ({
         sx={{ textAlign: "left", marginBottom: "1em", marginTop: "1em" }}
         variant={isMobile ? "subtitle1" : "h5"}
       >
-        Tareas
+        Tareas : {sectionMapping[sectionKey].name || sectionKey}
       </Typography>
       {taskData && taskData.length === 0 ? (
         <Typography>No hay tareas para esta sección.</Typography>
@@ -139,15 +146,14 @@ export const SectionsAndTasks = ({
               alignItems="center"
             >
               <Box display={"flex"} gap={3} justifyContent={"space-between"}>
-              {task.status ? <IconColors status={task.status} /> : null}
-                
+                {task.status ? <IconColors status={task.status} /> : null}
+
                 <Typography
                   variant={isMobile ? "subtitle1" : "h6"}
                   sx={{ cursor: "pointer", textAlign: "left" }}
                 >
                   {task.taskName}
                 </Typography>
-               
               </Box>
               <Box
                 display={isMobile ? "flex" : "block"}
@@ -218,14 +224,13 @@ export const SectionsAndTasks = ({
                     borderRadius={"10px"}
                     padding={"1em"}
                   >
-                    {task.prevImages &&
+                    {Array.isArray(task.prevImages) &&
                       task.prevImages.map((image, index) => (
                         <ExpandableImage
                           src={image}
                           key={index}
                           alt={`Inicial ${index}`}
                           onClick={() => handleImageClick(image)}
-                          
                         />
                       ))}
                   </Box>
@@ -245,15 +250,13 @@ export const SectionsAndTasks = ({
                     borderRadius={"10px"}
                     padding={"1em"}
                   >
-                    {task.finalImages &&
+                    {Array.isArray(task.finalImages) &&
                       task.finalImages.map((image, index) => (
                         <ExpandableImage
                           src={image}
                           key={index}
                           alt={`Final ${index}`}
                           onClick={() => handleImageClick(image)}
-                        
-
                         />
                       ))}
                   </Box>

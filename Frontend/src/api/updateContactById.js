@@ -1,10 +1,14 @@
 export const updateContactById = async (contactId, contactData) => {
+ 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/contacts/${contactId}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+           'Authorization': `Bearer ${token}`
         },
+        
         body:JSON.stringify(contactData)
       });
   

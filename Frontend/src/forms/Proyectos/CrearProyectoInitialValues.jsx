@@ -4,7 +4,6 @@ export const initialValues = {
   projectName: "",
   identifier:"",
   addressDescription: "",
-  address: "",
   block: "",
   unit: "",
   zipCode: "",

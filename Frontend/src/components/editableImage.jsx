@@ -7,6 +7,18 @@ import { useMediaQuery } from '@mui/material';
 
 Modal.setAppElement('#root');
 
+function base64ToFile(base64, filename) {
+  const arr = base64.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  } 
+  return new File([u8arr], filename, { type: mime });
+}
+
 const EditableImage = ({ src, onSave }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState(null);
@@ -68,7 +80,8 @@ const EditableImage = ({ src, onSave }) => {
   const handleSave = () => {
     const uri = stageRef.current.toDataURL();
     console.log("URI generado por Konva:", uri); 
-    onSave(uri); 
+    const file = base64ToFile(uri, 'edited-image.png');
+    onSave(file); 
     handleCloseModal();
   };
 
@@ -176,12 +189,8 @@ const EditableImage = ({ src, onSave }) => {
 };
 
 EditableImage.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
 export default EditableImage;
-
-
-
-

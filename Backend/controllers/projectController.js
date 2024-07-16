@@ -4,52 +4,50 @@ const uploadImage = require('../public/cloudinary/uploadImage');
 const cloudinary = require('cloudinary').v2;
 
 
-
 const addProject = async (req, res) => {
-    console.log("Request body:", req.body); 
-    try {
-      const { body, file } = req;
-  
-      let imageUrl = '';
-      if (file) {
-      
-        const result = await uploadImage(file.path);
-        imageUrl = result.secure_url;
-      }
-  
-      
-      let sections;
-      try {
-        sections = body.sections ? JSON.parse(body.sections) : [];
-      } catch (err) {
-        throw new Error('Invalid sections JSON format');
-      }
-  
-   
-      const projectData = { ...body, sections, image: imageUrl };
-      
-      const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
-      if (!projectData.sections.length) {
-        projectData.sections = defaultSections;
-      } else {
-        projectData.sections = projectData.sections.concat(defaultSections);
-      }
-  
-   
-      const projectId = await projectDao.addProject(projectData);
-      res.status(201).json({ message: "proyecto creado exitosamente", projectId });
-    } catch (error) {
-      console.error("Error al agregar el proyecto:", error.message);
-      res.status(500).json({ error: error.message });
+  const userId = req.user.userId; 
+  console.log("Request body:", req.body); 
+  try {
+    const { body, file } = req;
+
+    let imageUrl = '';
+    if (file) {
+      const result = await uploadImage(file.path);
+      imageUrl = result.secure_url;
     }
-  };
-  
+
+    let sections;
+    try {
+      sections = body.sections ? JSON.parse(body.sections) : [];
+    } catch (err) {
+      throw new Error('Invalid sections JSON format');
+    }
+
+    const projectData = { ...body, sections, userId, image: imageUrl };
+
+    const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+    if (!projectData.sections.length) {
+      projectData.sections = defaultSections;
+    } else {
+      projectData.sections = projectData.sections.concat(defaultSections);
+    }
+
+    const projectId = await projectDao.addProject(userId, projectData);
+    res.status(201).json({ message: "proyecto creado exitosamente", projectId });
+  } catch (error) {
+    console.error("Error al agregar el proyecto:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { addProject };
 
 
 const getProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
-        const project = await projectDao.getProject(projectId);
+        const userId = req.user.userId; 
+        const project = await projectDao.getProject(projectId, userId);
         if (project) {
             res.json(project);
         } else {
@@ -63,7 +61,8 @@ const getProject = async (req, res) => {
 
 const getAllProjects = async (req, res) => {
     try {
-        const projects = await projectDao.getAllProjects();
+      const userId = req.user.userId; 
+        const projects = await projectDao.getAllProjects(userId);
         if (projects) {
             res.json(projects);
         } else {
@@ -78,12 +77,16 @@ const getAllProjects = async (req, res) => {
 const updateProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
+        const userId = req.user.userId;
         const { body, file } = req;
 
         let imageUrl = '';
         if (file) {
             const result = await uploadImage(file.path);
             imageUrl = result.secure_url;
+            if (!imageUrl) {
+              throw new Error("Error al cargar la imagen en Cloudinary");
+          }
         }
 
         let sections;
@@ -95,7 +98,7 @@ const updateProject = async (req, res) => {
 
         const updatedData = { ...body, sections, image: imageUrl };
 
-        await projectDao.updateProject(projectId, updatedData);
+        await projectDao.updateProject(projectId,userId,  updatedData);
         res.json({ message: "Proyecto actualizado correctamente" });
     } catch (error) {
         console.error("Error al actualizar el proyecto:", error.message);
@@ -107,7 +110,8 @@ const updateProject = async (req, res) => {
 const deleteProject = async (req, res) => {
     try {
         const projectId = req.params.projectId;
-        await projectDao.deleteProject(projectId);
+        const userId = req.user.userId;
+        await projectDao.deleteProject(projectId, userId);
         res.json({ message: "proyecto eliminado exitosamente" });
     } catch (error) {
         console.error("Error al eliminar el proyecto:", error.message);
@@ -204,8 +208,8 @@ const uploadPDF = async (req, res) => {
     const { projectId } = req.params;
     const file = req.file;
 
-    // Encuentra el proyecto y actualiza su campo reports
-    const project = await projectDao.getProject(projectId);
+
+    const project = await projectDao.getProject(projectId, req.user.userId);
     if (!project) {
       return res.status(404).json({ error: 'Proyecto no encontrado/ uplaodPDF' });
     }
@@ -226,7 +230,7 @@ const uploadPDF = async (req, res) => {
       original_filename: result.original_filename
     };
     project.reports.push(newReport);
-    await projectDao.updateProject(projectId, { reports: project.reports });
+    await projectDao.updateProject(projectId,req.user.userId, { reports: project.reports });
 
     res.status(201).json({ message: 'Reporte subido exitosamente', url: result.secure_url });
     console.log('Resultado de los datos recibidos desde newReport:', newReport);

@@ -3,7 +3,8 @@ const path = require("path");
 
 const addContact = async (req, res) => {
     try {
-        const contactId = await contactDao.addContact(req.body);
+        const userId = req.user.userId;
+        const contactId = await contactDao.addContact({...req.body, userId});
         res.status(201).json({ message: "contacto creado exitosamente", contactId });
     } catch (error) {
         console.error("Error al agregar el contacto:", error.message);
@@ -13,8 +14,10 @@ const addContact = async (req, res) => {
 
 const getContactById = async (req, res) => {
     try {
+        
         const contactId = req.params.contactId;
-        const contact = await contactDao.getContactById(contactId);
+        const userId = req.user.userId; 
+        const contact = await contactDao.getContactById(contactId, userId);
         if (contact) {
             res.json(contact);
         } else {
@@ -28,7 +31,8 @@ const getContactById = async (req, res) => {
 
 const getAllContacts = async (req, res) => {
     try {
-        const contacts = await contactDao.getAllContacts();
+        const userId = req.user.userId; 
+        const contacts = await contactDao.getAllContacts(userId);
         if (contacts) {
             res.json(contacts);
         } else {
@@ -43,8 +47,9 @@ const getAllContacts = async (req, res) => {
 const updateContact = async (req, res) => {
     try {
         const contactId = req.params.contactId;
+        const userId = req.user.userId;
         const updatedData = req.body;
-        await contactDao.updateContact(contactId, updatedData);
+        await contactDao.updateContact(userId, contactId, updatedData);
         res.json({ message: "contact actualizado exitosamente" });
     } catch (error) {
         console.error("Error al actualizar el contacto:", error.message);
@@ -55,7 +60,8 @@ const updateContact = async (req, res) => {
 const deleteContact = async (req, res) => {
     try {
         const contactId = req.params.contactId;
-        await contactDao.deleteContact(contactId);
+        const userId = req.user.userId;
+        await contactDao.deleteContact(userId, contactId);
         res.json({ message: "contacto eliminado exitosamente" });
     } catch (error) {
         console.error("Error al eliminar el contacto:", error.message);

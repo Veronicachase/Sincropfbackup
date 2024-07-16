@@ -12,6 +12,9 @@ async function uploadImage(image) {
             }
         );
         console.log(result);
+        if (!result || !result.secure_url) {
+            throw new Error("Error al cargar la imagen en Cloudinary");
+        }
         return result; 
     } catch (error) {
         console.error(error);
