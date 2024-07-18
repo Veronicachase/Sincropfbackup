@@ -224,15 +224,18 @@ export const SectionsAndTasks = ({
                     borderRadius={"10px"}
                     padding={"1em"}
                   >
-                    {Array.isArray(task.prevImages) &&
-                      task.prevImages.map((image, index) => (
+                  {Array.isArray(task.prevImages) &&
+                    task.prevImages.map((image, index) => {
+                      console.log('Image URL:', image); 
+                      return (
                         <ExpandableImage
                           src={image}
                           key={index}
                           alt={`Inicial ${index}`}
                           onClick={() => handleImageClick(image)}
                         />
-                      ))}
+                      );
+                    })}
                   </Box>
                 </Box>
 
@@ -267,7 +270,7 @@ export const SectionsAndTasks = ({
                     sx={{ textAlign: "left", cursor: "default" }}
                     variant="body1"
                   >
-                    <strong>Información Adicional:</strong>
+                    <strong>Escribe aquí información que solo aparecerá en tu pdf:</strong>
                   </Typography>
                   <TextField
                     fullWidth

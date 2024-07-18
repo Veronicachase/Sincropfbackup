@@ -54,8 +54,8 @@ export default function ProjectCreateTask() {
     <Box>
       <Box sx={{ marginTop: "3em" }}>
         <div>
-          {projectData.projectName} {"- "} {projectData.constructionType}{" "}
-          {projectData.section}
+          {projectData.projectName} {" - "} {projectData.constructionType}{" - "}
+          {sectionKey}
         </div>
       </Box>
       <Formik
@@ -116,7 +116,7 @@ export default function ProjectCreateTask() {
                     name="taskName"
                     label="Nombre de la tarea"
                     fullWidth
-                    required
+                  
                   />
                 </Grid>
 

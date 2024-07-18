@@ -11,7 +11,7 @@ const addTask = async (req, res) => {
   const finalImagesUrls = [];
 
   if (!taskData.status) {
-    taskData.status = 'noIniciado';
+    taskData.status = "noIniciado";
   }
   console.log("Datos de la tarea recibidos:", taskData);
   try {
@@ -24,7 +24,7 @@ const addTask = async (req, res) => {
         });
         prevImagesUrls.push(uploadedImage.secure_url);
       }
-      taskData.prevImages = JSON.stringify(prevImagesUrls);
+      taskData.prevImages = prevImagesUrls;
     }
 
     // Manejo de finalImages
@@ -36,11 +36,11 @@ const addTask = async (req, res) => {
         });
         finalImagesUrls.push(uploadedImage.secure_url);
       }
-      taskData.finalImages = JSON.stringify(finalImagesUrls);
+      taskData.finalImages = finalImagesUrls;
     }
 
     const taskId = await taskDao.addTask(sectionKey, taskData);
-    console.log('task id', taskId);
+    console.log("task id", taskId);
     res.status(201).json({ message: "Tarea creada exitosamente", taskId });
   } catch (error) {
     console.error("Error al agregar la tarea:", error.message);
@@ -51,7 +51,7 @@ const addTask = async (req, res) => {
 const getTaskById = async (req, res) => {
   try {
     const taskId = req.params.taskId;
-    const userId = req.user.userId; 
+    const userId = req.user.userId;
     const task = await taskDao.getTaskById(taskId, userId);
     if (task) {
       res.json(task);
@@ -87,7 +87,9 @@ const getTasksBySection = async (req, res) => {
     if (tasks && tasks.length > 0) {
       res.json(tasks);
     } else {
-      res.status(404).json({ message: "Tarea no encontrada para la sección escogida" });
+      res
+        .status(404)
+        .json({ message: "Tarea no encontrada para la sección escogida" });
     }
   } catch (error) {
     console.error("Error al obtener la tarea:", error.message);
@@ -98,13 +100,18 @@ const getTasksBySection = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-    const taskData = { ...req.body };
+    const userId = req.user.userId;
+    const taskData = { ...req.body, userId };
+
+    if (!taskData.sectionKey) {
+      return res.status(400).json({ error: "sectionKey cannot be null" });
+    }
 
     const prevImagesUrls = [];
     const finalImagesUrls = [];
 
     if (!taskData.status) {
-      taskData.status = 'noIniciado';
+      taskData.status = "noIniciado";
     }
 
     // Manejo de prevImages
@@ -116,7 +123,11 @@ const updateTask = async (req, res) => {
         });
         prevImagesUrls.push(uploadedImage.secure_url);
       }
-      taskData.prevImages = JSON.stringify(prevImagesUrls);
+      taskData.prevImages = prevImagesUrls;
+    }else if (taskData.prevImages) {
+      taskData.prevImages = Array.isArray(taskData.prevImages) ? taskData.prevImages : [taskData.prevImages];
+    } else {
+      taskData.prevImages = [];
     }
 
     // Manejo de finalImages
@@ -128,7 +139,11 @@ const updateTask = async (req, res) => {
         });
         finalImagesUrls.push(uploadedImage.secure_url);
       }
-      taskData.finalImages = JSON.stringify(finalImagesUrls);
+      taskData.finalImages = finalImagesUrls;
+    }else if (taskData.finalImages) {
+      taskData.finalImages = Array.isArray(taskData.finalImages) ? taskData.finalImages : [taskData.finalImages];
+    } else {
+      taskData.finalImages = [];
     }
 
     await taskDao.updateTask(taskId, taskData);
@@ -159,5 +174,3 @@ module.exports = {
   getAllTasks,
   getTaskById,
 };
-
-

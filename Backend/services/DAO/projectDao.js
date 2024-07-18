@@ -155,6 +155,9 @@ projectDao.deleteProject = async (projectId, userId) => {
   }
 };
 
+
+// sections
+
 projectDao.addSectionToProject = async (projectId, userId, newSection) => {
   let conn = null;
   try {
@@ -249,6 +252,84 @@ projectDao.getSections = async () => {
     if (conn) await conn.end();
   }
 };
+
+// Reports
+
+
+projectDao.uploadPDFReport = async (projectId, userId, reportData) => {
+  let conn = null;
+
+  try { 
+    conn = await db.createConnection(); 
+
+    const project = await db.query(
+      "SELECT reports FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
+      "select",
+      conn
+    );
+
+    if (!project || project.length === 0) {
+      throw new Error("Proyecto no encontrado");
+    }
+
+    let reports = project[0].reports ? JSON.parse(project[0].reports) : [];
+    reports.push(reportData);
+
+    await db.query(
+      "UPDATE projects SET reports = ? WHERE projectId = ? AND userId = ?",
+      [JSON.stringify(reports), projectId, userId],
+      "update",
+      conn
+    );
+
+    return { message: "Reporte agregado con éxito", projectId };
+  } catch (e) {
+    console.error(e.message);
+    throw e;
+  } finally {
+    if (conn) await conn.end();
+  }
+};
+
+projectDao.getAllReports = async (userId) => {
+  let conn = null;
+  try{
+conn = await db.createConnection();
+return await db.query ("SELECT reports FROM projects WHERE userId=?", [userId], "select", conn)
+
+  }catch (e) {
+    console.error("Error al obtener las tareas desde Dao: ", e.message);
+    throw e;
+  } finally {
+    if (conn) await conn.end();
+  }
+};
+
+projectDao.deleteReport = async (projectId, userId, reportId) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const project = await db.query("SELECT reports FROM projects WHERE projectId = ? AND userId = ?", [projectId, userId], "select", conn);
+    
+    if (!project || project.length === 0) {
+      throw new Error("Proyecto no encontrado");
+    }
+
+    const reports = project[0].reports ? JSON.parse(project[0].reports) : [];
+    const updatedReports = reports.filter(report => report.id !== reportId);
+    
+    return await db.query("UPDATE projects SET reports = ? WHERE projectId = ? AND userId = ?", [JSON.stringify(updatedReports), projectId, userId], "update", conn);
+  } catch (e) {
+    console.error("Error al eliminar el informe desde Dao: ", e.message);
+    throw e;
+  } finally {
+    if (conn) await conn.end();
+  }
+};
+
+
+
 
 module.exports = projectDao;
 

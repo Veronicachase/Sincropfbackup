@@ -10,7 +10,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
@@ -18,7 +18,7 @@ import { getTaskById } from "../../api/getTaskById";
 import { updateTaskById } from "../../api/updateTaskById";
 import IconColors from "../../components/IconColors";
 import { getEmployees } from "../../api/getEmployees";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { initialValues } from "../../forms/SectionTasks/InitialValues";
 import { capitalizeFirstLetter } from "../../components/CapitalizedFirstLetter";
 
@@ -37,8 +37,12 @@ export default function TaskInfoAndEdit() {
       try {
         const taskData = await getTaskById(taskId);
         setTask(taskData);
-        setPrevImages(taskData.prevImages || []);
-        setFinalImages(taskData.finalImages || []);
+        setPrevImages(
+          Array.isArray(taskData.prevImages) ? taskData.prevImages : []
+        );
+        setFinalImages(
+          Array.isArray(taskData.finalImages) ? taskData.finalImages : []
+        );
         const employeesData = await getEmployees();
         setEmployees(employeesData);
         setEditInitialValues(initialValues(taskData));
@@ -52,24 +56,40 @@ export default function TaskInfoAndEdit() {
     fetchData();
   }, [taskId]);
 
+  const handleFileUpload = (event, setImages, existingImages=[]) => {
+    const files = Array.from(event.target.files);
+    console.log('existingImages:', existingImages);
+    setImages(existingImages.concat(files));
+  };
+  const handleImageDelete = (index, setImages, images) => {
+    const newImages = images.filter((_, i) => i !== index);
+    setImages(newImages);
+  };
+
   const handleSubmit = async (values, actions) => {
     console.log("Valores antes de enviar:", values);
     const formData = new FormData();
 
     // Añadir campos de texto
-    Object.keys(values).forEach(key => {
-      if (key !== 'prevImages' && key !== 'finalImages') {
+    Object.keys(values).forEach((key) => {
+      if (key !== "prevImages" && key !== "finalImages") {
         formData.append(key, values[key]);
       }
     });
-
+    if (!values.sectionKey) {
+      formData.append("sectionKey", task.sectionKey);
+    }
     // Añadir archivos
     prevImages.forEach((file) => {
-      formData.append('prevImages', file);
+      formData.append("prevImages", file);
     });
 
     finalImages.forEach((file) => {
-      formData.append('finalImages', file);
+      formData.append("finalImages", file);
+    });
+
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
     });
 
     try {
@@ -81,19 +101,6 @@ export default function TaskInfoAndEdit() {
     } finally {
       actions.setSubmitting(false);
     }
-  };
-
-  const handleFileChange = (event, setFieldValue, field) => {
-    const files = Array.from(event.currentTarget.files);
-    console.log(`Archivos seleccionados para ${field}: en handleFileChange`, files);
-
-    if (field === "prevImages") {
-      setPrevImages((prev) => [...prev, ...files]);
-    } else if (field === "finalImages") {
-      setFinalImages((prev) => [...prev, ...files]);
-    }
-
-    setFieldValue(field, (prev) => [...prev, ...files]);
   };
 
   if (loading) return <p>Cargando...</p>;
@@ -124,11 +131,15 @@ export default function TaskInfoAndEdit() {
             onSubmit={handleSubmit}
             enableReinitialize={true}
           >
-            {({ values, handleChange, setFieldValue, isSubmitting }) => (
+            {({ values, handleChange, isSubmitting }) => (
               <Form>
                 <Grid container spacing={2} sx={{ marginBottom: "2em" }}>
                   <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal" sx={{ backgroundColor: "#fff" }}>
+                    <FormControl
+                      fullWidth
+                      margin="normal"
+                      sx={{ backgroundColor: "#fff" }}
+                    >
                       <InputLabel>Estado de la tarea</InputLabel>
                       <Field
                         as={Select}
@@ -146,7 +157,11 @@ export default function TaskInfoAndEdit() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal" sx={{ backgroundColor: "#fff" }}>
+                    <FormControl
+                      fullWidth
+                      margin="normal"
+                      sx={{ backgroundColor: "#fff" }}
+                    >
                       <InputLabel>Trabajador Asignado</InputLabel>
                       <Field
                         as={Select}
@@ -157,7 +172,10 @@ export default function TaskInfoAndEdit() {
                         fullWidth
                       >
                         {employees.map((employee) => (
-                          <MenuItem key={employee.employeeId} value={employee.name}>
+                          <MenuItem
+                            key={employee.employeeId}
+                            value={employee.name}
+                          >
                             {employee.name}
                           </MenuItem>
                         ))}
@@ -214,16 +232,20 @@ export default function TaskInfoAndEdit() {
                     borderRadius: "10px",
                   }}
                 >
-                  <Typography>Fotos iniciales</Typography>
+                  <Typography>Imágenes iniciales</Typography>
                   <Grid item xs={12}>
                     {prevImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
                         {prevImages.map((img, index) => (
                           <img
                             key={index}
-                            src={typeof img === 'string' ? img : URL.createObjectURL(img)}
+                            src={
+                              typeof img === "string"
+                                ? img
+                                : URL.createObjectURL(img)
+                            }
                             alt={`prev-${index}`}
-                            style={{ width: '100px', height: '100px' }}
+                            style={{ width: "100px", height: "100px" }}
                           />
                         ))}
                       </Box>
@@ -231,9 +253,14 @@ export default function TaskInfoAndEdit() {
                     <input
                       type="file"
                       name="prevImages"
-                      onChange={(e) => handleFileChange(e, setFieldValue, "prevImages")}
+                      onChange={(e) =>
+                      handleFileUpload(e, setPrevImages, prevImages)
+                      }
                       multiple
-                      style={{ marginTop: "1em", width: isMobile ? "300px" : "100%" }}
+                      style={{
+                        marginTop: "1em",
+                        width: isMobile ? "300px" : "100%",
+                      }}
                     />
                   </Grid>
                 </Box>
@@ -247,16 +274,24 @@ export default function TaskInfoAndEdit() {
                     borderRadius: "10px",
                   }}
                 >
-                  <Typography>Fotos finales</Typography>
+                  <Typography>Imagenes finales</Typography>
                   <Grid item xs={12}>
                     {finalImages.length > 0 && (
                       <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
                         {finalImages.map((img, index) => (
                           <img
                             key={index}
-                            src={typeof img === 'string' ? img : URL.createObjectURL(img)}
+                            src={
+                              typeof img === "string"
+                                ? img
+                                : URL.createObjectURL(img)
+                            }
                             alt={`final-${index}`}
-                            style={{ width: '100px', height: '100px' }}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              marginRight: "1em",
+                            }}
                           />
                         ))}
                       </Box>
@@ -264,9 +299,14 @@ export default function TaskInfoAndEdit() {
                     <input
                       type="file"
                       name="finalImages"
-                      onChange={(e) => handleFileChange(e, setFieldValue, "finalImages")}
+                      onChange={(e) =>
+                      handleFileUpload(e, setFinalImages, finalImages)
+                      }
                       multiple
-                      style={{ marginTop: "1em" }}
+                      style={{
+                        marginTop: "1em",
+                        width: isMobile ? "300px" : "100%",
+                      }}
                     />
                   </Grid>
                 </Box>

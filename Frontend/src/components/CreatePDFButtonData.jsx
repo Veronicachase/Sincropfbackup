@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 
-const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
+const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
   const generatePDF = async () => {
     const doc = new jsPDF();
     const imageWidth = 50;
@@ -18,48 +18,43 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
     };
 
     // Datos generales del proyecto
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 0, 0); 
+    doc.text("MARVEL CONSTRUCCIONES", 10, 10);
+
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("DATOS DEL PROYECTO", 10, 10);
-    let y = 20;
+    doc.setTextColor(0, 0, 0);
+    doc.text("Datos del Proyecto", 10, 20);
+
+    doc.setDrawColor(211, 211, 211); 
+    doc.line(10, 25, 200, 25); 
+
+    let y = 30;
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text(`Nombre del proyecto: ${project.projectName}`, 10, y);
     y += 10;
+    doc.text(`Fecha de inicio: ${project.startDate}`, 10, y);
+    y += 10;
+    doc.text(`Fecha de entrega: ${project.endDate}`, 10, y);
+    y += 10;
     doc.text(`Identificador: ${project.identifier}`, 10, y);
     y += 10;
     doc.text(`Empresa contratante: ${project.hiringCompany}`, 10, y);
-    y += 10;
-    doc.text(`Tipo de Proyecto: ${project.typeOfWork}`, 10, y);
-    y += 10;
-    doc.text(`Tipo de construcción: ${project.constructionType}`, 10, y);
     y += 10;
     doc.text(
       `Descripción general del proyecto: ${project.projectDescription}`,
       10,
       y
     );
-    y += 10;
-    doc.text(`Fecha de inicio: ${project.startDate}`, 10, y);
-    y += 10;
-    doc.text(`Fecha de entrega: ${project.endDate}`, 10, y);
-    y += 10;
-    doc.text(`Estado: ${project.status}`, 10, y);
     y += 20;
 
-    doc.setFont("helvetica", "bold");
-    doc.text("DIRECCIÓN DEL PROYECTO", 10, y);
+    doc.setDrawColor(211, 211, 211); 
+    doc.line(10, y, 200, y); 
     y += 10;
-    doc.setFont("helvetica", "normal");
-    doc.text(`Dirección: ${project.addressDescription}`, 10, y);
-    y += 10;
-    doc.text(`Bloque: ${project.block}`, 10, y);
-    y += 10;
-    doc.text(`No.: ${project.unit}`, 10, y);
-    y += 10;
-    doc.text(`Provincia: ${project.province}`, 10, y);
-    y += 20;
 
     if (!tasks) {
       console.error("tasks no está definido");
@@ -91,6 +86,8 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
         y += 10;
 
         if (task.prevImages && task.prevImages.length > 0) {
+        
+          y = checkPageSpace(doc, y, imageHeight + 20);
           doc.text("Imágenes anteriores:", 10, y);
           y += 10;
           let imageRowIndex = 0;
@@ -118,6 +115,8 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
         }
 
         if (task.finalImages && task.finalImages.length > 0) {
+          
+          y = checkPageSpace(doc, y, imageHeight + 20);
           doc.text("Imágenes finales:", 10, y);
           y += 10;
           let imageRowIndex = 0;
@@ -144,10 +143,14 @@ const CreatePDFButtonPData = ({ project, tasks, fileName, projectId }) => {
           y += imageHeight + 10;
         }
 
+       
+        doc.setDrawColor(211, 211, 211); 
+        doc.line(10, y, 200, y); 
+        y += 10;
+
         y += 20;
       });
     });
-
     // Convertir el PDF a Blob
     const pdfBlob = doc.output("blob");
     const currentDate = new Date().toISOString().split("T")[0];

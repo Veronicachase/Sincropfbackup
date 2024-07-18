@@ -1,8 +1,13 @@
 const db = require("../db");
-
+const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys");
 const taskDao = {};
 
 taskDao.addTask = async (sectionKey, taskData) => {
+  const cleanData = removeUndefinedKeys({
+    ...taskData,
+    prevImages: taskData.prevImages,
+    finalImages: taskData.finalImages,
+  });
   const {
     projectId,
     taskName,
@@ -15,7 +20,15 @@ taskDao.addTask = async (sectionKey, taskData) => {
     employeeId,
     employeeName,
     userId,
-  } = taskData;
+  } = cleanData;
+
+  if (!taskName) {
+    throw new Error("taskName cannot be null");
+  }
+
+  if (!sectionKey) {
+    throw new Error("sectionKey cannot be null");
+  }
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -53,8 +66,7 @@ taskDao.getTaskById = async (taskId, userId) => {
     const result = await db.query(sql, [taskId, userId], "select", conn);
     if (result.length) {
       const task = result[0];
-      task.prevImages = JSON.parse(task.prevImages || "[]");
-      task.finalImages = JSON.parse(task.finalImages || "[]");
+      
       return task;
     }
     return null;
@@ -103,6 +115,19 @@ taskDao.getTasksBySection = async (projectId, sectionKey, userId) => {
 };
 
 taskDao.updateTask = async (taskId, taskData) => {
+  const cleanData = removeUndefinedKeys({
+    ...taskData,
+    prevImages: Array.isArray(taskData.prevImages)
+      ? taskData.prevImages
+      : [taskData.prevImages],
+    finalImages: Array.isArray(taskData.finalImages)
+      ? taskData.finalImages
+      : [taskData.finalImages],
+  });
+
+  if (!cleanData.sectionKey) {
+    throw new Error("sectionKey cannot be null");
+  }
   const {
     taskName,
     taskDescription,
@@ -116,7 +141,7 @@ taskDao.updateTask = async (taskId, taskData) => {
     projectId,
     sectionKey,
     userId,
-  } = taskData;
+  } = cleanData;
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -127,8 +152,8 @@ taskDao.updateTask = async (taskId, taskData) => {
       taskDescription,
       startDate,
       endDate,
-      JSON.stringify(prevImages || []), 
-      JSON.stringify(finalImages || []), 
+      JSON.stringify(prevImages || []),
+      JSON.stringify(finalImages || []),
       status,
       employeeId,
       employeeName,

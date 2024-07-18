@@ -4,6 +4,7 @@ export const getTaskById = async (taskId) => {
     const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
       method: "GET",
       headers: {
+       
         Authorization: `Bearer ${token}`,
       },
     });

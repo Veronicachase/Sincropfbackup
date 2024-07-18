@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
  const ExpandableImage = ({ src, alt }) => {
+  console.log('esto viene de expandable image ,verificando si la imagen llega',src)
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleImageClick = () => {
@@ -19,6 +20,7 @@ import PropTypes from 'prop-types';
         width: isExpanded ? '400px' : '100px', 
         height: isExpanded ? '400px' : '100px', 
         transition: 'width 0.3s ease, height 0.3s ease', 
+        marginRight:"1em",
         cursor: 'pointer', 
       }}
     />

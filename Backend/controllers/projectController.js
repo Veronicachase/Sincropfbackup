@@ -40,7 +40,7 @@ const addProject = async (req, res) => {
   }
 };
 
-module.exports = { addProject };
+
 
 
 const getProject = async (req, res) => {
@@ -201,15 +201,16 @@ const getSections = async (req, res) => {
 }
 
 
-const uploadPDF = async (req, res) => {
+const uploadPDFReport = async (req, res) => {
   try {
     console.log('req.params:', req.params); 
     console.log('req.body:', req.body);
     const { projectId } = req.params;
     const file = req.file;
+    const userId = req.user.userId;
 
 
-    const project = await projectDao.getProject(projectId, req.user.userId);
+    const project = await projectDao.getProject(projectId, userId);
     if (!project) {
       return res.status(404).json({ error: 'Proyecto no encontrado/ uplaodPDF' });
     }
@@ -243,7 +244,8 @@ const uploadPDF = async (req, res) => {
 const deleteReport = async (req, res) => {
   try {
     const { projectId, reportId } = req.params;
-    const project = await projectDao.getProject(projectId);
+    const userId = req.user.userId;
+    const project = await projectDao.getProject(projectId, userId);
     if (!project) {
       return res.status(404).json({ error: 'Proyecto no encontrado' });
     }
@@ -257,7 +259,7 @@ const deleteReport = async (req, res) => {
     await cloudinary.uploader.destroy(publicId);
 
     project.reports.splice(reportIndex, 1);
-    await projectDao.updateProject(projectId, { reports: project.reports });
+    await projectDao.updateProject(projectId, userId, { reports: project.reports });
 
     res.status(200).json({ message: 'Reporte eliminado' });
   } catch (error) {
@@ -267,8 +269,10 @@ const deleteReport = async (req, res) => {
 };
 
 const getAllReports = async (req, res) => {
+
   try {
-    const projects = await projectDao.getAllProjects();
+    const userId = req.user.userId;
+    const projects = await projectDao.getAllReports(userId);
     let allReports = [];
     
     projects.forEach(project => {
@@ -277,6 +281,7 @@ const getAllReports = async (req, res) => {
       }
     });
 
+    console.log("Todos los reportes:", allReports); 
     res.status(200).json(allReports);
   } catch (error) {
     console.error('Error al obtener todos los reportes:', error);
@@ -290,4 +295,4 @@ const getAllReports = async (req, res) => {
 
 
 
-module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections, uploadPDF, deleteReport,getAllReports   };
+module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections, uploadPDFReport, deleteReport,getAllReports   };
