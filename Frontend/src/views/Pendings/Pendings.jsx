@@ -105,11 +105,15 @@ export default function Pendings() {
   };
 
   const handleDeleteLocalEmployee = (employeeId) => {
-    setEmployees(employees.filter((employee) => employee.employeeId !== employeeId));
+    setEmployees(
+      employees.filter((employee) => employee.employeeId !== employeeId)
+    );
   };
 
   const handleDeleteLocalOrder = (orderId) => {
-    setPendingOrders(pendingOrders.filter((order) => order.orderId !== orderId));
+    setPendingOrders(
+      pendingOrders.filter((order) => order.orderId !== orderId)
+    );
   };
 
   const navigateToDetail = (id, type) => {
@@ -130,7 +134,13 @@ export default function Pendings() {
 
   return (
     <>
-      <Box display="flex" padding={3} marginTop={"2em"} flexDirection="column" gap={3}>
+      <Box
+        display="flex"
+        padding={3}
+        marginTop={"2em"}
+        flexDirection="column"
+        gap={3}
+      >
         <Box
           sx={{
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -148,7 +158,7 @@ export default function Pendings() {
             initialValues={{
               date: new Date().toISOString().slice(0, 10),
               details: "",
-              status: "pendiente", // Este es el valor inicial del estado 
+              status: "pendiente",
             }}
             validationSchema={validationSchema}
             onSubmit={handleAddPending}
@@ -167,9 +177,7 @@ export default function Pendings() {
                   InputProps={{
                     endAdornment: (
                       <VoiceInputNoFormik
-                        onTextChange={(text) =>
-                          setFieldValue("details", text)
-                        }
+                        onTextChange={(text) => setFieldValue("details", text)}
                       />
                     ),
                   }}
@@ -234,12 +242,28 @@ export default function Pendings() {
                 sx={{ color: "red" }}
                 edge="end"
                 aria-label="delete"
-                onClick={() => handleDeleteLocal(setPendings, pending.pendingId)}
+                onClick={() =>
+                  handleDeleteLocal(setPendings, pending.pendingId)
+                }
               >
                 <DeleteForeverIcon />
               </IconButton>
             </Box>
           ))}
+        </Box>
+        <Box
+          sx={{
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: "5px",
+            padding: 3,
+            backgroundColor: "#fff",
+            transition: "transform 0.2s, box-shadow 0.2s",
+            "&:hover": {
+              transform: "scale(1.02)",
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+            },
+          }}
+        >
         </Box>
 
         <Box
@@ -255,6 +279,47 @@ export default function Pendings() {
             },
           }}
         >
+          <Typography variant="h6" textAlign={"left"} marginBottom={"1em"}>
+            Tareas Pendientes
+          </Typography>
+          {tasks.map((task) => (
+            <Box
+              key={task.taskId}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border: "1px solid #f0efef",
+                marginBottom: "1em",
+                borderRadius: "5px",
+                padding: ".5em 1.5em",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+                ":hover": { backgroundColor: "#f9f9f9" },
+              }}
+            >
+              <Typography sx={{ textAlign: "left" }}>
+                {task.status} - {task.taskName}
+              </Typography>
+              <Box>
+                <IconButton
+                  onClick={() =>
+                    navigateToDetail(task.taskId, "task")
+                  }
+                >
+                  <RemoveRedEyeIcon />
+                </IconButton>
+                <IconButton
+                  sx={{ color: "red" }}
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => handleDeleteLocalTask(task.taskId)}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Box>
+            </Box>
+          ))}
           <Typography variant="h6" textAlign={"left"} marginBottom={"1em"}>
             Trabajadores con equipo incompleto
           </Typography>

@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
-
+import toast from "react-hot-toast";
 const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
   const generatePDF = async () => {
     const doc = new jsPDF();
@@ -185,6 +185,7 @@ const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
 
       const result = await response.json();
       console.log("PDF subido con éxito:", result);
+      toast.success('Reporte creado exitosamente');
     } catch (error) {
       console.error("Error subiendo el PDF:", error);
     }

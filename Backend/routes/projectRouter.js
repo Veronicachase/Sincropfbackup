@@ -9,7 +9,7 @@ const {
   updateProject,
   updateSection,
   deleteSection,
-  addSection,
+  addSectionToProject,
   getSections,
   uploadPDFReport,
   deleteReport,
@@ -27,7 +27,7 @@ projectRouter.delete("/:projectId", deleteProject);
 projectRouter.patch("/:projectId", upload.single("image"), updateProject);
 
 /* Estas rutas son específicas para manejar las secciones (editar, borrar y agragar una sección (JSON) dentro de projects) */
-projectRouter.post("/:projectId/sections", addSection);
+projectRouter.post("/:projectId/sections", addSectionToProject);
 projectRouter.patch("/:projectId/sections/:sectionKey", updateSection);
 projectRouter.delete("/:projectId/sections/:sectionKey", deleteSection);
 projectRouter.get("/:projectId", getSections);

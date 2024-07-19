@@ -26,6 +26,7 @@ import { getTaskBySection } from "../../api/getTaskBySection";
 import { handleSubmitSection } from "../../api/handleSubmitSection";
 import { sectionMapping } from "../../components/SectionMappingIcons";
 import { AddButton } from "../../components/AddButton";
+import toast from "react-hot-toast";
 
 const drawerWidth = 240;
 
@@ -112,7 +113,9 @@ const ProjectInfo = () => {
           sections: [...prevProject.sections, newSection],
         }));
         handleClose();
+        toast.success('La sección ha sido agregada correctamente!');
       } else {
+        toast.error("No se ha podido agregar la sección.");
         console.error("Error: No se pudo agregar la sección");
       }
     } catch (error) {

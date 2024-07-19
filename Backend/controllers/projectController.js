@@ -26,6 +26,7 @@ const addProject = async (req, res) => {
     const projectData = { ...body, sections, userId, image: imageUrl };
 
     const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+    
     if (!projectData.sections.length) {
       projectData.sections = defaultSections;
     } else {
@@ -39,8 +40,6 @@ const addProject = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 
 const getProject = async (req, res) => {
@@ -161,34 +160,45 @@ const updateSection = async (req, res) => {
 };
 
 
-const addSection = async (req, res) => {
+const addSectionToProject = async (req, res) => {
     const { projectId } = req.params;
     const { section: newSectionData } = req.body;
+    const userId = req.user.userId;
   
-    try {
-      const project = await projectDao.getProject(projectId);
-      if (!project) {
-        return res.status(404).json({ message: "Proyecto no encontrado" });
-      }
-  
-      let sections = [];
-      if (project.sections) {
-        sections = project.sections;
-      }
-  
-      if (!sections.includes(newSectionData)) {
-        sections.push(newSectionData);
-        await projectDao.updateSection(projectId, sections); 
-        res.status(201).json({ message: "Sección agregada exitosamente" });
-      } else {
-        res.status(409).json({ message: "La sección ya existe" });
-      }
-    } catch (error) {
-      console.error("Error al agregar la sección:", error.message);
-      res.status(500).json({ error: error.message });
+    const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+
+  try {
+    const project = await projectDao.getProject(projectId, userId);
+    if (!project) {
+      return res.status(404).json({ message: "Proyecto no encontrado" });
     }
-  };
-  
+
+    let sections = [...defaultSections];
+    if (project.sections) {
+      try {
+        const existingSections = JSON.parse(project.sections);
+        sections = [...defaultSections, ...existingSections];
+      } catch (error) {
+        console.error("Error parsing sections:", error.message);
+        sections = defaultSections;
+      }
+    }
+
+    // Eliminar duplicados
+    sections = Array.from(new Set(sections));
+
+    if (!sections.includes(newSectionData)) {
+      sections.push(newSectionData);
+      await projectDao.addSectionToProject(projectId, userId, sections);
+      res.status(201).json({ message: "Sección agregada exitosamente" });
+    } else {
+      res.status(409).json({ message: "La sección ya existe" });
+    }
+  } catch (error) {
+    console.error("Error al agregar la sección:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 const getSections = async (req, res) => {
     try {
@@ -259,7 +269,7 @@ const deleteReport = async (req, res) => {
     await cloudinary.uploader.destroy(publicId);
 
     project.reports.splice(reportIndex, 1);
-    await projectDao.updateProject(projectId, userId, { reports: project.reports });
+    await projectDao.updateProject(projectId, userId, { reports: project.reports.length ? project.reports : [] });
 
     res.status(200).json({ message: 'Reporte eliminado' });
   } catch (error) {
@@ -295,4 +305,4 @@ const getAllReports = async (req, res) => {
 
 
 
-module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, updateSection, deleteSection, addSection, getSections, uploadPDFReport, deleteReport,getAllReports   };
+module.exports = { addProject,deleteProject, updateProject, getProject,getAllProjects, deleteSection, addSectionToProject, updateSection, getSections, uploadPDFReport, deleteReport,getAllReports   };

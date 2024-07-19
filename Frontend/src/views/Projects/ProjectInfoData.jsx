@@ -147,8 +147,9 @@ export default function ProjectinfoData() {
             </Card>
           </Grid>
 
+          
           <Grid item xs={12}>
-            <Card sx={{ width: "100%", minWidth:"355px" }}>
+            <Card sx={{ width : isMobile? "100%": "800px", minWidth:"355px" }}>
               <CardActionArea>
                 <CardContent>
                   <Typography
@@ -194,7 +195,7 @@ export default function ProjectinfoData() {
                     borderRadius={2}
                     p={2}
                     backgroundColor="#fff"
-                    borderColor="#ccc"
+                    borderColor="#fff"
                   >
                     <MapView />
                   </Box>
@@ -210,7 +211,7 @@ export default function ProjectinfoData() {
         {sectionsWithTasks.map((section) => (
           <Box key={section} sx={{ marginBottom: "2em" }}>
             <Typography
-              sx={{ textAlign: "left", marginBottom: "1em", marginTop: "1em" }}
+              sx={{ textAlign: "left", marginBottom: "1em", marginTop: "1em", padding:"1em" }}
               variant="h5"
             >
               {sectionMapping[section]?.icon} {sectionMapping[section]?.name || section}
@@ -221,10 +222,10 @@ export default function ProjectinfoData() {
                   key={task.taskId}
                   id={`task-${task.taskId}`}
                   sx={{
-                    marginBottom: 3,
+                    margin:"3 auto",
                     border: "1px solid #ccc",
                     borderRadius: "5px",
-                    
+                    padding:"1em",
                     backgroundColor: "#fff",
                     justifyContent: "left",
                     transition: "transform 0.2s, box-shadow 0.2s",
@@ -275,7 +276,7 @@ export default function ProjectinfoData() {
                   </Box>
 
                   <Box>
-                    <Box display="flex" flexDirection={isMobile ? "column" : "row"}>
+                    <Box display="flex" flexDirection={isMobile ? "column" : "row"} width= {isMobile? "auto" : "400px"} sx={{gap:1}} >
 
                       {task.prevImages &&
                         task.prevImages.map((image, index) => (
@@ -283,7 +284,7 @@ export default function ProjectinfoData() {
                             key={index}
                             component="img"
                             alt={`Prev Image ${index + 1}`}
-                            height="140"
+                            height="200"
                             
                             image={image}
                             title={`Prev Image ${index + 1}`}
@@ -291,14 +292,15 @@ export default function ProjectinfoData() {
                           />
                         ))}
                     </Box>
-                    <Box display="flex" flexDirection={isMobile ? "column" : "row"} marginBottom={isMobile ? "1em" : "auto"}>
+                    
+                    <Box display="flex" flexDirection={isMobile ? "column" : "row"} marginBottom={isMobile ? "1em" : "auto"} width= {isMobile? "auto" : "400px"}sx={{gap:1}} >
                       {task.finalImages &&
                         task.finalImages.map((image, index) => (
                           <CardMedia
                             key={index}
                             component="img"
-                            alt={`Final Image ${index + 1}`}
-                            height="140"
+                            alt={`Final Image ${index + 1}`}s
+                            height="200"
                             image={image}
                             title={`Final Image ${index + 1}`}
                           />

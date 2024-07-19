@@ -84,7 +84,7 @@ OrderDetailsModal.propTypes = {
   order: PropTypes.shape({
     orderId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     productName: PropTypes.string,
-    amount: PropTypes.number,
+    amount: PropTypes.string,
     brand: PropTypes.string,
     date: PropTypes.string,
     status: PropTypes.string,
