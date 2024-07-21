@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 
 import {
   Box,
@@ -21,7 +21,7 @@ import { CreatePDFButton } from "../components/CreatePDFButton";
 import { getProjectById } from "../api/getProjectById";
 import VoiceInputNoFormik from "../components/VoiceInputNoFormik";
 import ExpandableImage from "../components/ExpandableImage";
-import { sectionMapping } from "./SectionMappingIcons";
+import { SectionMappingContext } from "../context/MappingContext";
 import IconColors from "./IconColors";
 import toast from "react-hot-toast";
 
@@ -37,6 +37,7 @@ export const SectionsAndTasks = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState("");
+  const { sectionMapping } = useContext(SectionMappingContext);
   const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {

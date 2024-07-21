@@ -161,11 +161,9 @@ const updateSection = async (req, res) => {
 
 
 const addSectionToProject = async (req, res) => {
-    const { projectId } = req.params;
-    const { section: newSectionData } = req.body;
-    const userId = req.user.userId;
-  
-    const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+  const { projectId } = req.params;
+  const { section: newSectionData } = req.body;
+  const userId = req.user.userId;
 
   try {
     const project = await projectDao.getProject(projectId, userId);
@@ -173,7 +171,30 @@ const addSectionToProject = async (req, res) => {
       return res.status(404).json({ message: "Proyecto no encontrado" });
     }
 
-    let sections = [...defaultSections];
+    await projectDao.addSectionToProject(projectId, userId, newSectionData);
+    return res.status(200).json({ message: "Sección agregada exitosamente" });
+  } catch (error) {
+    console.error("Error agregando sección al proyecto:", error.message);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+
+
+
+{/*const addSectionToProject = async (req, res) => {
+    const { projectId } = req.params;
+    const { section: newSectionData } = req.body;
+    const userId = req.user.userId;
+  
+  try {
+    const project = await projectDao.getProject(projectId, userId);
+    if (!project) {
+      return res.status(404).json({ message: "Proyecto no encontrado" });
+    }
+    let sections =[];
+    const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+  
     if (project.sections) {
       try {
         const existingSections = JSON.parse(project.sections);
@@ -198,7 +219,7 @@ const addSectionToProject = async (req, res) => {
     console.error("Error al agregar la sección:", error.message);
     res.status(500).json({ error: error.message });
   }
-};
+};*/ }
 
 const getSections = async (req, res) => {
     try {

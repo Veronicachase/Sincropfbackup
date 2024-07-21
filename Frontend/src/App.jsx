@@ -28,6 +28,7 @@ import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 import ProjectInfoData  from "./views/projects/ProjectInfoData"
 import ResetPassword from "./views/forgotPassword/ResetPassword";
 import RequireAuth from "./components/RequireAuth"
+import { SectionMappingProvider } from './context/MappingContext';
 import { Toaster } from 'react-hot-toast';
 import "./App.css";
 
@@ -35,6 +36,7 @@ import "./App.css";
 export default function App() {
   return (
     <AuthContextProvider>
+    <SectionMappingProvider>
       <CreatePdfContextProvider>
       
       <Toaster />
@@ -71,6 +73,7 @@ export default function App() {
         </Routes>
       
       </CreatePdfContextProvider>
+      </SectionMappingProvider>
     </AuthContextProvider>
   );
 }

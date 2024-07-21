@@ -4,6 +4,38 @@ const db = require("../db");
 
 const pendingDao = {};
 
+
+
+
+pendingDao.addPending = async (pendingData) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    
+    let pendingObj = {
+      date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      details: pendingData.details,  
+      status: pendingData.status,
+      userId:pendingData.userId  
+    };
+   
+    pendingObj = await removeUndefinedKeys(pendingObj);
+   
+    return await db.query(
+      "INSERT INTO pendings SET ?",
+      pendingObj,
+      "insert",
+      conn
+    );
+    
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+
 pendingDao.getPendingById = async (pendingId) => {
   let conn = null;
   try {
@@ -21,11 +53,11 @@ pendingDao.getPendingById = async (pendingId) => {
   }
 };
 
-pendingDao.getAllPendings = async () => {
+pendingDao.getAllPendings = async (userId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const results = await db.query("SELECT * FROM pendings", null, "select", conn);  // Corrección aquí
+    const results = await db.query("SELECT * FROM pendings where userId = ?", userId, "select", conn);  
     if (results.length) {
       return results;
     }
@@ -38,62 +70,15 @@ pendingDao.getAllPendings = async () => {
   }
 };
 
-pendingDao.addPending = async (pendingData) => {
-  let conn = null;
-  try {
-    conn = await db.createConnection();
-    
-    let pendingObj = {
-      date: moment().format("YYYY-MM-DD HH:mm:ss"),
-      details: pendingData.details,  // Corrección aquí
-      status: pendingData.status  // Corrección aquí
-    };
-   
-    pendingObj = await removeUndefinedKeys(pendingObj);
-   
-    return await db.query(
-      "INSERT INTO pendings SET ?",
-      pendingObj,
-      "insert",
-      conn
-    );
-  } catch (e) {
-    throw new Error(e);
-  } finally {
-    conn && (await conn.end());
-  }
-};
 
-pendingDao.updatePending = async (pendingId, pendingData) => {
+pendingDao.deletePending = async (pendingId, userId) => {
   let conn = null;
   try {
+    if (typeof pendingId !== 'number' && typeof pendingId !== 'string') {
+      throw new Error('Invalid pendingId');
+    }
     conn = await db.createConnection();
-   
-    let pendingObj = {
-      date: moment().format("YYYY-MM-DD HH:mm:ss"),
-      details: pendingData.details,  // Corrección aquí
-      status: pendingData.status  // Corrección aquí
-    };
-    
-    pendingObj = await removeUndefinedKeys(pendingObj);
-    return await db.query(
-      "UPDATE pendings SET ? WHERE pendingId = ?",
-      [pendingObj, pendingId],
-      "update",
-      conn
-    );
-  } catch (e) {
-    throw new Error(e);
-  } finally {
-    conn && (await conn.end());
-  }
-};
-
-pendingDao.deletePending = async (pendingId) => {
-  let conn = null;
-  try {
-    conn = await db.createConnection();
-    return await db.query("DELETE FROM pendings WHERE pendingId = ?", pendingId, "delete", conn);
+    return await db.query("DELETE FROM pendings WHERE pendingId = ? And userId = ? ", [pendingId, userId], "delete", conn);
   } catch (e) {
     throw new Error(e);
   } finally {

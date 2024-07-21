@@ -8,6 +8,7 @@ import { getAllOrders } from "../../api/getAllOrders";
 import { getEmployees } from "../../api/getEmployees";
 import { getAllPendings } from "../../api/getAllPendings";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { deletePending } from "../../api/deletePending";
 import VoiceInputNoFormik from "../../components/VoiceInputNoFormik";
 import { Button, TextField, IconButton, Box, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -17,6 +18,7 @@ export default function Pendings() {
   const [employees, setEmployees] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
   const [pendings, setPendings] = useState([]);
+  const [updatePendings, setUpdatePendings] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,21 +75,26 @@ export default function Pendings() {
       }
     }
     fetchPendings();
-  }, []);
+  }, [updatePendings]);
 
   const validationSchema = yup.object().shape({
     date: yup.date().required("La fecha es requerida"),
     details: yup.string().required("Los detalles son requeridos"),
+    
   });
 
   const handleAddPending = async (values, actions) => {
+    const userId = localStorage.getItem('userId'); 
     try {
       const addedPending = await addPending({
         details: values.details.trim(),
-        status: "pendiente", // Establecer estado por defecto
+        status: "pendiente", 
         date: new Date().toISOString(),
+        userId,
+        
       });
-      setPendings([...pendings, addedPending]);
+      setPendings(prevPendings => [...prevPendings, addedPending]);
+      setUpdatePendings(!updatePendings);
       actions.resetForm();
     } catch (error) {
       console.error("Failed to add pending:", error);
@@ -96,8 +103,13 @@ export default function Pendings() {
     }
   };
 
-  const handleDeleteLocal = (setState, id) => {
-    setState((prevItems) => prevItems.filter((item) => item.id !== id));
+  const handleDeletePending = async (pendingId) => {
+    try {
+      await deletePending(pendingId); 
+      setPendings((prevPendings) => prevPendings.filter(p => p.pendingId !== pendingId));
+    } catch (error) {
+      console.error("Failed to delete pending:", error);
+    }
   };
 
   const handleDeleteLocalTask = (taskId) => {
@@ -243,7 +255,7 @@ export default function Pendings() {
                 edge="end"
                 aria-label="delete"
                 onClick={() =>
-                  handleDeleteLocal(setPendings, pending.pendingId)
+                  handleDeletePending(pending.pendingId)
                 }
               >
                 <DeleteForeverIcon />
@@ -251,20 +263,7 @@ export default function Pendings() {
             </Box>
           ))}
         </Box>
-        <Box
-          sx={{
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            borderRadius: "5px",
-            padding: 3,
-            backgroundColor: "#fff",
-            transition: "transform 0.2s, box-shadow 0.2s",
-            "&:hover": {
-              transform: "scale(1.02)",
-              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
-            },
-          }}
-        >
-        </Box>
+       
 
         <Box
           sx={{
@@ -320,6 +319,18 @@ export default function Pendings() {
               </Box>
             </Box>
           ))}
+          </Box>
+          <Box sx={{
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: "5px",
+            padding: 3,
+            backgroundColor: "#fff",
+            transition: "transform 0.2s, box-shadow 0.2s",
+            "&:hover": {
+              transform: "scale(1.02)",
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+            },
+          }}> 
           <Typography variant="h6" textAlign={"left"} marginBottom={"1em"}>
             Trabajadores con equipo incompleto
           </Typography>
@@ -361,8 +372,8 @@ export default function Pendings() {
               </Box>
             </Box>
           ))}
-        </Box>
-
+        
+          </Box>
         <Box
           sx={{
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",

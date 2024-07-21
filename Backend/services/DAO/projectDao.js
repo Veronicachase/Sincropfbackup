@@ -158,7 +158,7 @@ projectDao.deleteProject = async (projectId, userId) => {
 
 // sections
 
-projectDao.addSectionToProject = async (projectId, userId,  newSection) => {
+projectDao.addSectionToProject = async (projectId, userId, newSection) => {
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -170,13 +170,23 @@ projectDao.addSectionToProject = async (projectId, userId,  newSection) => {
     );
 
     if (project.length) {
-      let sections;
+      let sections = [];
+      const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
+      
       try {
-        sections = JSON.parse(project[0].sections);
+        // Verificar si sections es una cadena válida de JSON
+        if (typeof project[0].sections === 'string' && project[0].sections.trim() !== '') {
+          sections = JSON.parse(project[0].sections);
+        }
       } catch (error) {
         console.error("Error parsing sections:", error.message);
-        sections = [];
+        // Si falla el parseo, intentamos limpiar los corchetes y separar por comas
+        let cleanedString = project[0].sections.replace(/[\[\]]/g, '');
+        sections = cleanedString.split(',').map(section => section.trim());
       }
+
+      // Asegurarse de que las secciones por defecto estén presentes
+      sections = [...new Set([...defaultSections, ...sections])];
 
       if (!sections.includes(newSection)) {
         sections.push(newSection);
@@ -196,6 +206,7 @@ projectDao.addSectionToProject = async (projectId, userId,  newSection) => {
     if (conn) await conn.end();
   }
 };
+
 
 projectDao.updateSection = async (projectId, userId, newSection) => {
   let conn = null;
