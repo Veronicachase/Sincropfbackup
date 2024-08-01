@@ -1,3 +1,19 @@
-node_modules
+# Dependencias
+/node_modules/
+/package-lock.json
+
+# Archivos de configuración local
 .env
-package-lock.json
+
+# Directorios de caché
+/dist/
+/build/
+
+# Archivos de compilación
+*.log
+*.cache
+*.tmp
+
+
+# Archivos de debug
+npm-debug.log*
