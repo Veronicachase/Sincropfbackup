@@ -1,3 +1,5 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitProject = async (values) => {
   try {
     const token = localStorage.getItem("token");
@@ -6,7 +8,7 @@ export const handleSubmitProject = async (values) => {
       formData.append(key, values[key]);
     }
 
-    const response = await fetch("http://localhost:3000/projects", {
+    const response = await fetch(`${apiUrl}/projects`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

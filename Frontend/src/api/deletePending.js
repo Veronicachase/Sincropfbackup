@@ -1,10 +1,10 @@
 import toast, { Toaster } from 'react-hot-toast';
-
+const apiUrl = import.meta.env.VITE_API_URL;
 export const deletePending = async (pendingId) => {
   try {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`http://localhost:3000/pendings/${pendingId}`, { 
+    const response = await fetch(`${apiUrl}/pendings/${pendingId}`, { 
       method: 'DELETE',
       headers: {
         

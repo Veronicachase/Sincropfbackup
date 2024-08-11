@@ -1,13 +1,12 @@
-
-
+const apiUrl = import.meta.env.VITE_API_URL;
 export const getEmployees = async () => {
   try {
-    const token = localStorage.getItem('token');
-    const response = await fetch("http://localhost:3000/employees", {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${apiUrl}/employees`, {
       method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) throw new Error("Network response was not ok");
@@ -17,4 +16,3 @@ export const getEmployees = async () => {
     return [];
   }
 };
-

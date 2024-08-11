@@ -1,8 +1,10 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const addHours = async (employeeId, hoursData) => {
   try {
     console.log('Datos que se envían a la API:', hoursData);
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/hours/${employeeId}`, {
+    const response = await fetch(`${apiUrl}/hours/${employeeId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

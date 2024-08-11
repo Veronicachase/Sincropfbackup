@@ -1,7 +1,8 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitSection = async (projectId, newSection) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/sections`, {
+      const response = await fetch(`${apiUrl}/projects/${projectId}/sections`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

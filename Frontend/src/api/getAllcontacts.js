@@ -1,7 +1,9 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const getAllContacts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/contacts`, {
+      const response = await fetch(`${apiUrl}/contacts`, {
         method: "GET",
         headers: {
         'Content-Type': 'application/json',

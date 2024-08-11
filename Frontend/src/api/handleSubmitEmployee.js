@@ -1,3 +1,5 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitEmployee = async (values) => {
     const formData = { ...values };
     delete formData.files;
@@ -6,7 +8,7 @@ export const handleSubmitEmployee = async (values) => {
   
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch("http://localhost:3000/employees", {
+      const response = await fetch(`${apiUrl}/employees`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

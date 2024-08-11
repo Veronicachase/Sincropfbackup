@@ -1,7 +1,9 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const addPending = async (values) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:3000/pendings", {
+    const response = await fetch(`${apiUrl}/pendings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

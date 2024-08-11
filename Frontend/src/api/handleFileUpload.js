@@ -1,3 +1,5 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   if (file.size > 10000000) {
@@ -8,7 +10,7 @@ export const handleFileUpload = async (event) => {
   const formData = new FormData();
   formData.append("file", file);
   try {
-    const response = await fetch("http://localhost:3000/projects/files", {
+    const response = await fetch(`${apiUrl}/projects/files`, {
       method: "POST",
       body: formData,
     });

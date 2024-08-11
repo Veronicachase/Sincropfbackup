@@ -1,7 +1,10 @@
+const apiUrl = import.meta.env.VITE_API_URL;
+
+
 const addFilesToDb = async (image) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/files`, {
+      const response = await fetch(`${apiUrl}/files`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',

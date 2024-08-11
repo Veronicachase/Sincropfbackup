@@ -12,5 +12,4 @@ Thumbs.db
 # Archivos de debug
 npm-debug.log*
 
-# Vercel directory
-.vercel/
+

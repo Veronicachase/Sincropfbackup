@@ -1,8 +1,10 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const updateTaskById = async (taskId, taskData) => {
   console.log("Tareas enviadas / pasando por el fetch updateTaskById:", taskData); 
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+    const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`

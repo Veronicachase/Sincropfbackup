@@ -1,7 +1,8 @@
+const apiUrl = import.meta.env.VITE_API_URL;
   export const updateOrder = async (orderId, orderData ) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
+      const response = await fetch(`${apiUrl}/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

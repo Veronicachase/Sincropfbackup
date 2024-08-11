@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast';
-
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitRegister = async (userData, actions, navigate) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch("http://localhost:3000/users", {
+    const response = await fetch(`${apiUrl}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

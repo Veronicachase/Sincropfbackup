@@ -1,8 +1,10 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const updateProjectById = async (projectId, formData) => {
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `http://localhost:3000/projects/${projectId}`,
+      `${apiUrl}/projects/${projectId}`,
       {
         method: "PATCH",
         headers: {

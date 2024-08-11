@@ -1,7 +1,9 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const deleteProject = async (projectId) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
+    const response = await fetch(`${apiUrl}/projects/${projectId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

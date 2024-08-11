@@ -1,7 +1,9 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const getAllTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/tasks/`, {
+      const response = await fetch(`${apiUrl}/tasks/`, {
         method: "GET",
         headers: {
         'Content-Type': 'application/json',

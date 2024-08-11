@@ -1,17 +1,17 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitTask = async (formData, sectionKey) => {
   console.log("Valores", formData);
   try {
     const token = localStorage.getItem("token");
-    const response = await fetch(`http://localhost:3000/tasks/${sectionKey}`, {
+    const response = await fetch(`${apiUrl}/tasks/${sectionKey}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-     
-    body: formData,
-      
+
+      body: formData,
     });
-    console.log(formData)
+    console.log(formData);
 
     if (response.ok) {
       const data = await response.json();

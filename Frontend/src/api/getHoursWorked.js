@@ -1,7 +1,9 @@
+
+const apiUrl = import.meta.env.VITE_API_URL;
 export const getHoursWorked = async (employeeId, startDate, endDate) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/hours/${employeeId}?start=${startDate}&end=${endDate}`, {
+      const response = await fetch(`${apiUrl}/hours/${employeeId}?start=${startDate}&end=${endDate}`, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
