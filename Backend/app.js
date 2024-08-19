@@ -6,7 +6,7 @@ const projectRouter = require("./routes/projectRouter");
 const employeeRouter = require("./routes/employeeRouter");
 const taskRouter = require("./routes/taskRouter");
 const contactRouter = require("./routes/contactRouter");
-const orderRouter = require("./routes/OrderRouter");
+const orderRouter = require("./routes/orderRouter");
 const hoursRouter = require("./routes/hoursRouter");
 const pendingRouter = require("./routes/pendingRouter");
 const cors = require("cors");
@@ -15,13 +15,12 @@ const { jwtVerify } = require("jose");
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "http://sincro.pro",
   credentials: true,
 };
-
 // Middlewares de express
 app.use(cors(corsOptions));
 app.use(logger("dev"));
@@ -63,9 +62,16 @@ app.use("/pendings", authenticateToken, pendingRouter);
 
 // Rutas públicas
 app.use("/users", userRouter);
-
-// Servidor
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+// Redirigir a la ruta de inicio de sesión
+app.get("/", (req, res) => {
+  res.redirect("/users/login");
 });
 
+// Servidor
+app.listen(port, (err) => {
+  if (err) {
+    console.error(`Error starting server on port ${port}:`, err);
+    process.exit(1);
+  }
+  console.log(`Example app listening on port ${port}`);
+});
