@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { addFile, getFile, updateFile, deleteFile } = require('../controllers/filesController');
+
 
  const storage = multer.diskStorage({
     destination: function (req, file, cb) {
