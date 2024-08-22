@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { TextField, Box, Typography, Button, IconButton, InputAdornment } from "@mui/material";
+import {
+  TextField,
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Logo from "../../assets/images/logo2.png";
@@ -8,7 +15,6 @@ import { RegisterFormSchema } from "../../forms/LoginAndRegister/RegisterFormSch
 import { useNavigate, Link } from "react-router-dom";
 import { placeHolderText } from "../../components/PlaceHolderTextRegister";
 import { handleSubmitRegister } from "../../api/handleSubmitRegister";
-import toast, { Toaster } from 'react-hot-toast';
 import "../../assets/styles/estilosGenerales.css";
 import "./register.css";
 import { useState, useEffect } from "react";
@@ -19,7 +25,8 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +40,7 @@ const Register = () => {
     validationSchema: RegisterFormSchema,
     onSubmit: async (values, actions) => {
       const { confirmPassword, ...userData } = values;
-     
+
       console.log("Enviando datos al servidor:", userData);
       await handleSubmitRegister(userData, actions, navigate);
     },
@@ -51,7 +58,7 @@ const Register = () => {
         paddingTop={3}
         paddingBottom={3}
       >
-        <Typography sx={{color:"#1976D2"}} mb={5} variant="h4">
+        <Typography sx={{ color: "#1976D2" }} mb={5} variant="h4">
           Registrar
         </Typography>
 
@@ -73,30 +80,45 @@ const Register = () => {
               <TextField
                 key={field}
                 type={
-                  (field === "password" && showPassword) || 
-                  (field === "confirmPassword" && showConfirmPassword) 
-                    ? "text" 
-                    : field.includes("password") 
-                      ? "password" 
-                      : "text"
+                  (field === "password" && showPassword) ||
+                  (field === "confirmPassword" && showConfirmPassword)
+                    ? "text"
+                    : field.includes("password")
+                    ? "password"
+                    : "text"
                 }
                 name={field}
                 value={formik.values[field]}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder={placeHolderText(field)}
-                error={formik.errors[field] && formik.touched[field] ? true : false}
-                helperText={formik.errors[field] && formik.touched[field] ? formik.errors[field] : ""}
+                error={
+                  formik.errors[field] && formik.touched[field] ? true : false
+                }
+                helperText={
+                  formik.errors[field] && formik.touched[field]
+                    ? formik.errors[field]
+                    : ""
+                }
                 sx={{ marginBottom: "1em" }}
                 InputProps={{
                   endAdornment: field.includes("password") ? (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label={`toggle ${field} visibility`}
-                        onClick={field === "password" ? handleClickShowPassword : handleClickShowConfirmPassword}
+                        onClick={
+                          field === "password"
+                            ? handleClickShowPassword
+                            : handleClickShowConfirmPassword
+                        }
                         edge="end"
                       >
-                        {(field === "password" && showPassword) || (field === "confirmPassword" && showConfirmPassword) ? <VisibilityOff /> : <Visibility />}
+                        {(field === "password" && showPassword) ||
+                        (field === "confirmPassword" && showConfirmPassword) ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ) : null,
@@ -108,19 +130,19 @@ const Register = () => {
                 }}
               />
             ))}
-            <Button 
-            type="submit"
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               sx={{
                 backgroundColor: "#1976D2",
                 marginBottom: "1em",
-                '&:active': {
-                  backgroundColor: "#A9A9A9 !important" 
+                "&:active": {
+                  backgroundColor: "#A9A9A9 !important",
                 },
-                '&:hover': {
-                  backgroundColor: "#1976d28e", 
-                }
-              }} 
+                "&:hover": {
+                  backgroundColor: "#1976d28e",
+                },
+              }}
               disabled={formik.isSubmitting}
             >
               Registrar

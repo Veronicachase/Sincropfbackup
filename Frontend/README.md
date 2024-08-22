@@ -70,6 +70,6 @@ Sincro360 es una aplicación web que utiliza Node.js para el backend y React con
 Crea un archivo `.env` en el directorio del backend y añade tus variables de entorno necesarias. Aquí hay un ejemplo:
 
 ```env
-PORT=3000
+PORT=3001
 DATABASE_URL=mysql://user:password@localhost:3306/database_name
 CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name

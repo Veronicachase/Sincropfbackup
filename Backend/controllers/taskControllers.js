@@ -22,6 +22,7 @@ const addTask = async (req, res) => {
           upload_preset: "presets",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
+        console.log("Archivos recibidos:", req.files);
         prevImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.prevImages = prevImagesUrls;
@@ -34,6 +35,7 @@ const addTask = async (req, res) => {
           upload_preset: "presets",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
+        console.log("Archivos recibidos:", req.files);
         finalImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.finalImages = finalImagesUrls;

@@ -62,10 +62,10 @@ const getAllProjects = async (req, res) => {
     try {
       const userId = req.user.userId; 
         const projects = await projectDao.getAllProjects(userId);
-        if (projects) {
+        if (projects && projects.length > 0) {
             res.json(projects);
         } else {
-            res.status(404).json({ message: "No hay proyectos creados" });
+            res.status(404).json({ message: "No hay proyectos creados, crea un proyecto" });
         }
     } catch (error) {
         console.error("Error al obtener tus proyectos:", error.message);

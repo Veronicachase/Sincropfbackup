@@ -13,13 +13,21 @@ export const getAllProjects = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log("Proyectos cargados correctamente:", data);
-      return data;
+
+      if (data.length === 0) {
+        return { status: 'empty', data: null };  
+      }
+
+      return { status: 'success', data };
+
+    } else if (response.status === 404) {
+      return { status: 'empty', data: null };
     } else {
       throw new Error('Fallo en cargar los proyectos: ' + response.status);
     }
+
   } catch (error) {
     console.error("Error al obtener tus proyectos:", error);
-    throw error;
+    return { status: 'error', error: error.message };
   }
 };

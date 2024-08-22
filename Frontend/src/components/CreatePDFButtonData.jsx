@@ -2,6 +2,9 @@ import jsPDF from "jspdf";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import toast from "react-hot-toast";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
   const generatePDF = async () => {
     const doc = new jsPDF();
@@ -169,7 +172,7 @@ const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
       // Subir el PDF a Cloudinary
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/projects/${projectId}/upload-report`,
+        `${apiUrl}/projects/${projectId}/upload-report`,
         {
           method: "POST",
           headers: {

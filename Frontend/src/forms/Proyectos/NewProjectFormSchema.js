@@ -11,10 +11,12 @@ export const NewProjectFormSchema = yup.object().shape({
   province: yup.string().nullable(true),
   typeOfWork: yup.string().oneOf(["construction", "finishings", "installations", "solarPanels", "other"]).nullable(true),
   constructionType: yup.string().oneOf(["chalet", "apartment", "rural", "other"]).nullable(true),
+ 
   map: yup.string().nullable(true).matches(
     /^-?\d+(\.\d+)?, \s*-?\d+(\.\d+)?$/,         
     'El formato de la ubicación debe ser "latitud, longitud"'
-  ),
+  ).notRequired(),
+
   startDate: yup.date().nullable(true).typeError('Debe ser una fecha válida'),
   endDate: yup.date().nullable(true).typeError('Debe ser una fecha válida'),
   projectDescription: yup.string().nullable(true),

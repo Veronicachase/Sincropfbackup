@@ -1,3 +1,5 @@
+console.log("Cargando app.js");
+require('./utils/config');
 const express = require("express");
 const dotenv = require("dotenv");
 const logger = require("morgan");
@@ -12,13 +14,12 @@ const pendingRouter = require("./routes/pendingRouter");
 const cors = require("cors");
 const { jwtVerify } = require("jose");
 
-dotenv.config();
-
+ 
 const app = express();
 const port = process.env.PORT || 3001;
 
 const corsOptions = {
-  origin: "http://sincro.pro",
+  origin: '*',
   credentials: true,
 };
 // Middlewares de express
