@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
-import { getAllTasks } from "../../api/getAllTasks";
-import { addPending } from "../../api/addPending";
-import { getAllOrders } from "../../api/getAllOrders";
-import { getEmployees } from "../../api/getEmployees";
-import { getAllPendings } from "../../api/getAllPendings";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { deletePending } from "../../api/deletePending";
-import VoiceInputNoFormik from "../../components/VoiceInputNoFormik";
+import { getAllTasks } from "../../api/projectsAndTaskApis/getAllTasks";
+import { addPending } from "../../api/pedingApis/handleSubmitPending";
+import { getAllOrders } from "../../api/orderApis/getAllOrders";
+import { getEmployees } from "../../api/employeeApis/getEmployees";
+import { getAllPendings } from "../../api/pedingApis/getAllPendings";
+import { deletePending } from "../../api/pedingApis/deletePending";
+import VoiceInputNoFormik from "../../components/generalComponents/VoiceInputNoFormik";
 import { Button, TextField, IconButton, Box, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 export default function Pendings() {
   const [tasks, setTasks] = useState([]);

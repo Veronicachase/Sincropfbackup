@@ -1,14 +1,14 @@
 import { Box, Grid, Select, MenuItem, TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
-import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
+import { CreateTaskFormSchema } from "./TasksSchemaAndInitialValues/CreateTaskFormSchema";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProjectById } from "../../api/getProjectById";
-import { handleSubmitTask } from "../../api/handleSubmitTask";
-import { getEmployees } from "../../api/getEmployees";
-import VoiceInput from "../../components/VoiceInput";
-import { initialValues } from "../../forms/SectionTasks/InitialValues";
-import toast, { Toaster } from 'react-hot-toast';
+import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
+import { handleSubmitTask } from "../../api/projectsAndTaskApis/handleSubmitTask";
+import {getEmployees } from "../../api/employeeApis/getEmployees";
+import VoiceInput from "../../components/generalComponents/VoiceInput";
+import { initialValues } from "./TasksSchemaAndInitialValues/InitialValues";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ProjectCreateTask() {
   const { projectId, sectionKey } = useParams();
@@ -31,7 +31,7 @@ export default function ProjectCreateTask() {
 
       try {
         const employeeData = await getEmployees();
-        console.log(employeeData);
+
         setEmployees(employeeData);
       } catch (error) {
         console.error("Error al obtener los datos de los trabajadores:", error);
@@ -40,10 +40,10 @@ export default function ProjectCreateTask() {
 
     fetchData();
   }, [projectId]);
-
   const handleFileUpload = (event, setImages) => {
-  const files = Array.from(event.target.files);
-    setImages(Array.from(files));
+    const files = Array.from(event.target.files);
+
+    setImages((prevImages) => [...prevImages, ...files]);
   };
 
   if (!projectData) {
@@ -54,7 +54,8 @@ export default function ProjectCreateTask() {
     <Box>
       <Box sx={{ marginTop: "3em" }}>
         <div>
-          {projectData.projectName} {" - "} {projectData.constructionType}{" - "}
+          {projectData.projectName} {" - "} {projectData.constructionType}
+          {" - "}
           {sectionKey}
         </div>
       </Box>
@@ -63,35 +64,34 @@ export default function ProjectCreateTask() {
         validationSchema={CreateTaskFormSchema}
         onSubmit={async (values, actions) => {
           const formData = new FormData();
-          formData.append('projectId', projectId);
-          formData.append('taskName', values.taskName);
-          formData.append('employeeId', values.employeeId);
-          formData.append('employeeName', values.employeeName);
-          formData.append('taskDescription', values.taskDescription);
-          formData.append('startDate', values.startDate);
-          formData.append('endDate', values.endDate);
+          formData.append("projectId", projectId);
+          formData.append("taskName", values.taskName);
+          formData.append("employeeId", values.employeeId);
+          formData.append("employeeName", values.employeeName);
+          formData.append("taskDescription", values.taskDescription);
+          formData.append("startDate", values.startDate);
+          formData.append("endDate", values.endDate);
 
           prevImages.forEach((file) => {
-            formData.append('prevImages', file);
+            formData.append("prevImages", file);
           });
 
           finalImages.forEach((file) => {
-            formData.append('finalImages', file);
+            formData.append("finalImages", file);
           });
-          console.log("Values", values);
-          
-          console.log("FormData entries:");
-          formData.forEach((value, key) => {
-            console.log(`${key}:`, value);
-          });
+
+          formData.forEach((value, key) => {});
 
           try {
             await handleSubmitTask(formData, sectionKey);
-            toast.success('Tarea creada con éxito!');
-            navigate(-1); 
+            toast.success("Tarea creada con éxito!");
+            navigate(-1);
           } catch (error) {
-            console.error("Error durante el proceso de creación de tarea: ", error);
-            toast.error('Error al crear la tarea');
+            console.error(
+              "Error durante el proceso de creación de tarea: ",
+              error
+            );
+            toast.error("Error al crear la tarea");
             actions.setSubmitting(false);
           }
         }}
@@ -116,7 +116,6 @@ export default function ProjectCreateTask() {
                     name="taskName"
                     label="Nombre de la tarea"
                     fullWidth
-                  
                   />
                 </Grid>
 
@@ -124,7 +123,7 @@ export default function ProjectCreateTask() {
                   <Field
                     as={Select}
                     name="employeeId"
-                    value={values.employeeId || ''}
+                    value={values.employeeId || ""}
                     sx={{ backgroundColor: "#fff", marginTop: ".5em" }}
                     fullWidth
                     displayEmpty
@@ -201,7 +200,9 @@ export default function ProjectCreateTask() {
                   <input
                     type="file"
                     name="prevImages"
-                    onChange={(e) => handleFileUpload(e, setPrevImages)}
+                    onChange={(e) =>
+                      handleFileUpload(e, setPrevImages, prevImages)
+                    }
                     multiple
                   />
                 </Grid>
@@ -231,10 +232,7 @@ export default function ProjectCreateTask() {
           </Form>
         )}
       </Formik>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+      <Toaster position="top-right" reverseOrder={false} />
     </Box>
   );
 }

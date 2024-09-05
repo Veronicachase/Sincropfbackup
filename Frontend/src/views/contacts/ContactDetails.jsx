@@ -13,9 +13,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
-import { getContactById } from "../../api/getContactById";
-import { updateContactById } from "../../api/updateContactById";
-import { NewContactFormSchema } from "../../forms/Contactos/NewContactSchema";
+import { getContactById } from "../../api/contactApi/getContactById";
+import { updateContactById } from "../../api/contactApi/updateContactById";
+import { NewContactFormSchema } from "./ContactsSchemaAndInitialValues/NewContactSchema";
 import toast, { Toaster } from "react-hot-toast";
 
 const defaultInitialValues = {
@@ -44,7 +44,6 @@ export default function ContactDetails() {
           setContact(contactById);
           setFormValues({ ...defaultInitialValues, ...contactById });
         } else {
-          console.log("Error al recuperar los datos del contacto");
         }
       } catch (error) {
         console.error("Error fetching contacts:", error);
@@ -61,7 +60,7 @@ export default function ContactDetails() {
   const handleSubmit = async (values) => {
     try {
       await updateContactById(contactId, values);
-      console.log("Valores de contacto actualizados", values);
+
       toast.success("Datos actualizados!", {
         icon: "👏",
       });

@@ -1,16 +1,17 @@
-import { Box, Button, Typography } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProjectById } from "../../api/getProjectById";
-import IconColors from "../../components/IconColors";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { deleteTask } from "../../api/deleteTask";
-import { getTaskBySection } from "../../api/getTaskBySection";
-import { SectionsAndTasks } from '../../components/SectionsAndTask'
+import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
+import IconColors from "../../components/generalComponents/IconColors";
+import { deleteTask } from "../../api/projectsAndTaskApis/deleteTask";
+import { getTaskBySection } from "../../api/projectsAndTaskApis/getTaskBySection";
+import { SectionsAndTasks } from "../../components/proyectComponets/SectionsAndTask";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
-import Img from "../../ui/CloudinaryImg";
+import { Box, Button, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Img from "../../components/cloudinaryComponents/CloudinaryImg";
 
 export default function ProjectSectionTasks() {
   const { projectId, sectionKey } = useParams();
@@ -22,11 +23,9 @@ export default function ProjectSectionTasks() {
     if (projectId) {
       getProjectById(projectId)
         .then((data) => {
-          console.log("Project data received:", data);
           setProjectData(data);
           if (data && data.sections && data.sections[sectionKey]) {
             getTaskBySection(projectId, sectionKey).then((tasks) => {
-              console.log("Task data received:", tasks);
               setTaskData(tasks);
             });
           }
@@ -129,16 +128,15 @@ export default function ProjectSectionTasks() {
                   </Box>
 
                   <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                  {task.prevImages && (
-                    task.prevImages.map((url, index) => (
-                      <Img
-                        key={index} 
-                        uploadedImg={url} 
-                        alt={`Preview ${index}`} 
-                        className="prueba"
-                      />
-                    ))
-                  )}
+                    {task.prevImages &&
+                      task.prevImages.map((url, index) => (
+                        <Img
+                          key={index}
+                          uploadedImg={url}
+                          alt={`Preview ${index}`}
+                          className="prueba"
+                        />
+                      ))}
                   </Box>
                   <Box sx={{ display: "flex", flexWrap: "wrap" }}>
                     {task.finalImages &&

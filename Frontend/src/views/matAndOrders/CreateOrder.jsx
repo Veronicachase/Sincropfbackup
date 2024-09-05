@@ -1,12 +1,20 @@
 import { Formik, Form, Field } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomTextField from "../../ui/CustomTextField";
-import { Grid, Box, Typography, Button, Select, MenuItem, FormControl } from "@mui/material";
-import { handleSubmitOrder } from "../../api/handleSubmitOrder";
-import { OrderFormSchema } from "../../forms/Orders/OrdersFormSchema";
-import { getAllProjects } from "../../api/getAllProjects";
-import { InitialValues } from "../../forms/Orders/InitialValues";
+import CustomTextField from "../../components/generalComponents/CustomTextField";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
+import { handleSubmitOrder } from "../../api/orderApis/handleSubmitOrder";
+import { OrderFormSchema } from "./ordersSchemaAndInitialValues/OrdersFormSchema";
+import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
+import { InitialValues } from "./ordersSchemaAndInitialValues/InitialValues";
 import toast, { Toaster } from "react-hot-toast";
 
 function CreateOrder() {
@@ -71,10 +79,9 @@ function CreateOrder() {
           if (image) {
             values.image = image;
           }
-          console.log("Formulario enviado", values);
+
           handleSubmitOrder(values)
             .then(() => {
-              console.log(values);
               actions.setSubmitting(false);
               actions.resetForm();
               toast.success("Producto creado correctamente!");
@@ -143,7 +150,6 @@ function CreateOrder() {
 
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      
                       <Field
                         name="projectName"
                         as={Select}
@@ -159,9 +165,7 @@ function CreateOrder() {
                           setFieldValue("projectName", event.target.value);
                           setFieldValue(
                             "projectId",
-                            selectedProject
-                              ? selectedProject.projectId
-                              : ""
+                            selectedProject ? selectedProject.projectId : ""
                           );
                         }}
                         value={values.projectName || ""}
@@ -279,7 +283,6 @@ function CreateOrder() {
                     />
                   </Grid>
 
-
                   <Grid item xs={12}>
                     <Button
                       variant="outlined"
@@ -321,7 +324,8 @@ function CreateOrder() {
                         ":hover": {
                           backgroundColor: "#76b0a0",
                           transform: "scale(1.02)",
-                        }}}
+                        },
+                      }}
                       type="submit"
                       disabled={isSubmitting}
                     >
@@ -339,5 +343,3 @@ function CreateOrder() {
 }
 
 export default CreateOrder;
-
-

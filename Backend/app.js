@@ -1,7 +1,6 @@
-console.log("Cargando app.js");
+
 require('./utils/config');
 const express = require("express");
-const dotenv = require("dotenv");
 const logger = require("morgan");
 const userRouter = require("./routes/userRouter");
 const projectRouter = require("./routes/projectRouter");
@@ -33,17 +32,17 @@ app.use(express.urlencoded({ extended: true }));
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  console.log("Token recibido:", token);
+
 
   if (!token) {
-    console.log("No hay token, no ha llegado el token hasta el authenticateToken");
+  
     return res.sendStatus(401); 
   }
 
   try {
     const encoder = new TextEncoder();
     const { payload } = await jwtVerify(token, encoder.encode(process.env.JWT_SECRET));
-    console.log("Payload del token:", payload);
+
     req.user = payload;
     next();
   } catch (err) {

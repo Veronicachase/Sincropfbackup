@@ -16,9 +16,9 @@ import CreateEmployee from './views/staff/CreateEmployee';
 import StaffList from './views/staff/StaffList';
 import Employee from './views/staff/Employee';
 import ReportList  from './views/reports/Reports';
-import Layout from './components/Layout';
+import Layout from './components/generalComponents/Layout';
 import LoginForm from './views/login/LoginForm';
-import Register from './views/register/Register';
+import Register from './views/login/register/Register';
 import Home from './views/home/Home';
 import ProjectSectionTasks from "./views/projects/ProjectSectionTasks";
 import ProjectCreateTask from "./views/projects/ProjectCreateTask";
@@ -27,7 +27,7 @@ import ForgotPassword from './views/forgotPassword/ForgotPassword';
 import TaskInfoAndEdit from "./views/projects/TaskInfoAndEdit";
 import ProjectInfoData  from "./views/projects/ProjectInfoData"
 import ResetPassword from "./views/forgotPassword/ResetPassword";
-import RequireAuth from "./components/RequireAuth"
+import RequireAuth from "./components/authComponents/RequireAuth"
 import { SectionMappingProvider } from './context/MappingContext';
 import { Toaster } from 'react-hot-toast';
 import "./App.css";

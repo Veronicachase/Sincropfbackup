@@ -1,8 +1,8 @@
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { initialValues } from "../../forms/Proyectos/CrearProyectoInitialValues";
-import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
-import { handleSubmitProject } from "../../api/handlerSubmitProject";
+import { initialValues } from "./ProyectsSchemaAndInitialValues/CrearProyectoInitialValues";
+import { NewProjectFormSchema } from "./ProyectsSchemaAndInitialValues/NewProjectFormSchema";
+import { handleSubmitProject } from "../../api/projectsAndTaskApis/handlerSubmitProject";
 import toast, { Toaster } from "react-hot-toast";
 import {
   Container,
@@ -18,7 +18,7 @@ import {
   ProjectTextField,
   ProjectTextField2,
 } from "../../configs/projectTextField";
-import MapView from "../../components/MapView";
+
 
 function CreateNewProject() {
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ function CreateNewProject() {
       initialValues={initialValues}
       validationSchema={NewProjectFormSchema}
       onSubmit={(values, actions) => {
-        console.log("Formulario enviado con valores:", values);
         handleSubmitProject(values)
           .then(() => {
             actions.setSubmitting(false);

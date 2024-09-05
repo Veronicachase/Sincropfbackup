@@ -2,6 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteOrder } from "../../api/orderApis/deleteOrder";
+import { getAllOrders } from "../../api/orderApis/getAllOrders";
+import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
+import SimpleSnackbar from "../../components/generalComponents/SnackBar";
+import AlertDialog from "../../components/generalComponents/AlertDialog";
+import IconColorsOrder from "../../components/orderComponets/IconColorsOrder";
+import OrderDetailsModal from "../../components/orderComponets/orderDetailModal";
+import { addOrder } from "../../api/orderApis/addOrder";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
   Typography,
@@ -11,21 +26,6 @@ import {
   Paper,
   useMediaQuery,
 } from "@mui/material";
-import { deleteOrder } from "../../api/deleteOrder";
-import { getAllOrders } from "../../api/getAllOrders";
-import { getAllProjects } from "../../api/getAllProjects";
-import SimpleSnackbar from "../../components/SnackBar";
-import AlertDialog from "../../components/AlertDialog";
-import IconColorsOrder from "../../components/IconColorsOrder";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import SendIcon from "@mui/icons-material/Send";
-import OrderDetailsModal from "../../components/orderDetailModal";
-import { addOrder } from "../../api/addOrder";
 
 function OrderList() {
   const [orders, setOrders] = useState([]);

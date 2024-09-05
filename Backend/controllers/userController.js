@@ -14,7 +14,6 @@ const addUser = async (req, res) => {
     const userId = await userDao.addUser(req.body);
     if (userId) return res.json(`Usuario ${name} con id: ${userId} registrado`);
   } catch (e) {
-    console.log(e.message);
     res.status(500).json({ message: "Error al registrar el usuario" });
     throw new Error(e);
   }
@@ -51,7 +50,6 @@ const loginUser = async (req, res) => {
 
     return res.send({ token: jwt, user });
   } catch (e) {
-    console.log(e.message);
     res.status(500).send("Error al iniciar sesión");
   }
 };
@@ -76,7 +74,6 @@ const deleteUser = async (req, res) => {
     await userDao.deleteUser(req.params.userId);
     return res.send(`Usuario con id ${req.params.userId} eliminado`);
   } catch (e) {
-    console.log(e.message);
     res.status(500).send("Error al eliminar usuario");
   }
 };
@@ -97,7 +94,6 @@ const updateUser = async (req, res) => {
 
     return res.send(`Usuario con id ${userId} actualizado`);
   } catch (e) {
-    console.log(e.message);
     res.status(500).send("Error al actualizar usuario");
     throw new Error(e.message);
   }
@@ -123,4 +119,3 @@ module.exports = {
   getUser,
   logoutUser,
 };
-

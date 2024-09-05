@@ -7,10 +7,8 @@ const { removeUndefinedKeys } = require("../../utils/removeUndefinedkeys");
 const projectDao = {};
 
 projectDao.addProject = async (userId, projectData) => {
- 
   let conn = null;
   try {
-    console.log(projectData.sections, "projectData");
     conn = await db.createConnection();
 
     let projectObj = {
@@ -72,13 +70,12 @@ projectDao.getProject = async (projectId, userId) => {
       try {
         results[0].reports = JSON.parse(results[0].reports);
       } catch (error) {
-        results[0].reports = []; 
+        results[0].reports = [];
       }
       return results[0];
     }
     return null;
   } catch (e) {
-    
     console.error(e.message);
     throw e;
   } finally {
@@ -111,12 +108,8 @@ projectDao.getAllProjects = async (userId) => {
 projectDao.updateProject = async (projectId, userId, data) => {
   let conn = null;
   try {
-    console.log("Data: ", data);
-
-    console.log("Data antes de remove", data);
-
     const cleanData = await removeUndefinedKeys(data);
-    console.log("datos limpios despues de filtrar por el removeUndefinedKeys", cleanData);
+
     if (cleanData.reports) {
       cleanData.reports = JSON.stringify(cleanData.reports);
     }
@@ -155,7 +148,6 @@ projectDao.deleteProject = async (projectId, userId) => {
   }
 };
 
-
 // sections
 
 projectDao.addSectionToProject = async (projectId, userId, newSection) => {
@@ -171,18 +163,30 @@ projectDao.addSectionToProject = async (projectId, userId, newSection) => {
 
     if (project.length) {
       let sections = [];
-      const defaultSections = ["pool", "kitchen", "laundry", "roof", "room", "bathRoom", "hall", "livingRoom"];
-      
+      const defaultSections = [
+        "pool",
+        "kitchen",
+        "laundry",
+        "roof",
+        "room",
+        "bathRoom",
+        "hall",
+        "livingRoom",
+      ];
+
       try {
         // Verificar si sections es una cadena válida de JSON
-        if (typeof project[0].sections === 'string' && project[0].sections.trim() !== '') {
+        if (
+          typeof project[0].sections === "string" &&
+          project[0].sections.trim() !== ""
+        ) {
           sections = JSON.parse(project[0].sections);
         }
       } catch (error) {
         console.error("Error parsing sections:", error.message);
         // Si falla el parseo, intentamos limpiar los corchetes y separar por comas
-        let cleanedString = project[0].sections.replace(/[\[\]]/g, '');
-        sections = cleanedString.split(',').map(section => section.trim());
+        let cleanedString = project[0].sections.replace(/[\[\]]/g, "");
+        sections = cleanedString.split(",").map((section) => section.trim());
       }
 
       // Asegurarse de que las secciones por defecto estén presentes
@@ -190,7 +194,7 @@ projectDao.addSectionToProject = async (projectId, userId, newSection) => {
 
       if (!sections.includes(newSection)) {
         sections.push(newSection);
-        console.log(`Actualizando secciones: ${JSON.stringify(sections)}`);
+
         await db.query(
           "UPDATE projects SET sections = ? WHERE projectId = ? AND userId = ?",
           [JSON.stringify(sections), projectId, userId],
@@ -207,15 +211,14 @@ projectDao.addSectionToProject = async (projectId, userId, newSection) => {
   }
 };
 
-
 projectDao.updateSection = async (projectId, userId, newSection) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    console.log("Sections before updating in DB:", newSection);
+
     await db.query(
       "UPDATE projects SET sections = ? WHERE projectId = ?",
-      [JSON.stringify(newSection),projectId, userId],
+      [JSON.stringify(newSection), projectId, userId],
       "update",
       conn
     );
@@ -227,7 +230,11 @@ projectDao.updateSection = async (projectId, userId, newSection) => {
   }
 };
 
-projectDao.removeSectionFromProject = async (projectId, userId, sectionToRemove) => {
+projectDao.removeSectionFromProject = async (
+  projectId,
+  userId,
+  sectionToRemove
+) => {
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -274,12 +281,11 @@ projectDao.getSections = async () => {
 
 // Reports
 
-
 projectDao.uploadPDFReport = async (projectId, userId, reportData) => {
   let conn = null;
 
-  try { 
-    conn = await db.createConnection(); 
+  try {
+    conn = await db.createConnection();
 
     const project = await db.query(
       "SELECT reports FROM projects WHERE projectId = ? AND userId = ?",
@@ -313,11 +319,15 @@ projectDao.uploadPDFReport = async (projectId, userId, reportData) => {
 
 projectDao.getAllReports = async (userId) => {
   let conn = null;
-  try{
-conn = await db.createConnection();
-return await db.query ("SELECT reports FROM projects WHERE userId=?", [userId], "select", conn)
-
-  }catch (e) {
+  try {
+    conn = await db.createConnection();
+    return await db.query(
+      "SELECT reports FROM projects WHERE userId=?",
+      [userId],
+      "select",
+      conn
+    );
+  } catch (e) {
     console.error("Error al obtener las tareas desde Dao: ", e.message);
     throw e;
   } finally {
@@ -329,16 +339,30 @@ projectDao.deleteReport = async (projectId, userId, reportId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    const project = await db.query("SELECT reports FROM projects WHERE projectId = ? AND userId = ?", [projectId, userId], "select", conn);
-    
+    const project = await db.query(
+      "SELECT reports FROM projects WHERE projectId = ? AND userId = ?",
+      [projectId, userId],
+      "select",
+      conn
+    );
+
     if (!project || project.length === 0) {
       throw new Error("Proyecto no encontrado");
     }
 
     const reports = project[0].reports ? JSON.parse(project[0].reports) : [];
-    const updatedReports = reports.filter(report => report.id !== reportId);
-    
-    return await db.query("UPDATE projects SET reports = ? WHERE projectId = ? AND userId = ?", [JSON.stringify(updatedReports.length ? updatedReports : []), projectId, userId], "update", conn);
+    const updatedReports = reports.filter((report) => report.id !== reportId);
+
+    return await db.query(
+      "UPDATE projects SET reports = ? WHERE projectId = ? AND userId = ?",
+      [
+        JSON.stringify(updatedReports.length ? updatedReports : []),
+        projectId,
+        userId,
+      ],
+      "update",
+      conn
+    );
   } catch (e) {
     console.error("Error al eliminar el informe desde Dao: ", e.message);
     throw e;
@@ -347,8 +371,4 @@ projectDao.deleteReport = async (projectId, userId, reportId) => {
   }
 };
 
-
-
-
 module.exports = projectDao;
-

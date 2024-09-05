@@ -13,7 +13,12 @@ HoursDao.gethoursByEmployeeId = async (employeeId, startDate, endDate) => {
       WHERE employeeId = ? 
       AND date BETWEEN ? AND ?
     `;
-    return await db.query(sql, [employeeId, startDate, endDate], "select", conn);
+    return await db.query(
+      sql,
+      [employeeId, startDate, endDate],
+      "select",
+      conn
+    );
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -31,21 +36,25 @@ HoursDao.addHours = async (employeeId, hoursData) => {
       extraHours: hoursData.extraHours,
       extraMinutes: hoursData.extraMinutes,
       regularMinutes: hoursData.regularMinutes,
-      employeeId: employeeId
+      employeeId: employeeId,
     };
-    console.log("Objeto horas para insertar en la DB:", hoursObj); 
+
     hoursObj = await removeUndefinedKeys(hoursObj);
-    const result = await db.query("INSERT INTO hours SET ?", hoursObj, "insert", conn);
-    console.log("Resultado de la inserción en la DB:", result);
-    return result; 
+    const result = await db.query(
+      "INSERT INTO hours SET ?",
+      hoursObj,
+      "insert",
+      conn
+    );
+
+    return result;
   } catch (e) {
     throw new Error(e);
-    console.error("Error al insertar en la DB:", error.message); 
+    console.error("Error al insertar en la DB:", error.message);
   } finally {
     conn && (await conn.end());
   }
 };
-
 
 HoursDao.updateHours = async (employeeId, hoursData) => {
   let conn = null;
@@ -57,10 +66,15 @@ HoursDao.updateHours = async (employeeId, hoursData) => {
       extraHours: hoursData.extraHours,
       extraMinutes: hoursData.extraMinutes,
       regularMinutes: hoursData.regularMinutes,
-      employeeId: employeeId
+      employeeId: employeeId,
     };
     hoursObj = await removeUndefinedKeys(hoursObj);
-    return await db.query("UPDATE hours SET ? WHERE employeeId = ?", [employeeId, hoursObj ], "update", conn);
+    return await db.query(
+      "UPDATE hours SET ? WHERE employeeId = ?",
+      [employeeId, hoursObj],
+      "update",
+      conn
+    );
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -72,7 +86,12 @@ HoursDao.deleteHour = async (employeeId) => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    return await db.query("DELETE FROM hours WHERE employeeId = ?", employeeId, "delete", conn);
+    return await db.query(
+      "DELETE FROM hours WHERE employeeId = ?",
+      employeeId,
+      "delete",
+      conn
+    );
   } catch (e) {
     throw new Error(e);
   } finally {

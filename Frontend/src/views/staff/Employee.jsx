@@ -21,16 +21,16 @@ import {
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 
-import { getEmployeeById } from "../../api/getEmployeeById";
-import { getHoursWorked } from "../../api/getHoursWorked";
-import { updateEmployeeById } from "../../api/updateEmployeeById";
-import { addHours } from "../../api/addHours";
-import CurrentDate from "../../components/CurrentDate";
-import { calculateTotalHours } from "../../components/CalculatedTotalHours";
-import CreateEmployeePDFButton from "../../components/CreateEmployeePDFButton";
+import { getEmployeeById } from "../../api/employeeApis/getEmployeeById";
+import { getHoursWorked } from "../../api/hoursApis/getHoursWorked";
+import { updateEmployeeById } from "../../api/employeeApis/updateEmployeeById";
+import {handleSubmitHours } from "../../api/hoursApis/handleSubmitHours";
+import CurrentDate from "../../components/generalComponents/CurrentDate";
+import { calculateTotalHours } from "../../components/hourComponents/CalculatedTotalHours";
+import CreateEmployeePDFButton from "../../components/employeeComponents/CreateEmployeePDFButton";
 import toast, { Toaster } from "react-hot-toast";
-import { ValidationSchemaHours } from "../../forms/Trabajadores/trabajador/ValidationSchemaHours";
-import { ValidationSchemaEmployee } from "../../forms/Trabajadores/trabajador/ValidationSchemaEmployee";
+import { ValidationSchemaHours } from "./trabajador/ValidationSchemaHours";
+import { ValidationSchemaEmployee } from "./trabajador/ValidationSchemaEmployee";
 
 export default function Employee() {
   const { employeeId } = useParams();
@@ -93,7 +93,6 @@ export default function Employee() {
       }));
       setHoursWorked(sanitizedHours);
     } catch (error) {
-      console.log("Failed to fetch hours worked", error);
       setHoursWorked([]);
     }
   };
@@ -239,12 +238,10 @@ export default function Employee() {
         }}
         validationSchema={ValidationSchemaHours}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log("Enviando valores desde el formulario:", values);
           setSubmitting(false);
 
           try {
-            console.log("Enviando valores desde el formulario:", values);
-            await addHours(employeeId, {
+            await handleSubmitHours (employeeId, {
               date: new Date().toISOString().split("T")[0],
               regularHours: values.regularHours,
               regularMinutes: values.regularMinutes,

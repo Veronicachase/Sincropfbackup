@@ -1,6 +1,6 @@
 import { TextField, Box, Typography, Button } from "@mui/material";
 import { useFormik } from "formik";
-import { LoginFormSchema } from "../../forms/LoginAndRegister/LoginFormSchema";
+import { LoginFormSchema } from "./LoginRegisterSchemaAndInitialValues/LoginFormSchema";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import "../../assets/styles/estilosGenerales.css";

@@ -1,7 +1,7 @@
 
 import { Box, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { MenuOptionsList } from "../../components/MenuOptionsList";
+import { MenuOptionsList } from "../../components/generalComponents/MenuOptionsList";
 import { useAuthContext } from "../../context/AuthContext";
 import "./home.css";
 

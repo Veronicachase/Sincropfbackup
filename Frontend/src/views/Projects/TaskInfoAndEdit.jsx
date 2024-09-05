@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import { CreateTaskFormSchema } from "./TasksSchemaAndInitialValues/CreateTaskFormSchema";
+import { getTaskById } from "../../api/projectsAndTaskApis/getTaskById";
+import { updateTaskById } from "../../api/projectsAndTaskApis/updateTaskById";
+import IconColors from "../../components/generalComponents/IconColors";
+import { getEmployees } from "../../api/employeeApis/getEmployees";
+import { initialValues } from "./TasksSchemaAndInitialValues/InitialValues";
+import { capitalizeFirstLetter } from "../../components/generalComponents/CapitalizedFirstLetter";
+import toast from "react-hot-toast";
 import {
   Box,
   Button,
@@ -12,15 +21,6 @@ import {
   InputLabel,
   useMediaQuery,
 } from "@mui/material";
-import { Formik, Form, Field } from "formik";
-import { CreateTaskFormSchema } from "../../forms/SectionTasks/CreateTaskFormSchema";
-import { getTaskById } from "../../api/getTaskById";
-import { updateTaskById } from "../../api/updateTaskById";
-import IconColors from "../../components/IconColors";
-import { getEmployees } from "../../api/getEmployees";
-import toast from "react-hot-toast";
-import { initialValues } from "../../forms/SectionTasks/InitialValues";
-import { capitalizeFirstLetter } from "../../components/CapitalizedFirstLetter";
 
 export default function TaskInfoAndEdit() {
   const { taskId } = useParams();
@@ -56,9 +56,9 @@ export default function TaskInfoAndEdit() {
     fetchData();
   }, [taskId]);
 
-  const handleFileUpload = (event, setImages, existingImages=[]) => {
+  const handleFileUpload = (event, setImages, existingImages = []) => {
     const files = Array.from(event.target.files);
-    console.log('existingImages:', existingImages);
+
     setImages(existingImages.concat(files));
   };
   const handleImageDelete = (index, setImages, images) => {
@@ -67,7 +67,6 @@ export default function TaskInfoAndEdit() {
   };
 
   const handleSubmit = async (values, actions) => {
-    console.log("Valores antes de enviar:", values);
     const formData = new FormData();
 
     // Añadir campos de texto
@@ -89,7 +88,7 @@ export default function TaskInfoAndEdit() {
     });
 
     formData.forEach((value, key) => {
-      console.log(`${key}:`, value);
+      `${key}:`, value;
     });
 
     try {
@@ -254,7 +253,7 @@ export default function TaskInfoAndEdit() {
                       type="file"
                       name="prevImages"
                       onChange={(e) =>
-                      handleFileUpload(e, setPrevImages, prevImages)
+                        handleFileUpload(e, setPrevImages, prevImages)
                       }
                       multiple
                       style={{
@@ -300,7 +299,7 @@ export default function TaskInfoAndEdit() {
                       type="file"
                       name="finalImages"
                       onChange={(e) =>
-                      handleFileUpload(e, setFinalImages, finalImages)
+                        handleFileUpload(e, setFinalImages, finalImages)
                       }
                       multiple
                       style={{

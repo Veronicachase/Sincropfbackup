@@ -1,13 +1,12 @@
 import { Formik, Form } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { initialValues as defaultInitialValues } from "../../forms/Proyectos/CrearProyectoInitialValues";
-import { NewProjectFormSchema } from "../../forms/Proyectos/NewProjectFormSchema";
-import { getProjectById } from "../../api/getProjectById";
-import { updateProjectById } from "../../api/updateProjectById";
-import { getLabel } from "../../components/getLabel";
+import { initialValues as defaultInitialValues } from "./ProyectsSchemaAndInitialValues/CrearProyectoInitialValues";
+import { NewProjectFormSchema } from "./ProyectsSchemaAndInitialValues/NewProjectFormSchema";
+import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
+import { updateProjectById } from "../../api/projectsAndTaskApis/updateProjectById";
+import { getLabel } from "../../components/generalComponents/getLabel";
 import toast from "react-hot-toast";
-import MapView from "../../components/MapView";
 
 import {
   Button,
@@ -77,7 +76,6 @@ export default function ProjectEditInfo() {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "sections") {
-          console.log("hola");
         } else if (values[key] instanceof File) {
           formData.append(key, values[key], values[key].name);
         } else {
@@ -160,13 +158,7 @@ export default function ProjectEditInfo() {
                         onChange={(e) => setFieldValue(key, e.target.value)}
                       />
                     )}
-                  {key === "map" && (
-                    <Grid item xs={12}>
-                      <Box sx={{ height: 400, width: "100%", marginTop: 2 }}>
-                        <MapView setFieldValue={setFieldValue} />
-                      </Box>
-                    </Grid>
-                  )}
+                  
                   {key === "typeOfWork" && (
                     <FormControl
                       fullWidth
@@ -184,12 +176,8 @@ export default function ProjectEditInfo() {
                       >
                         <MenuItem value="finishings">Repasos</MenuItem>
                         <MenuItem value="construction">Construcción</MenuItem>
-                        <MenuItem value="installations">
-                          Instalaciones
-                        </MenuItem>
-                        <MenuItem value="solarPanels">
-                          Paneles solares
-                        </MenuItem>
+                        <MenuItem value="installations">Instalaciones</MenuItem>
+                        <MenuItem value="solarPanels">Paneles solares</MenuItem>
                         <MenuItem value="other">Otras</MenuItem>
                       </Select>
                     </FormControl>
@@ -235,22 +223,22 @@ export default function ProjectEditInfo() {
                 marginTop: 2,
                 display: "flex",
                 justifyContent: "center",
-                flexDirection: "column", 
+                flexDirection: "column",
                 marginBottom: { xs: "2em", sm: "0" },
-                boxShadow:"0 2px 2px #ccc"
+                boxShadow: "0 2px 2px #ccc",
               }}
             >
-            <Box>
-            {imageUrls && (
-              <CardMedia
-                component="img"
-                height="auto"
-                image={imageUrls}
-                alt="Imagen del Proyecto"
-              />
-            )}
-          </Box>
-        
+              <Box>
+                {imageUrls && (
+                  <CardMedia
+                    component="img"
+                    height="auto"
+                    image={imageUrls}
+                    alt="Imagen del Proyecto"
+                  />
+                )}
+              </Box>
+
               <Button
                 variant="outlined"
                 component="label"

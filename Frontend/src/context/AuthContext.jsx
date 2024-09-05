@@ -21,23 +21,22 @@ export default function AuthContextProvider({ children }) {
   async function login(email, password) {
     try {
       const response = await fetch(`${apiUrl}/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      console.log('Respuesta del servidor:', data);
+
       if (response.ok) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem("token", data.token);
         setAuth(data.user);
         setErrorMessage("");
-        navigate("/home"); 
-        
+        navigate("/home");
       } else {
-        throw new Error(data.message || 'Error de autenticación');
+        throw new Error(data.message || "Error de autenticación");
       }
     } catch (error) {
-      console.error('Error al intentar iniciar sesión:', error);
+      console.error("Error al intentar iniciar sesión:", error);
       setErrorMessage(error.message);
       setAuth(null);
     }
@@ -46,27 +45,27 @@ export default function AuthContextProvider({ children }) {
   // Función para cerrar sesión
   async function logout() {
     try {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       setAuth(null);
-      navigate("/login"); 
+      navigate("/login");
     } catch (error) {
-      console.error('Error al intentar cerrar sesión:', error);
+      console.error("Error al intentar cerrar sesión:", error);
       setErrorMessage(error.message);
     }
   }
 
   // Función para verificar la autenticación
   async function checkAuth() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       return;
     }
     try {
       const response = await fetch(`${apiUrl}/users/verify-token`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
@@ -76,7 +75,7 @@ export default function AuthContextProvider({ children }) {
         logout();
       }
     } catch (error) {
-      console.error('Error verifying token:', error);
+      console.error("Error verifying token:", error);
       logout();
     }
   }
@@ -92,7 +91,3 @@ export default function AuthContextProvider({ children }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-
-
-

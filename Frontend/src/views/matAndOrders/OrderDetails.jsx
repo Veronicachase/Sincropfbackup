@@ -13,12 +13,12 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import CustomTextField from "../../ui/CustomTextField";
-import { getOrderById } from "../../api/getOrderById";
-import { updateOrder } from "../../api/updateOrder";
-import { getAllProjects } from "../../api/getAllProjects";
-import { InitialValues } from "../../forms/Orders/InitialValues"; 
-import { OrderFormSchema } from "../../forms/Orders/OrdersFormSchema";
+import CustomTextField from "../../components/generalComponents/CustomTextField";
+import { getOrderById } from "../../api/orderApis/getOrderById";
+import { updateOrder } from "../../api/orderApis/updateOrder";
+import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
+import { InitialValues } from "./ordersSchemaAndInitialValues/InitialValues"; 
+import { OrderFormSchema } from "./ordersSchemaAndInitialValues/OrdersFormSchema";
 import toast from "react-hot-toast";
 
 export default function OrderDetails() {

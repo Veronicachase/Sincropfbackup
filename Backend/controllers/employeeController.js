@@ -15,7 +15,7 @@ const getEmployeeById = async (req, res) => {
 const getAllEmployees = async (req, res) => {
   try {
       const employees = await employeeDao.getAllEmployees();
-      console.log(employees);
+     
       if (employees) {
           res.json(employees);
       } else {

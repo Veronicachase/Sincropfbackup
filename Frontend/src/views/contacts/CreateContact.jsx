@@ -1,17 +1,10 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
-import {
-  Grid,
-  Box,
-  Button,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
-import { NewContactFormSchema } from "../../forms/Contactos/NewContactSchema";
-import { handleSubmitContact } from "../../api/handleSubmitContact";
+import { Grid, Box, Button, MenuItem, Select, TextField } from "@mui/material";
+import { NewContactFormSchema } from "./ContactsSchemaAndInitialValues/NewContactSchema";
+import { handleSubmitContact } from "../../api/contactApi/handleSubmitContact";
 import toast, { Toaster } from "react-hot-toast";
-import { initialValues } from "../../forms/Contactos/InitialValues";
+import { initialValues } from "./ContactsSchemaAndInitialValues/InitialValues"
 export default function CreateContact() {
   const navigate = useNavigate();
 
@@ -22,7 +15,6 @@ export default function CreateContact() {
       onSubmit={(values, actions) => {
         handleSubmitContact(values)
           .then(() => {
-            console.log("estos son los valores enviados", values);
             actions.setSubmitting(false);
             actions.resetForm();
             toast.success("Contacto creado correctamente!");

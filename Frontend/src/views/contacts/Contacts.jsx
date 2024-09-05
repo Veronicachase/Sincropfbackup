@@ -1,3 +1,13 @@
+
+
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAllContacts } from "../../api/contactApi/getAllContacts";
+import { ContactMapping } from "../../components/contactComponents/ContactMapping";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   Box,
   Typography,
@@ -9,14 +19,7 @@ import {
   Button,
   Paper,
 } from "@mui/material";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllContacts } from "../../api/getAllContacts";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { ContactMapping } from "../../components/ContactMapping";
+
 
 export default function Contacts() {
   const [open, setOpen] = useState({});
@@ -26,14 +29,12 @@ export default function Contacts() {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        console.log("Llamando a getAllContacts desde el frontend");
         const allContacts = await getAllContacts();
-        console.log("Contactos cargados correctamente:", allContacts);
 
         // Agrupar contactos por categoría
         const groupedContacts = allContacts.reduce((acc, contact) => {
           const category = contact.category;
-          console.log(category)
+
           if (!acc[category]) {
             acc[category] = [];
           }
@@ -86,68 +87,76 @@ export default function Contacts() {
           {Object.keys(data).length === 0 ? (
             <Typography>No hay contactos disponibles</Typography>
           ) : (
-            Object.keys(data).sort().map((category) => (
-              <Paper
-                key={category}
-                sx={{
-                  marginBottom: 2,
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  transition: "transform 0.3s, box-shadow 0.3s",
-                  ":hover": {
-                    transform: "scale(1.01)",
-                    boxShadow: 3,
-                  },
-                }}
-              >
-                <Box
-                  onClick={() => toggleCollapse(category)}
+            Object.keys(data)
+              .sort()
+              .map((category) => (
+                <Paper
+                  key={category}
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "1em",
-                    cursor: "pointer",
-                    backgroundColor: "#f0f0f0",
+                    marginBottom: 2,
+                    backgroundColor: "#fff",
                     borderRadius: "10px",
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    ":hover": {
+                      transform: "scale(1.01)",
+                      boxShadow: 3,
+                    },
                   }}
                 >
-                  <Typography variant="h6">
-                    {ContactMapping[category]?.name || category}
-                  </Typography>
-                  <IconButton>
-                    {open[category] ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                  </IconButton>
-                </Box>
-                <Collapse in={open[category]} timeout="auto" unmountOnExit>
-                  <List>
-                    {data[category].map((contactItem) => (
-                      <ListItem
-                        key={contactItem.contactId}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "1em",
-                          ":hover": {
-                            backgroundColor: "#e0f7fa",
-                          },
-                        }}
-                      >
-                        <ListItemText primary={contactItem.contactName} />
-                        <IconButton
-                          onClick={() =>
-                            navigate(`/contact-details/${contactItem.contactId}`)
-                          }
+                  <Box
+                    onClick={() => toggleCollapse(category)}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "1em",
+                      cursor: "pointer",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <Typography variant="h6">
+                      {ContactMapping[category]?.name || category}
+                    </Typography>
+                    <IconButton>
+                      {open[category] ? (
+                        <ArrowDropUpIcon />
+                      ) : (
+                        <ArrowDropDownIcon />
+                      )}
+                    </IconButton>
+                  </Box>
+                  <Collapse in={open[category]} timeout="auto" unmountOnExit>
+                    <List>
+                      {data[category].map((contactItem) => (
+                        <ListItem
+                          key={contactItem.contactId}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: "1em",
+                            ":hover": {
+                              backgroundColor: "#e0f7fa",
+                            },
+                          }}
                         >
-                          <ArrowForwardIosIcon />
-                        </IconButton>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
-              </Paper>
-            ))
+                          <ListItemText primary={contactItem.contactName} />
+                          <IconButton
+                            onClick={() =>
+                              navigate(
+                                `/contact-details/${contactItem.contactId}`
+                              )
+                            }
+                          >
+                            <ArrowForwardIosIcon />
+                          </IconButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </Paper>
+              ))
           )}
         </Box>
       </Box>

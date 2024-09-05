@@ -7,13 +7,12 @@ const addTask = async (req, res) => {
   const sectionKey = req.params.sectionKey;
   const taskData = req.body;
   taskData.userId = userId;
-  const prevImagesUrls = [];
-  const finalImagesUrls = [];
-
+  const prevImagesUrls = taskData.prevImages || [];
+  const finalImagesUrls = taskData.finalImages || [];
   if (!taskData.status) {
     taskData.status = "noIniciado";
   }
-  console.log("Datos de la tarea recibidos:", taskData);
+
   try {
     // Manejo de prevImages
     if (req.files && req.files.prevImages) {
@@ -22,7 +21,7 @@ const addTask = async (req, res) => {
           upload_preset: "presets",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
-        console.log("Archivos recibidos:", req.files);
+
         prevImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.prevImages = prevImagesUrls;
@@ -35,14 +34,14 @@ const addTask = async (req, res) => {
           upload_preset: "presets",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
-        console.log("Archivos recibidos:", req.files);
+
         finalImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.finalImages = finalImagesUrls;
     }
 
     const taskId = await taskDao.addTask(sectionKey, taskData);
-    console.log("task id", taskId);
+
     res.status(201).json({ message: "Tarea creada exitosamente", taskId });
   } catch (error) {
     console.error("Error al agregar la tarea:", error.message);
@@ -109,8 +108,10 @@ const updateTask = async (req, res) => {
       return res.status(400).json({ error: "sectionKey cannot be null" });
     }
 
-    const prevImagesUrls = [];
-    const finalImagesUrls = [];
+    const existingTask = await taskDao.getTaskById(taskId, userId);
+
+    const prevImagesUrls = existingTask.prevImages || [];
+    const finalImagesUrls = existingTask.finalImages || [];
 
     if (!taskData.status) {
       taskData.status = "noIniciado";
@@ -126,8 +127,10 @@ const updateTask = async (req, res) => {
         prevImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.prevImages = prevImagesUrls;
-    }else if (taskData.prevImages) {
-      taskData.prevImages = Array.isArray(taskData.prevImages) ? taskData.prevImages : [taskData.prevImages];
+    } else if (taskData.prevImages) {
+      taskData.prevImages = Array.isArray(taskData.prevImages)
+        ? taskData.prevImages
+        : [taskData.prevImages];
     } else {
       taskData.prevImages = [];
     }
@@ -142,8 +145,10 @@ const updateTask = async (req, res) => {
         finalImagesUrls.push(uploadedImage.secure_url);
       }
       taskData.finalImages = finalImagesUrls;
-    }else if (taskData.finalImages) {
-      taskData.finalImages = Array.isArray(taskData.finalImages) ? taskData.finalImages : [taskData.finalImages];
+    } else if (taskData.finalImages) {
+      taskData.finalImages = Array.isArray(taskData.finalImages)
+        ? taskData.finalImages
+        : [taskData.finalImages];
     } else {
       taskData.finalImages = [];
     }

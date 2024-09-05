@@ -6,7 +6,7 @@ const addOrder = async (req, res) => {
     try {
       const userId = req.user.userId;
       const { image, ...orderData } = req.body;
-      console.log("Datos recibidos en el servidor controller:", orderData);
+      
       if (image) {
         const uploadedImage = await uploadImage(image);
         orderData.image = uploadedImage.secure_url;
@@ -25,7 +25,7 @@ const addOrder = async (req, res) => {
         image: orderData.image || null,
        
       };
-      console.log("Datos completos a insertar:", completeOrderData);
+   
       const orderId = await orderDao.addOrder(orderData, userId);
       res.status(201).json({ message: "Pedido de orden creado exitosamente", orderId });
     } catch (error) {

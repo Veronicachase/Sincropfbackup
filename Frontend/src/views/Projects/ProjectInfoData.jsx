@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProjectById } from "../../api/getProjectById";
-import { getTaskBySection } from "../../api/getTaskBySection";
-import { sectionMapping } from "../../components/SectionMappingIcons";
-import MapView from "../../components/MapView";
+import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
+import { getTaskBySection } from "../../api/projectsAndTaskApis/getTaskBySection";
+import { sectionMapping } from "../../components/proyectComponets/SectionMappingIcons";
+import CreatePDFButtonPData from "../../components/pdfComponents/CreatePDFButtonData";
+
 import {
   Box,
   Typography,
@@ -15,7 +16,7 @@ import {
   CardActionArea,
   useMediaQuery,
 } from "@mui/material";
-import CreatePDFButtonPData from "../../components/CreatePDFButtonData";
+
 
 export default function ProjectinfoData() {
   const { projectId } = useParams();

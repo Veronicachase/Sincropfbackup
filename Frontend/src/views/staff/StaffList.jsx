@@ -1,7 +1,7 @@
 //Lista de todos los trabajadores por categoría.
 
 import { useState, useEffect } from "react";
-import { getEmployees } from "../../api/getEmployees";
+import { getEmployees } from "../../api/employeeApis/getEmployees";
 import {
   Box,
   Typography,
@@ -33,7 +33,6 @@ export default function EmployeeList() {
         setEmployees(fetchedEmployees);
         setFilteredEmployees(fetchedEmployees);
       } catch (error) {
-        console.log("Failed to fetch employees", error);
         setEmployees([]);
         setFilteredEmployees([]);
       }
@@ -51,7 +50,12 @@ export default function EmployeeList() {
 
   return (
     <>
-      <Box marginBottom={5} display="flex" justifyContent="center" marginTop="3em">
+      <Box
+        marginBottom={5}
+        display="flex"
+        justifyContent="center"
+        marginTop="3em"
+      >
         <Button
           variant="contained"
           sx={{
@@ -73,7 +77,12 @@ export default function EmployeeList() {
       </Box>
 
       <Box display="flex" justifyContent="center" width="100%">
-        <Box width="80%" display="flex" flexDirection="column" alignItems="center">
+        <Box
+          width="80%"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
           <FormControl fullWidth sx={{ marginBottom: "2em" }}>
             <Box
               sx={{
@@ -131,50 +140,54 @@ export default function EmployeeList() {
           <Typography variant="h6" sx={{ marginBottom: "1em" }}>
             Resultados:
           </Typography>
-          <List sx={{ width: "100%", backgroundColor: "#fff", borderRadius: "10px", boxShadow: 1 }}>
-            {filteredEmployees.sort((a,b)=>a.name.localeCompare(b.name)).map((employee) => (
-              <ListItem
-                key={employee.employeeId}
-                sx={{
-                  cursor: "pointer",
-                  marginBottom: "1em",
-                  borderBottom: "1px solid #E9E5E5",
-                  transition: "background-color 0.3s, transform 0.3s",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                    transform: "scale(1.01)",
-                  },
-                }}
-                onClick={() => handleEmployeeClick(employee.employeeId)}
-              >
-                <ListItemText
-                  primary={
-                    selectedFilter === "name"
-                      ? employee.name
-                      : selectedFilter === "position"
-                      ? `${employee.position} - ${employee.name}`
-                      : selectedFilter === "project"
-                      ? `${employee.project} - ${employee.name} (${employee.position})`
-                      : `${employee.name} - ${employee.position} (${employee.projectName})`
-                  }
-                />
-                <IconButton
-                  edge="end"
-                  aria-label="details"
+          <List
+            sx={{
+              width: "100%",
+              backgroundColor: "#fff",
+              borderRadius: "10px",
+              boxShadow: 1,
+            }}
+          >
+            {filteredEmployees
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((employee) => (
+                <ListItem
+                  key={employee.employeeId}
+                  sx={{
+                    cursor: "pointer",
+                    marginBottom: "1em",
+                    borderBottom: "1px solid #E9E5E5",
+                    transition: "background-color 0.3s, transform 0.3s",
+                    ":hover": {
+                      backgroundColor: "#f0f0f0",
+                      transform: "scale(1.01)",
+                    },
+                  }}
                   onClick={() => handleEmployeeClick(employee.employeeId)}
                 >
-                  <VisibilityIcon sx={{ color: "#1976d2" }} />
-                </IconButton>
-              </ListItem>
-            ))}
+                  <ListItemText
+                    primary={
+                      selectedFilter === "name"
+                        ? employee.name
+                        : selectedFilter === "position"
+                        ? `${employee.position} - ${employee.name}`
+                        : selectedFilter === "project"
+                        ? `${employee.project} - ${employee.name} (${employee.position})`
+                        : `${employee.name} - ${employee.position} (${employee.projectName})`
+                    }
+                  />
+                  <IconButton
+                    edge="end"
+                    aria-label="details"
+                    onClick={() => handleEmployeeClick(employee.employeeId)}
+                  >
+                    <VisibilityIcon sx={{ color: "#1976d2" }} />
+                  </IconButton>
+                </ListItem>
+              ))}
           </List>
         </Box>
       </Box>
     </>
   );
 }
-
-
-
-
-
