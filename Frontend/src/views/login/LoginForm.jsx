@@ -1,8 +1,10 @@
-import { TextField, Box, Typography, Button } from "@mui/material";
+
 import { useFormik } from "formik";
 import { LoginFormSchema } from "./LoginRegisterSchemaAndInitialValues/LoginFormSchema";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import "../../assets/styles/estilosGenerales.css";
 
 const LoginForm = () => {
@@ -26,171 +28,66 @@ const LoginForm = () => {
   });
 
   return (
-    <Box>
-      <Box
-        sx={{
-          width: "80%",
-          maxWidth: "700px",
-          height: "60vh",
-          display: "flex",
-          flexDirection: "column",
-          margin: "7em auto",
-          padding: "2em",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: 3,
-          borderRadius: "20px",
-          cursor: "pointer",
-        }}
-      >
-        <Typography
-          sx={{
-            color: "#1976d2",
-            caretColor: "transparent",
-            cursor: "pointer",
-          }}
-          mb={3}
-          variant="h4"
-        >
-          Iniciar Sesión
-        </Typography>
+    <div className="container d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div className="card shadow" style={{ maxWidth: '400px', width: '100%', padding: '2em' }}>
+        <h2 className="text-primary text-center mb-4">Iniciar Sesión</h2>
 
-        <form onSubmit={formik.handleSubmit} style={{ width: "100%" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <TextField
+        <form onSubmit={formik.handleSubmit}>
+          <div className="form-group mb-3">
+            <label htmlFor="email">Ingrese su email</label>
+            <input
               type="email"
-              label="Ingrese su email"
-              variant="outlined"
+              id="email"
+              name="email"
+              className={`form-control ${formik.errors.email && formik.touched.email ? 'is-invalid' : ''}`}
               value={formik.values.email}
-              onChange={formik.handleChange("email")}
-              onBlur={formik.handleBlur("email")}
-              className={
-                formik.errors.email && formik.touched.email ? "input-error" : ""
-              }
-              InputProps={{ style: { borderRadius: 10 } }}
-              sx={{
-                marginBottom: "1.5em",
-                width: "100%",
-                maxWidth: "400px",
-                backgroundColor: "#fff",
-                caretColor: "transparent",
-                cursor: "pointer",
-              }}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
             {formik.errors.email && formik.touched.email && (
-              <Typography
-                variant="body2"
-                className="error"
-                sx={{ color: "red", marginBottom: "1em" }}
-              >
-                {formik.errors.email}
-              </Typography>
+              <div className="invalid-feedback">{formik.errors.email}</div>
             )}
+          </div>
 
-            <TextField
+          <div className="form-group mb-3">
+            <label htmlFor="password">Ingrese su contraseña</label>
+            <input
               type="password"
-              label="Ingrese su contraseña"
-              variant="outlined"
+              id="password"
+              name="password"
+              className={`form-control ${formik.errors.password && formik.touched.password ? 'is-invalid' : ''}`}
               value={formik.values.password}
-              onChange={formik.handleChange("password")}
-              onBlur={formik.handleBlur("password")}
-              className={
-                formik.errors.password && formik.touched.password
-                  ? "input-error"
-                  : ""
-              }
-              InputProps={{ style: { borderRadius: 10 } }}
-              sx={{
-                marginBottom: "1.5em",
-                width: "100%",
-                maxWidth: "400px",
-                backgroundColor: "#fff",
-              }}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
             {formik.errors.password && formik.touched.password && (
-              <Typography
-                variant="body2"
-                className="error"
-                sx={{ color: "red", marginBottom: "1em" }}
-              >
-                {formik.errors.password}
-              </Typography>
+              <div className="invalid-feedback">{formik.errors.password}</div>
             )}
+          </div>
 
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#1976d2",
-                marginBottom: "1.5em",
-                padding: "0.5em 2em",
-                borderRadius: "10px",
-                cursor: "pointer",
-                transition: "background-color 0.3s, transform 0.3s",
-                "&:hover": {
-                  backgroundColor: "#1565c0",
-                  transform: "scale(1.05)",
-                },
-                "&:active": {
-                  backgroundColor: "#A9A9A9",
-                },
-              }}
-              disabled={formik.isSubmitting}
-            >
+          <div className="d-grid mb-3">
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
               Iniciar sesión
-            </Button>
+            </button>
+          </div>
 
-            <Typography
-              variant="body2"
-              sx={{
-                marginBottom: "1em",
-                caretColor: "transparent",
-                cursor: "pointer",
-              }}
-            >
+          <div className="text-center">
+            <p className="mb-1">
               ¿No tienes una cuenta?
-              <Link
-                to="/register"
-                style={{
-                  color: "#1976d2",
-                  marginLeft: "0.5em",
-                  cursor: "pointer",
-                }}
-              >
+              <Link to="/register" className="text-primary ms-1">
                 Regístrate
               </Link>
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                marginBottom: "0.5em",
-                caretColor: "transparent",
-                cursor: "pointer",
-              }}
-            >
+            </p>
+            <p className="mb-1">
               ¿Olvidaste tu contraseña?
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ caretColor: "transparent", cursor: "pointer" }}
-            >
-              <Link
-                to="/forgot-password"
-                style={{ color: "#1976d2", cursor: "pointer" }}
-              >
+              <Link to="/forgot-password" className="text-primary ms-1">
                 Haz click aquí para recuperarla
               </Link>
-            </Typography>
-          </Box>
+            </p>
+          </div>
         </form>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

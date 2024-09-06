@@ -20,6 +20,7 @@
     "@mui/material": "^5.16.0",
     "@mui/x-date-pickers": "^7.9.0",
     "@react-google-maps/api": "^2.19.3",
+    "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",
     "dom-to-image-more": "^3.3.0",
     "formik": "^2.4.6",

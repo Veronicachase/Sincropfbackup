@@ -2,25 +2,28 @@ import toast from 'react-hot-toast';
 const apiUrl = import.meta.env.VITE_API_URL;
 export const handleSubmitRegister = async (userData, actions, navigate) => {
   try {
-    const token = localStorage.getItem('token');
+
     const response = await fetch(`${apiUrl}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`
+        
       },
       body: JSON.stringify(userData),
     });
-    const data = await response.json();
+    
     if (response.ok) {
       toast.success('Te has registrado correctamente, inicia sesión para entrar!');
       navigate("/login");
     } else {
-      console.error("Error en el registro", data);
-      actions.setFieldError(
-        "general",
-        data.message || "Error en el registro"
-      );
+      const data = await response.json();
+      if (response.status === 409) {
+    
+        actions.setFieldError("email", "Este email ya está registrado. Usa otro o inicia sesión.");
+      } else {
+        console.error("Error en el registro", data);
+        actions.setFieldError("general", data.message || "Error en el registro");
+      }
     }
     actions.setSubmitting(false);
     actions.resetForm();

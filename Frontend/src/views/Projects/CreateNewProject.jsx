@@ -1,24 +1,11 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
+import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { initialValues } from "./ProyectsSchemaAndInitialValues/CrearProyectoInitialValues";
 import { NewProjectFormSchema } from "./ProyectsSchemaAndInitialValues/NewProjectFormSchema";
 import { handleSubmitProject } from "../../api/projectsAndTaskApis/handlerSubmitProject";
 import toast, { Toaster } from "react-hot-toast";
-import {
-  Container,
-  Box,
-  Grid,
-  TextField,
-  Button,
-  MenuItem,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import {
-  ProjectTextField,
-  ProjectTextField2,
-} from "../../configs/projectTextField";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function CreateNewProject() {
   const navigate = useNavigate();
@@ -38,21 +25,6 @@ function CreateNewProject() {
           .catch((error) => {
             console.error("Error en el proceso:", error);
             actions.setSubmitting(false);
-            actions.setTouched({
-              typeOfWork: true,
-              constructionType: true,
-              hiringCompany: true,
-              projectName: true,
-              identifier: true,
-              addressDescription: true,
-              block: true,
-              unit: true,
-              zipCode: true,
-              province: true,
-              map: true,
-              projectDescription: true,
-              image: true,
-            });
             toast.error("Error al crear el proyecto");
           });
       }}
@@ -66,144 +38,208 @@ function CreateNewProject() {
         touched,
       }) => (
         <Form>
-          <Container
-            maxWidth="md"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              marginTop: "2em",
-            }}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                maxWidth: 900,
-                marginTop: "3em",
-                paddingLeft: "1em",
-              }}
-            >
-              <Grid container spacing={3} alignItems="center">
-                <Grid container spacing={2}>
-                  {ProjectTextField.map((field) => (
-                    <Grid
-                      key={field.name}
-                      item
-                      xs={12}
-                      sm={field.name === "addressDescription" ? 12 : 6}
+          <div className="container mt-5">
+            <div className="row justify-content-center">
+              <div className="col-md-8">
+                <div className="card shadow p-4">
+                  <h4 className="text-center mb-4">Crear Proyecto</h4>
+
+                  {/* Campos del formulario */}
+                  <div className="mb-3 text-start">
+                    <label htmlFor="projectName" className="form-label ms-2">Nombre del Proyecto</label>
+                    <Field
+                      type="text"
+                      name="projectName"
+                      className={`form-control ${touched.projectName && errors.projectName ? "is-invalid" : ""}`}
+                      placeholder="Nombre del proyecto"
+                      onChange={handleChange}
+                      value={values.projectName}
+                    />
+                    {touched.projectName && errors.projectName && (
+                      <div className="invalid-feedback">{errors.projectName}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="hiringCompany" className="form-label ms-2">Empresa Contratante</label>
+                    <Field
+                      type="text"
+                      name="hiringCompany"
+                      className={`form-control ${touched.hiringCompany && errors.hiringCompany ? "is-invalid" : ""}`}
+                      placeholder="Empresa Contratante"
+                      onChange={handleChange}
+                      value={values.hiringCompany}
+                    />
+                    {touched.hiringCompany && errors.hiringCompany && (
+                      <div className="invalid-feedback">{errors.hiringCompany}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="block" className="form-label ms-2">Bloque</label>
+                    <Field
+                      type="text"
+                      name="block"
+                      className={`form-control ${touched.block && errors.block ? "is-invalid" : ""}`}
+                      placeholder="Bloque"
+                      onChange={handleChange}
+                      value={values.block}
+                    />
+                    {touched.block && errors.block && (
+                      <div className="invalid-feedback">{errors.block}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="unit" className="form-label ms-2">Unidad</label>
+                    <Field
+                      type="text"
+                      name="unit"
+                      className={`form-control ${touched.unit && errors.unit ? "is-invalid" : ""}`}
+                      placeholder="Unidad"
+                      onChange={handleChange}
+                      value={values.unit}
+                    />
+                    {touched.unit && errors.unit && (
+                      <div className="invalid-feedback">{errors.unit}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="addressDescription" className="form-label ms-2">Descripción de la Dirección</label>
+                    <Field
+                      type="text"
+                      name="addressDescription"
+                      className={`form-control ${touched.addressDescription && errors.addressDescription ? "is-invalid" : ""}`}
+                      placeholder="Dirección del proyecto"
+                      onChange={handleChange}
+                      value={values.addressDescription}
+                    />
+                    {touched.addressDescription && errors.addressDescription && (
+                      <div className="invalid-feedback">{errors.addressDescription}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="zipCode" className="form-label ms-2">Código Postal</label>
+                    <Field
+                      type="text"
+                      name="zipCode"
+                      className={`form-control ${touched.zipCode && errors.zipCode ? "is-invalid" : ""}`}
+                      placeholder="Código Postal"
+                      onChange={handleChange}
+                      value={values.zipCode}
+                    />
+                    {touched.zipCode && errors.zipCode && (
+                      <div className="invalid-feedback">{errors.zipCode}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="province" className="form-label ms-2">Provincia</label>
+                    <Field
+                      type="text"
+                      name="province"
+                      className={`form-control ${touched.province && errors.province ? "is-invalid" : ""}`}
+                      placeholder="Provincia"
+                      onChange={handleChange}
+                      value={values.province}
+                    />
+                    {touched.province && errors.province && (
+                      <div className="invalid-feedback">{errors.province}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="typeOfWork" className="form-label ms-2">Tipo de Trabajo</label>
+                    <Field
+                      as="select"
+                      name="typeOfWork"
+                      className={`form-select ${touched.typeOfWork && errors.typeOfWork ? "is-invalid" : ""}`}
+                      onChange={handleChange}
+                      value={values.typeOfWork}
                     >
-                      <TextField
-                        name={field.name}
-                        label={field.label}
-                        type={field.type}
-                        value={values[field.name]}
-                        placeholder={field.placeholder}
-                        autoComplete="off"
-                        fullWidth
-                        variant="outlined"
-                        onChange={handleChange}
-                        error={
-                          touched[field.name] && Boolean(errors[field.name])
-                        }
-                        helperText={touched[field.name] && errors[field.name]}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
+                      <option value="">Selecciona un tipo</option>
+                      <option value="construction">Construcción</option>
+                      <option value="finishings">Repasos</option>
+                      <option value="installations">Instalación de equipos</option>
+                      <option value="solarPanels">Instalación de paneles solares</option>
+                      <option value="other">Otra</option>
+                    </Field>
+                    {touched.typeOfWork && errors.typeOfWork && (
+                      <div className="invalid-feedback">{errors.typeOfWork}</div>
+                    )}
+                  </div>
 
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    name="typeOfWork"
-                    value={values.typeOfWork}
-                    onChange={handleChange}
-                    label="Tipo de Trabajo"
-                    fullWidth
-                    variant="outlined"
-                    error={touched.typeOfWork && Boolean(errors.typeOfWork)}
-                    helperText={touched.typeOfWork && errors.typeOfWork}
-                  >
-                    <MenuItem value="">Selecciona un tipo</MenuItem>
-                    <MenuItem value="construction">Construcción</MenuItem>
-                    <MenuItem value="finishings">Repasos</MenuItem>
-                    <MenuItem value="installations">
-                      Instalación de equipos
-                    </MenuItem>
-                    <MenuItem value="solarPanels">
-                      Instalación de paneles solares
-                    </MenuItem>
-                    <MenuItem value="other">Otra</MenuItem>
-                  </TextField>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    name="constructionType"
-                    value={values.constructionType}
-                    onChange={handleChange}
-                    label="Tipo de Construcción"
-                    fullWidth
-                    variant="outlined"
-                    error={
-                      touched.constructionType &&
-                      Boolean(errors.constructionType)
-                    }
-                    helperText={
-                      touched.constructionType && errors.constructionType
-                    }
-                  >
-                    <MenuItem value="">Selecciona un tipo</MenuItem>
-                    <MenuItem value="chalet">Chalet</MenuItem>
-                    <MenuItem value="apartment">Piso</MenuItem>
-                    <MenuItem value="rural">Rural</MenuItem>
-                    <MenuItem value="other">Otra</MenuItem>
-                  </TextField>
-                </Grid>
-
-                <Grid container spacing={2} marginTop={3}>
-                  {ProjectTextField2.map((field) => (
-                    <Grid
-                      key={field.name}
-                      item
-                      xs={12}
-                      sm={
-                        field.name === "projectDescription" ||
-                        field.name === "createTask"
-                          ? 12
-                          : 6
-                      }
+                  <div className="mb-3 text-start">
+                    <label htmlFor="constructionType" className="form-label ms-2">Tipo de Construcción</label>
+                    <Field
+                      as="select"
+                      name="constructionType"
+                      className={`form-select ${touched.constructionType && errors.constructionType ? "is-invalid" : ""}`}
+                      onChange={handleChange}
+                      value={values.constructionType}
                     >
-                      <TextField
-                        name={field.name}
-                        type={field.type}
-                        value={values[field.name]}
-                        label={field.label}
-                        placeholder={field.placeholder}
-                        autoComplete="off"
-                        fullWidth
-                        variant="outlined"
-                        onChange={handleChange}
-                        error={
-                          touched[field.name] && Boolean(errors[field.name])
-                        }
-                        helperText={touched[field.name] && errors[field.name]}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
+                      <option value="">Selecciona un tipo</option>
+                      <option value="chalet">Chalet</option>
+                      <option value="apartment">Piso</option>
+                      <option value="rural">Rural</option>
+                      <option value="other">Otra</option>
+                    </Field>
+                    {touched.constructionType && errors.constructionType && (
+                      <div className="invalid-feedback">{errors.constructionType}</div>
+                    )}
+                  </div>
 
-                <Grid item xs={12} sx={{ textAlign: "center" }}>
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    sx={{ marginTop: 2 }}
-                  >
-                    Agregar Imagen
+                  <div className="mb-3 text-start">
+                    <label htmlFor="startDate" className="form-label ms-2">Fecha de Inicio</label>
+                    <Field
+                      type="date"
+                      name="startDate"
+                      className={`form-control ${touched.startDate && errors.startDate ? "is-invalid" : ""}`}
+                      onChange={handleChange}
+                      value={values.startDate}
+                    />
+                    {touched.startDate && errors.startDate && (
+                      <div className="invalid-feedback">{errors.startDate}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="endDate" className="form-label ms-2">Fecha de Finalización</label>
+                    <Field
+                      type="date"
+                      name="endDate"
+                      className={`form-control ${touched.endDate && errors.endDate ? "is-invalid" : ""}`}
+                      onChange={handleChange}
+                      value={values.endDate}
+                    />
+                    {touched.endDate && errors.endDate && (
+                      <div className="invalid-feedback">{errors.endDate}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3 text-start">
+                    <label htmlFor="projectDescription" className="form-label ms-2">Descripción del Proyecto</label>
+                    <Field
+                      as="textarea"
+                      name="projectDescription"
+                      className={`form-control ${touched.projectDescription && errors.projectDescription ? "is-invalid" : ""}`}
+                      placeholder="Descripción del proyecto"
+                      onChange={handleChange}
+                      value={values.projectDescription}
+                    />
+                    {touched.projectDescription && errors.projectDescription && (
+                      <div className="invalid-feedback">{errors.projectDescription}</div>
+                    )}
+                  </div>
+
+                  {/* Campo para subir imagen */}
+                  <div className="mb-3 text-start">
+                    <label className="form-label ms-2">Agregar Imagen</label>
                     <input
                       type="file"
-                      hidden
+                      className="form-control"
                       onChange={(e) => {
                         const file = e.target.files[0];
                         if (file) {
@@ -211,59 +247,38 @@ function CreateNewProject() {
                         }
                       }}
                     />
-                  </Button>
-                  {values.image && (
-                    <Box
-                      component="img"
-                      src={URL.createObjectURL(values.image)}
-                      alt="Preview"
-                      sx={{ marginTop: 2, maxHeight: 200 }}
-                    />
-                  )}
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography sx={{ textAlign: "left" }} variant="subtitle1">
-                    Indica la ubicación{" "}
-                  </Typography>
-                  <Box id="map" sx={{ height: 400, width: "100%" }}>
-                    <MapView setFieldValue={setFieldValue} />
-                  </Box>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sx={{
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: 8,
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    onClick={() => navigate("/my-projects")}
-                    sx={{ marginTop: 2 }}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    disabled={isSubmitting}
-                    sx={{ marginTop: 2 }}
-                  >
-                    {isSubmitting ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      "Crear Proyecto"
+                    {values.image && (
+                      <img
+                        src={URL.createObjectURL(values.image)}
+                        alt="Preview"
+                        className="img-fluid mt-3"
+                        style={{ maxHeight: "200px" }}
+                      />
                     )}
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </Container>
+                  </div>
+
+                  {/* Botones de acción */}
+                  <div className="d-flex justify-content-center gap-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => navigate("/my-projects")}
+                      disabled={isSubmitting}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Creando..." : "Crear Proyecto"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <Toaster />
         </Form>
       )}

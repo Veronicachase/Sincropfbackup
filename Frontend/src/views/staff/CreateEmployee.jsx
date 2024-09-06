@@ -1,24 +1,37 @@
 import { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
-import { Grid, Box, Button, Typography } from "@mui/material";
-import CustomTextField from "../../components/generalComponents/CustomTextField";
-import VoiceInput from "../../components/generalComponents/VoiceInput";
+import { Formik, Form, Field } from "formik";
 import { CrearTrabajadorFormSchema } from "./EmployeeInitialValuesAndSchema/CrearTrabajadorFormSchema";
 import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
 import { initialValues } from "./EmployeeInitialValuesAndSchema/InitialValues";
 import { handleSubmitEmployee } from "../../api/employeeApis/handleSubmitEmployee";
+import VoiceInput from "../../components/generalComponents/VoiceInput";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const CrearTrabajador = () => {
   const [selected, setSelected] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(null); // Comienza como null para controlar la carga
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const projectsData = await getAllProjects();
-        setProjects(projectsData);
+
+        if (Array.isArray(projectsData) && projectsData.length > 0) {
+          setProjects(projectsData);
+        } else {
+          // Si no hay proyectos, usar un proyecto predeterminado
+          setProjects([
+            { projectId: "default", projectName: "Default Project" },
+          ]);
+          console.log(
+            "No hay proyectos creados. Usando proyecto predeterminado."
+          );
+        }
       } catch (error) {
-        console.error("Error al obtener los datos de los proyectos:", error);
+        console.error(
+          "Error al obtener los proyectos. Usando proyecto predeterminado."
+        );
+        setProjects([{ projectId: "default", projectName: "Default Project" }]); // Si hay un error, también usar el proyecto predeterminado
       }
     };
 
@@ -36,7 +49,6 @@ const CrearTrabajador = () => {
       onSubmit={async (values, actions) => {
         try {
           await handleSubmitEmployee(values);
-
           actions.setSubmitting(false);
           actions.resetForm();
         } catch (error) {
@@ -46,243 +58,141 @@ const CrearTrabajador = () => {
     >
       {({ isSubmitting }) => (
         <Form>
-          <Box
-            sx={{
-              flexGrow: 1,
-              width: "100%",
-              maxWidth: "800px",
-              margin: "2em auto",
-              flexDirection: "column",
-              boxShadow: 3,
-              borderRadius: "10px",
-              backgroundColor: "#fff",
-              transition: "transform 0.3s, box-shadow 0.3s",
-              ":hover": {
-                transform: "scale(1.01)",
-                boxShadow: 6,
-              },
-            }}
-          >
-            <Typography
-              variant="h5"
-              gutterBottom
-              sx={{
-                textAlign: "left",
-                marginBottom: "1em",
-                paddingTop: "1em",
-                paddingLeft: "1em",
-              }}
-            >
-              Crear Trabajador
-            </Typography>
-            <Box width={"90%"} margin={"1em auto"}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <CustomTextField
-                    name="date"
-                    type="date"
-                    label="Fecha"
-                    placeholder="Fecha"
-                    fullWidth
-                    InputProps={{
-                      style: {
-                        borderRadius: "10px",
-                        backgroundColor: "#fff",
-                        textAlign: "left",
-                      },
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
+          <div className="container mt-5">
+            <div className="row justify-content-center">
+              <div className="col-md-8">
+                <div className="card shadow p-4">
+                  <h4 className="text-center mb-4">Crear Trabajador</h4>
 
-                <Grid item xs={12}>
-                  <CustomTextField
-                    name="name"
-                    type="text"
-                    label="Nombre"
-                    placeholder="Nombre"
-                    fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
+                  {/* Fecha */}
+                  <div className="mb-3 text-start">
+                    <label htmlFor="date" className="form-label ms-2">
+                      Fecha
+                    </label>
+                    <Field type="date" name="date" className="form-control" />
+                  </div>
 
-                <Grid item xs={12}>
-                  <CustomTextField
-                    name="position"
-                    type="text"
-                    label="Posición"
-                    placeholder="Posición"
-                    fullWidth
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  >
-                    <option value="">Seleccione una posición</option>
-                    <option value="Encargado">Encargado</option>
-                    <option value="Ayudante">Ayudante</option>
-                    <option value="Principal">Principal</option>
-                    <option value="Becario">Becario</option>
-                    <option value="Otro">Otro</option>
-                  </CustomTextField>
-                </Grid>
+                  {/* Nombre */}
+                  <div className="mb-3 text-start">
+                    <label htmlFor="name" className="form-label ms-2">
+                      Nombre
+                    </label>
+                    <Field
+                      type="text"
+                      name="name"
+                      className="form-control"
+                      placeholder="Nombre del trabajador"
+                    />
+                  </div>
 
-                <Grid item xs={12}>
-                  <CustomTextField
-                    name="project"
-                    type="text"
-                    label="Obra"
-                    placeholder="Obra"
-                    fullWidth
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    InputProps={{
-                      style: {
-                        borderRadius: "10px",
-                        backgroundColor: "#fff",
-                      },
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  >
-                    <option value="">Seleccione un proyecto</option>
-                    {projects.map((project) => (
-                      <option key={project.projectId} value={project.projectId}>
-                        {project.projectName}
-                      </option>
-                    ))}
-                  </CustomTextField>
-                </Grid>
+                  {/* Posición */}
+                  <div className="mb-3 text-start">
+                    <label htmlFor="position" className="form-label ms-2">
+                      Posición
+                    </label>
+                    <Field as="select" name="position" className="form-select">
+                      <option value="">Seleccione una posición</option>
+                      <option value="Encargado">Encargado</option>
+                      <option value="Ayudante">Ayudante</option>
+                      <option value="Principal">Principal</option>
+                      <option value="Becario">Becario</option>
+                      <option value="Otro">Otro</option>
+                    </Field>
+                  </div>
 
-                <Grid
-                  container
-                  direction="column"
-                  alignItems="center"
-                  spacing={2}
-                >
-                  <Typography
-                    sx={{
-                      marginTop: "2em",
-                      fontWeight: "bold",
-                      color: "#1976d2",
-                    }}
-                  >
-                    Equipo Reglamentario Entregado
-                  </Typography>
-                  <Grid container item justifyContent="center" spacing={2}>
-                    <Grid item>
-                      <Button
-                        sx={{
-                          backgroundColor:
-                            selected === "Si" ? "#8BB443" : "#E0E0E0",
-                          color: selected === "Si" ? "white" : "black",
-                          borderRadius: "10px",
-                          padding: "0.5em 1.5em",
-                          "&:hover": {
-                            backgroundColor:
-                              selected === "Si" ? "#76A33E" : "#BDBDBD",
-                          },
-                        }}
+                  {/* Proyecto */}
+                  <div className="mb-3 text-start">
+                    <label htmlFor="project" className="form-label ms-2">
+                      Obra
+                    </label>
+                    <Field as="select" name="project" className="form-select">
+                      <option value="">Seleccione un proyecto</option>
+                      {projects?.map((project) => (
+                        <option
+                          key={project.projectId}
+                          value={project.projectId}
+                        >
+                          {project.projectName}
+                        </option>
+                      ))}
+                    </Field>
+                  </div>
+
+                  {/* Equipo Reglamentario Entregado */}
+                  <div className="text-center">
+                    <h6 className="mb-3 mt-3 text-start">
+                      Equipo Reglamentario Entregado
+                    </h6>
+                    <div className="d-flex justify-content-start gap-2 ">
+                      <button
+                        type="button"
+                        className={`btn ${
+                          selected === "Si"
+                            ? "btn-success"
+                            : "btn-outline-secondary"
+                        }`}
                         onClick={() => handleClick("Si")}
                       >
                         SI
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        sx={{
-                          backgroundColor:
-                            selected === "No" ? "#F25244" : "#E0E0E0",
-                          color: selected === "No" ? "white" : "black",
-                          borderRadius: "10px",
-                          padding: "0.5em 1.5em",
-                          "&:hover": {
-                            backgroundColor:
-                              selected === "No" ? "#D9453A" : "#BDBDBD",
-                          },
-                        }}
+                      </button>
+                      <button
+                        type="button"
+                        className={`btn ${
+                          selected === "No"
+                            ? "btn-danger"
+                            : "btn-outline-secondary"
+                        }`}
                         onClick={() => handleClick("No")}
                       >
                         NO
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        sx={{
-                          backgroundColor:
-                            selected === "Incompleto" ? "#F2CB05" : "#E0E0E0",
-                          color: selected === "Incompleto" ? "white" : "black",
-                          borderRadius: "10px",
-                          padding: "0.5em 1.5em",
-                          "&:hover": {
-                            backgroundColor:
-                              selected === "Incompleto" ? "#D4B404" : "#BDBDBD",
-                          },
-                        }}
+                      </button>
+                      <button
+                        type="button"
+                        className={`btn ${
+                          selected === "Incompleto"
+                            ? "btn-warning"
+                            : "btn-outline-secondary"
+                        }`}
                         onClick={() => handleClick("Incompleto")}
                       >
                         Incompleto
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                      </button>
+                    </div>
+                  </div>
 
-                <Grid item xs={12}>
-                  <CustomTextField
-                    name="comments"
-                    type="text"
-                    label="Comentarios"
-                    placeholder="Comentarios"
-                    fullWidth
-                    multiline
-                    rows={3}
-                    InputProps={{
-                      endAdornment: <VoiceInput name="comments" />,
-                      style: {
-                        borderRadius: "10px",
-                        backgroundColor: "#fff",
-                      },
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
+                  {/* Comentarios */}
+                  <div className="mb-3 text-start mt-4">
+                    <label htmlFor="comments" className="form-label ms-2">
+                      Comentarios
+                    </label>
+                    <div className="input-group">
+                      <Field
+                        as="textarea"
+                        name="comments"
+                        className="form-control"
+                        placeholder="Comentarios sobre el trabajador"
+                        rows={3}
+                      />
+                      <span className="input-group-text">
+                        <VoiceInput name="comments" />
+                      </span>
+                    </div>
+                  </div>
 
-                <Grid item xs={12} display="flex" justifyContent="center">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      marginTop: "2em",
-                      marginBottom: "2em",
-                      color: "#fff",
-                      backgroundColor: "#1976d2",
-                      borderRadius: "10px",
-                      padding: "0.5em 2em",
-                      ":hover": {
-                        backgroundColor: "#1565c0",
-                        transform: "scale(1.02)",
-                      },
-                    }}
-                    disabled={isSubmitting}
-                  >
-                    Agregar Trabajador
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
+                  {/* Botón para enviar */}
+                  <div className="text-center mt-4">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Agregando..." : "Agregar Trabajador"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </Form>
       )}
     </Formik>

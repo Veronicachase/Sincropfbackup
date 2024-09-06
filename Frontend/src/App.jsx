@@ -18,7 +18,7 @@ import Employee from './views/staff/Employee';
 import ReportList  from './views/reports/Reports';
 import Layout from './components/generalComponents/Layout';
 import LoginForm from './views/login/LoginForm';
-import Register from './views/login/register/Register';
+import Register from './views/login/register/RegisterForm';
 import Home from './views/home/Home';
 import ProjectSectionTasks from "./views/projects/ProjectSectionTasks";
 import ProjectCreateTask from "./views/projects/ProjectCreateTask";
@@ -35,7 +35,7 @@ import "./App.css";
 
 export default function App() {
   return (
-    <AuthContextProvider>
+    //<AuthContextProvider>
     <SectionMappingProvider>
       <CreatePdfContextProvider>
       
@@ -47,7 +47,8 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword/>} />
           <Route element={<Layout />}>
-            <Route element={<RequireAuth />}>
+            
+          {/*Aqui va el RequireAuth */}
             <Route path="/home" element={<Home />} />
             <Route path="/create-new-project" element={<CreateNewProject />} />
             <Route path="/my-projects" element={<MyProjects />} />
@@ -68,13 +69,14 @@ export default function App() {
             <Route path="/create-employee" element={<CreateEmployee />} />
             <Route path="/employee/:employeeId" element={<Employee />} />
             <Route path="/reports" element={<ReportList />} />
-            </Route> 
-          </Route>
+         </Route> 
+         
+
         </Routes>
       
       </CreatePdfContextProvider>
       </SectionMappingProvider>
-    </AuthContextProvider>
+   // </AuthContextProvider>
   );
 }
 
