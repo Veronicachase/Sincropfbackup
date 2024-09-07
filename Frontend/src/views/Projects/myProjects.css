@@ -1,0 +1,11 @@
+
+
+.project-container{
+
+    border-radius: 10px;
+}
+.project-container:hover{
+
+    transform: scale(1.02);
+
+}

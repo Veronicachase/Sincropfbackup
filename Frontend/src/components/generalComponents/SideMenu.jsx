@@ -1,30 +1,48 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { MenuOptionsList } from "./MenuOptionsList";
-import { Link } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(false);
 
-  const toggleCollapse = () => {
+  const toggleMenu = () => {
     setCollapsed(!collapsed);
   };
-
   return (
-    <div className="d-flex flex-column vh-100 bg-white border-end" style={{ width: collapsed ? "80px" : "250px", transition: "width 0.3s" }}>
-      {/* Botón para colapsar el menú */}
-      <button className="btn btn-light mt-2 mx-auto" onClick={toggleCollapse}>
-        {collapsed ? "→" : "←"}
+    <div
+      className="d-flex flex-column vh-100 bg-light border-end  "
+      style={{
+        width: collapsed ? "80px" : "250px",
+        transition: "width 0.3s",
+        marginTop: "40px",
+      }}
+    >
+      <button
+        className="btn btn-outline-secondary mb-2 mx-auto"
+        onClick={toggleMenu}
+      >
+        {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
       </button>
 
       {/* Lista de opciones del menú */}
-      <ul className="nav flex-column mt-3">
+      <ul className="nav flex-column mt-2">
         {MenuOptionsList.map((option, index) => (
           <li key={index} className="nav-item">
             <Link
               to={option.path}
               className="nav-link d-flex align-items-center px-3 py-2"
-              style={{ transition: 'transform 0.2s, box-shadow 0.2s' }}
+              style={{
+                transition: "transform 0.2s, box-shadow 0.2s",
+                borderRadius: "5px",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  backgroundColor: "#f8f9fa",
+                },
+              }}
             >
               <span className="me-2">{option.icon}</span>
               {!collapsed && <span className="text-muted">{option.name}</span>}
@@ -35,22 +53,6 @@ export default function SideMenu() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { useState } from "react";
 // import { MenuOptionsList } from "./MenuOptionsList";

@@ -12,13 +12,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 export const MenuOptionsList = [
     {
       name: "Proyectos", path: "/my-projects",
-      icon: <ArchitectureIcon sx={{color:"#F0ED38", fontSize:"50px", paddingTop:"15px", paddingBottom:"15px", cursor:"pointer"}}/>,},
-    { name: "Pendientes", path: "/pendings", icon: <PendingActionsIcon sx={{color:"#D6556C", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px", cursor:"pointer"}} /> },
-    { name: "Pedidos", path: "/order-list", icon: <AllInboxIcon sx={{color:"#DA8F44", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
-    { name: "Contactos", path: "/allContacts", icon: <ContactPhoneIcon sx={{color:"#29BADE", fontSize:"40px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
-    { name: "Personal", path: "/staff-list", icon: <BadgeIcon sx={{color:"#84C7AE", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}}/> },
-    { name: "Reportes", path: "/reports", icon: <SummarizeIcon sx={{color:"#AD6DF1", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
-    { name: "Salir", path: "/login", icon: <LogoutIcon sx={{color:"#AD6DF1", fontSize:"45px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
+      icon: <ArchitectureIcon sx={{color:"#F0ED38", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px", cursor:"pointer"}}/>,},
+    { name: "Pendientes", path: "/pendings", icon: <PendingActionsIcon sx={{color:"#D6556C", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px", cursor:"pointer"}} /> },
+    { name: "Pedidos", path: "/order-list", icon: <AllInboxIcon sx={{color:"#DA8F44", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
+    { name: "Contactos", path: "/allContacts", icon: <ContactPhoneIcon sx={{color:"#29BADE", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
+    { name: "Personal", path: "/staff-list", icon: <BadgeIcon sx={{color:"#84C7AE", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}}/> },
+    { name: "Reportes", path: "/reports", icon: <SummarizeIcon sx={{color:"#AD6DF1", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
+    { name: "Salir", path: "/login", icon: <LogoutIcon sx={{color:"#AD6DF1", fontSize:"65px", paddingTop:"15px", paddingBottom:"15px" , cursor:"pointer"}} /> },
   ];
 
   
