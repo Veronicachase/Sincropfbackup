@@ -5,17 +5,26 @@ const cloudinary = require("cloudinary").v2;
 
 const addProject = async (req, res) => {
   const userId = req.user.userId;
+  console.log("Archivo recibido por multer controller:", req.file);
+  console.log("Campos del formulario controller:", req.body);
 
   try {
     const { body, file } = req;
 
     let imageUrl = "";
     if (file) {
-      const result = await uploadImage(file.path);
-      imageUrl = result.secure_url;
+
+      const uploadedImage = await cloudinary.uploader.upload(file.path, {
+        folder: "SincroProjectPic",
+        allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
+      });
+      imageUrl = uploadedImage.secure_url;
     }
 
-    let sections;
+    let sections ;
+
+    console.log("Archivo recibido por multer controller:", file);
+
     try {
       sections = body.sections ? JSON.parse(body.sections) : [];
     } catch (err) {
@@ -92,7 +101,9 @@ const updateProject = async (req, res) => {
 
     let imageUrl = "";
     if (file) {
+      console.log("Archivo recibido:", file);
       const result = await uploadImage(file.path);
+      console.log("Resultado de Cloudinary:", result);
       imageUrl = result.secure_url;
       if (!imageUrl) {
         throw new Error("Error al cargar la imagen en Cloudinary");

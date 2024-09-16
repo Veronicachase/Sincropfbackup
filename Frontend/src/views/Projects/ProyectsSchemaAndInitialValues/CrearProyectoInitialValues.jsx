@@ -15,5 +15,5 @@ export const initialValues = {
   //createTask: "",
   projectDescription: "",
   status: "noIniciado",
-  image: "",
+  image: null,
 };

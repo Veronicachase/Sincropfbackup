@@ -25,7 +25,7 @@ projectDao.addProject = async (userId, projectData) => {
       constructionType: projectData.constructionType || "",
       sections: projectData.sections || "",
       hiringCompany: projectData.hiringCompany || "",
-      image: projectData.image || "",
+      image: projectData.image || null,
       status: projectData.status || "noIniciado",
       reports: JSON.stringify([]),
       userId: userId,

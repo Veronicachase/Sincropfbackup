@@ -40,10 +40,15 @@ export default function ProjectCreateTask() {
 
     fetchData();
   }, [projectId]);
+  
   const handleFileUpload = (event, setImages) => {
     const files = Array.from(event.target.files);
-
-    setImages((prevImages) => [...prevImages, ...files]);
+    setImages((prevImages) => {
+      const newImages = files.filter(
+        (file) => !prevImages.some((prevFile) => prevFile.name === file.name)
+      );
+      return [...prevImages, ...newImages];
+    });
   };
 
   if (!projectData) {

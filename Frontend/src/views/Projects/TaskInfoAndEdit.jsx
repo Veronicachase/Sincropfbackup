@@ -9,18 +9,7 @@ import { getEmployees } from "../../api/employeeApis/getEmployees";
 import { initialValues } from "./TasksSchemaAndInitialValues/InitialValues";
 import { capitalizeFirstLetter } from "../../components/generalComponents/CapitalizedFirstLetter";
 import toast from "react-hot-toast";
-import {
-  Box,
-  Button,
-  Typography,
-  TextField,
-  Grid,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  useMediaQuery,
-} from "@mui/material";
+import { Container, Row, Col, Button, Form as BootstrapForm } from "react-bootstrap";
 
 export default function TaskInfoAndEdit() {
   const { taskId } = useParams();
@@ -30,7 +19,6 @@ export default function TaskInfoAndEdit() {
   const [prevImages, setPrevImages] = useState([]);
   const [finalImages, setFinalImages] = useState([]);
   const [editInitialValues, setEditInitialValues] = useState(initialValues());
-  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,12 +46,7 @@ export default function TaskInfoAndEdit() {
 
   const handleFileUpload = (event, setImages, existingImages = []) => {
     const files = Array.from(event.target.files);
-
     setImages(existingImages.concat(files));
-  };
-  const handleImageDelete = (index, setImages, images) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
   };
 
   const handleSubmit = async (values, actions) => {
@@ -78,6 +61,7 @@ export default function TaskInfoAndEdit() {
     if (!values.sectionKey) {
       formData.append("sectionKey", task.sectionKey);
     }
+
     // Añadir archivos
     prevImages.forEach((file) => {
       formData.append("prevImages", file);
@@ -85,10 +69,6 @@ export default function TaskInfoAndEdit() {
 
     finalImages.forEach((file) => {
       formData.append("finalImages", file);
-    });
-
-    formData.forEach((value, key) => {
-      `${key}:`, value;
     });
 
     try {
@@ -106,234 +86,158 @@ export default function TaskInfoAndEdit() {
   if (!task) return <p>No se encontró la tarea</p>;
 
   return (
-    <Box display={"flex"} sx={{ paddingTop: "2em", borderRadius: "10px" }}>
-      <Box sx={{ width: "100%", padding: isMobile ? "2em auto" : "2em" }}>
-        <Typography>Editar Tarea</Typography>
-        <Typography>{capitalizeFirstLetter(task.sectionKey)}</Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            marginBottom: "2em",
-            marginTop: "2em",
-          }}
-        >
-          <IconColors status={task.status} />
-          <Typography variant="h6">{task.taskName}</Typography>
-        </Box>
+    <Container className="mt-4">
+      <h2>Editar Tarea</h2>
+      <h4>{capitalizeFirstLetter(task.sectionKey)}</h4>
+      <div className="d-flex align-items-center my-4">
+        <IconColors status={task.status} />
+        <h5 className="ml-3">{task.taskName}</h5>
+      </div>
 
-        <Box>
-          <Formik
-            initialValues={editInitialValues}
-            validationSchema={CreateTaskFormSchema}
-            onSubmit={handleSubmit}
-            enableReinitialize={true}
-          >
-            {({ values, handleChange, isSubmitting }) => (
-              <Form>
-                <Grid container spacing={2} sx={{ marginBottom: "2em" }}>
-                  <Grid item xs={12}>
-                    <FormControl
-                      fullWidth
-                      margin="normal"
-                      sx={{ backgroundColor: "#fff" }}
-                    >
-                      <InputLabel>Estado de la tarea</InputLabel>
-                      <Field
-                        as={Select}
-                        name="status"
-                        value={values.status || ""}
-                        onChange={handleChange}
-                        label="Estado de la tarea"
-                        fullWidth
-                      >
-                        <MenuItem value="noIniciado">No Iniciado</MenuItem>
-                        <MenuItem value="iniciado">Iniciado</MenuItem>
-                        <MenuItem value="terminado">Terminado</MenuItem>
-                      </Field>
-                    </FormControl>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <FormControl
-                      fullWidth
-                      margin="normal"
-                      sx={{ backgroundColor: "#fff" }}
-                    >
-                      <InputLabel>Trabajador Asignado</InputLabel>
-                      <Field
-                        as={Select}
-                        name="employeeName"
-                        value={values.employeeName || ""}
-                        onChange={handleChange}
-                        label="Trabajador Asignado"
-                        fullWidth
-                      >
-                        {employees.map((employee) => (
-                          <MenuItem
-                            key={employee.employeeId}
-                            value={employee.name}
-                          >
-                            {employee.name}
-                          </MenuItem>
-                        ))}
-                      </Field>
-                    </FormControl>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      name="taskDescription"
-                      label="Descripción de la tarea"
-                      value={values.taskDescription}
-                      onChange={handleChange}
-                      fullWidth
-                      sx={{ backgroundColor: "#fff" }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <Field
-                      as={TextField}
-                      name="startDate"
-                      label="Fecha de inicio"
-                      type="date"
-                      value={values.startDate}
-                      onChange={handleChange}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ backgroundColor: "#fff" }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      as={TextField}
-                      name="endDate"
-                      label="Fecha de entrega"
-                      type="date"
-                      value={values.endDate}
-                      onChange={handleChange}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ backgroundColor: "#fff" }}
-                    />
-                  </Grid>
-                </Grid>
-
-                <Box
-                  sx={{
-                    border: "1px solid #ccc",
-                    marginBottom: "2em",
-                    padding: "1em",
-                    backgroundColor: "#fff",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <Typography>Imágenes iniciales</Typography>
-                  <Grid item xs={12}>
-                    {prevImages.length > 0 && (
-                      <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {prevImages.map((img, index) => (
-                          <img
-                            key={index}
-                            src={
-                              typeof img === "string"
-                                ? img
-                                : URL.createObjectURL(img)
-                            }
-                            alt={`prev-${index}`}
-                            style={{ width: "100px", height: "100px" }}
-                          />
-                        ))}
-                      </Box>
-                    )}
-                    <input
-                      type="file"
-                      name="prevImages"
-                      onChange={(e) =>
-                        handleFileUpload(e, setPrevImages, prevImages)
-                      }
-                      multiple
-                      style={{
-                        marginTop: "1em",
-                        width: isMobile ? "300px" : "100%",
-                      }}
-                    />
-                  </Grid>
-                </Box>
-
-                <Box
-                  sx={{
-                    border: "1px solid #ccc",
-                    marginBottom: "2em",
-                    padding: "1em",
-                    backgroundColor: "#fff",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <Typography>Imagenes finales</Typography>
-                  <Grid item xs={12}>
-                    {finalImages.length > 0 && (
-                      <Box display="flex" flexWrap="wrap" gap={2} mt={2}>
-                        {finalImages.map((img, index) => (
-                          <img
-                            key={index}
-                            src={
-                              typeof img === "string"
-                                ? img
-                                : URL.createObjectURL(img)
-                            }
-                            alt={`final-${index}`}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              marginRight: "1em",
-                            }}
-                          />
-                        ))}
-                      </Box>
-                    )}
-                    <input
-                      type="file"
-                      name="finalImages"
-                      onChange={(e) =>
-                        handleFileUpload(e, setFinalImages, finalImages)
-                      }
-                      multiple
-                      style={{
-                        marginTop: "1em",
-                        width: isMobile ? "300px" : "100%",
-                      }}
-                    />
-                  </Grid>
-                </Box>
-
-                <Box textAlign="center">
-                  <Button
-                    sx={{
-                      backgroundColor: "#1976d2",
-                      color: "#fff",
-                      paddingLeft: "1em",
-                      paddingRight: "1em",
-                      borderRadius: "10px",
-                      ":hover": {
-                        backgroundColor: "#1565c0",
-                        transform: "scale(1.02)",
-                      },
-                    }}
-                    type="submit"
-                    disabled={isSubmitting}
+      <Formik
+        initialValues={editInitialValues}
+        validationSchema={CreateTaskFormSchema}
+        onSubmit={handleSubmit}
+        enableReinitialize={true}
+      >
+        {({ values, handleChange, isSubmitting }) => (
+          <Form >
+            <Row >
+              <Col xs={12} >
+                <BootstrapForm.Group>
+                  <BootstrapForm.Label>Estado de la tarea</BootstrapForm.Label>
+                  <Field
+                    as="select"
+                    name="status"
+                    value={values.status || ""}
+                    onChange={handleChange}
+                    className="form-control"
                   >
-                    Guardar Cambios
-                  </Button>
-                </Box>
-              </Form>
-            )}
-          </Formik>
-        </Box>
-      </Box>
-    </Box>
+                    <option value="noIniciado">No Iniciado</option>
+                    <option value="iniciado">Iniciado</option>
+                    <option value="terminado">Terminado</option>
+                  </Field>
+                </BootstrapForm.Group>
+              </Col>
+
+              <Col xs={12}>
+                <BootstrapForm.Group>
+                  <BootstrapForm.Label>Trabajador Asignado</BootstrapForm.Label>
+                  <Field
+                    as="select"
+                    name="employeeName"
+                    value={values.employeeName || ""}
+                    onChange={handleChange}
+                    className="form-control"
+                  >
+                    {employees.map((employee) => (
+                      <option key={employee.employeeId} value={employee.name}>
+                        {employee.name}
+                      </option>
+                    ))}
+                  </Field>
+                </BootstrapForm.Group>
+              </Col>
+
+              <Col xs={12}>
+                <BootstrapForm.Group>
+                  <BootstrapForm.Label>Descripción de la tarea</BootstrapForm.Label>
+                  <Field
+                    as="textarea"
+                    name="taskDescription"
+                    value={values.taskDescription}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+
+              <Col xs={6}>
+                <BootstrapForm.Group>
+                  <BootstrapForm.Label>Fecha de inicio</BootstrapForm.Label>
+                  <Field
+                    as="input"
+                    type="date"
+                    name="startDate"
+                    value={values.startDate}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+              <Col xs={6}>
+                <BootstrapForm.Group>
+                  <BootstrapForm.Label>Fecha de entrega</BootstrapForm.Label>
+                  <Field
+                    as="input"
+                    type="date"
+                    name="endDate"
+                    value={values.endDate}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </BootstrapForm.Group>
+              </Col>
+            </Row>
+
+            {/* Imágenes iniciales */}
+            <div className="border p-3 my-4">
+              <h5>Imágenes iniciales</h5>
+              {prevImages.length > 0 && (
+                <div className="d-flex flex-wrap mt-2">
+                  {prevImages.map((img, index) => (
+                    <img
+                      key={index}
+                      src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                      alt={`prev-${index}`}
+                      className="mr-2 mb-2"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  ))}
+                </div>
+              )}
+              <input
+                type="file"
+                name="prevImages"
+                onChange={(e) => handleFileUpload(e, setPrevImages, prevImages)}
+                multiple
+                className="form-control mt-3"
+              />
+            </div>
+
+            {/* Imágenes finales */}
+            <div className="border p-3 my-4">
+              <h5>Imágenes finales</h5>
+              {finalImages.length > 0 && (
+                <div className="d-flex flex-wrap mt-2">
+                  {finalImages.map((img, index) => (
+                    <img
+                      key={index}
+                      src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                      alt={`final-${index}`}
+                      className="mr-2 mb-2"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  ))}
+                </div>
+              )}
+              <input
+                type="file"
+                name="finalImages"
+                onChange={(e) => handleFileUpload(e, setFinalImages, finalImages)}
+                multiple
+                className="form-control mt-3"
+              />
+            </div>
+
+            <div className="text-center">
+              <Button variant="primary" type="submit" disabled={isSubmitting}>
+                Guardar Cambios
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </Container>
   );
 }

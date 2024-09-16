@@ -5,11 +5,12 @@ import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
 import { initialValues } from "./EmployeeInitialValuesAndSchema/InitialValues";
 import { handleSubmitEmployee } from "../../api/employeeApis/handleSubmitEmployee";
 import VoiceInput from "../../components/generalComponents/VoiceInput";
+import toast from 'react-hot-toast'
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CrearTrabajador = () => {
   const [selected, setSelected] = useState("");
-  const [projects, setProjects] = useState(null); // Comienza como null para controlar la carga
+  const [projects, setProjects] = useState(null); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,19 +20,17 @@ const CrearTrabajador = () => {
         if (Array.isArray(projectsData) && projectsData.length > 0) {
           setProjects(projectsData);
         } else {
-          // Si no hay proyectos, usar un proyecto predeterminado
-          setProjects([
-            { projectId: "default", projectName: "Default Project" },
-          ]);
+          
+          setProjects([]);
           console.log(
-            "No hay proyectos creados. Usando proyecto predeterminado."
+            "No hay proyectos creados. No se puede asignar un proyecto predeterminado."
           );
         }
       } catch (error) {
         console.error(
           "Error al obtener los proyectos. Usando proyecto predeterminado."
         );
-        setProjects([{ projectId: "default", projectName: "Default Project" }]); // Si hay un error, también usar el proyecto predeterminado
+        setProjects([{ projectId: "default", projectName: "Default Project" }]); 
       }
     };
 
@@ -50,18 +49,20 @@ const CrearTrabajador = () => {
         try {
           await handleSubmitEmployee(values);
           actions.setSubmitting(false);
+          toast.success('Trabajador creado correctamente')
           actions.resetForm();
         } catch (error) {
           console.error("Error al enviar datos del formulario:", error);
+          toast.error('No se ha podido crear el trabajador')
         }
       }}
     >
       {({ isSubmitting }) => (
         <Form>
-          <div className="container mt-5">
+          <div className="container  mt-5">
             <div className="row justify-content-center">
               <div className="col-md-8">
-                <div className="card shadow p-4">
+                <div className="shadow p-4">
                   <h4 className="text-center mb-4">Crear Trabajador</h4>
 
                   {/* Fecha */}

@@ -14,12 +14,12 @@ export const getTaskBySection = async (projectId, sectionKey) => {
       const tasks = await response.json();
 
       //return tasks.filter(task => task.sectionKey === sectionKey && task.sectionIsActive);
-      return tasks;
+
+      return tasks.length > 0 ? tasks : null;
+    } else if (response.status === 404) {
+      return null;
     } else {
-      throw new Error(
-        "Ha habido un fallo al obtener el estatus de la tarea: " +
-          response.status
-      );
+      throw new Error("Ha habido un fallo al obtener el estatus de la tarea");
     }
   } catch (error) {
     console.error("Error al obtener la tarea:", error);

@@ -1,22 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
 import { getTaskBySection } from "../../api/projectsAndTaskApis/getTaskBySection";
 import { sectionMapping } from "../../components/proyectComponets/SectionMappingIcons";
 import CreatePDFButtonPData from "../../components/pdfComponents/CreatePDFButtonData";
-
-import {
-  Box,
-  Typography,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  useMediaQuery,
-} from "@mui/material";
-
+import { Button, Row, Col, Container, Image } from 'react-bootstrap';
 
 export default function ProjectinfoData() {
   const { projectId } = useParams();
@@ -24,8 +12,7 @@ export default function ProjectinfoData() {
   const [tasks, setTasks] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery('(max-width:600px)');
-
+  
   useEffect(() => {
     if (projectId) {
       getProjectById(projectId)
@@ -70,258 +57,90 @@ export default function ProjectinfoData() {
   return (
     <>
       <Button
-        sx={{ marginBottom: "2em", marginTop: "2em" }}
-        variant="contained"
+        className="my-4 mt-5"
+        variant="primary"
         onClick={() => navigate(`/project-info/${projectId}`)}
       >
         Volver a Tareas
       </Button>
-      <Box
-        display="flex"
-        alignItems="center"
-        sx={{
-          paddingTop: "1em",
-          width: isMobile ? "100%" : "800px",
-          margin: "0 auto",
-        }}
-      >
-        <Grid container spacing={3} direction="column" alignItems="center">
-          <Grid item xs={12}>
-            <Card sx={{ width: "100%", marginBottom: 2 }}>
-              <CardActionArea>
-                <CardContent>
-                  <Typography
-                    sx={{ textAlign: "left" }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                  >
-                    Datos del Proyecto
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Nombre del proyecto: </strong>
-                    {project.projectName}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Identificador: </strong>
-                    {project.identifier}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Empresa contratante: </strong>
-                    {project.hiringCompany}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Tipo de Proyecto: </strong>
-                    {project.typeOfWork}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Tipo de construcción: </strong>
-                    {project.constructionType}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Descripción general del proyecto: </strong>
-                    {project.projectDescription}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Fecha de inicio: </strong>
-                    {project.startDate}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Fecha de entrega: </strong>
-                    {project.endDate}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Estado:</strong>
-                    {project.status}
-                  </Typography>
-                </CardContent>
-                {project.image && (
-                  <CardMedia
-                    component="img"
-                    alt="Project"
-                    height="auto"
-                    image={project.image}
-                    title="Imagen general del proyecto"
-                  />
-                )}
-              </CardActionArea>
-            </Card>
-          </Grid>
 
-          
-          <Grid item xs={12}>
-            <Card sx={{ width : isMobile? "100%": "800px", minWidth:"355px" }}>
-              <CardActionArea>
-                <CardContent>
-                  <Typography
-                    sx={{ textAlign: "left" }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                  >
-                    Dirección
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Dirección:</strong>
-                    {project.addressDescription}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Bloque:</strong>
-                    {project.block}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>No.:</strong>
-                    {project.unit}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Código Postal:</strong>
-                    {project.zipCode}
-                  </Typography>
-                  <Typography sx={{ textAlign: "left" }} variant="body1">
-                    <strong>Provincia:</strong>
-                    {project.province}
-                  </Typography>
-                </CardContent>
-                <CardContent>
-                  <Typography
-                    sx={{ textAlign: "left" }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                  >
-                    Mapa
-                  </Typography>
-                  <Box
-                    border={1}
-                    borderRadius={2}
-                    p={2}
-                    backgroundColor="#fff"
-                    borderColor="#fff"
-                  >
-                    <MapView />
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
+      <Container className="my-4" style={{ maxWidth: "800px" }}>
+        <Row className="mb-3">
+          <Col>
+            <div className="shadow p-4 border rounded mx-auto text-start" style={{ maxWidth: '800px' }}>
+              <h5>Datos del Proyecto</h5>
+              <p><strong>Nombre del proyecto: </strong> {project.projectName}</p>
+              <p><strong>Empresa contratante: </strong> {project.hiringCompany}</p>
+              <p><strong>Fecha de inicio: </strong> {project.startDate}</p>
+              <p><strong>Fecha de entrega: </strong> {project.endDate}</p>
+              <p><strong>Descripción general del proyecto: </strong> {project.projectDescription}</p>
+              {project.image && (
+                <Image src={project.image} alt="Project" fluid />
+              )}
+            </div>
+          </Col>
+        </Row>
 
-      
-      <Box sx={{ width: isMobile ? "100%" : "800px", margin: "0 auto" }}>
+        <Row className="mb-3">
+          <Col>
+            <div className="shadow p-4 border rounded mx-auto text-start " style={{ maxWidth: '800px' }}>
+              <h5>Dirección</h5>
+              <div className="d-flex flex-column"> 
+              <p><strong>Dirección:</strong> {project.addressDescription}</p>
+              <div className="d-flex gap-2">  
+              <p><strong>Bloque:</strong> {project.block}</p>
+              <p><strong>No.:</strong> {project.unit}</p>
+              </div>
+              <div className="d-flex gap-2">
+              <p><strong>Código Postal:</strong> {project.zipCode}</p>
+              <p><strong>Provincia:</strong> {project.province}</p>
+              </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
+        
         {sectionsWithTasks.map((section) => (
-          <Box key={section} sx={{ marginBottom: "2em" }}>
-            <Typography
-              sx={{ textAlign: "left", marginBottom: "1em", marginTop: "1em", padding:"1em" }}
-              variant="h5"
-            >
-              {sectionMapping[section]?.icon} {sectionMapping[section]?.name || section}
-            </Typography>
-            {tasks[section] &&
-              tasks[section].map((task) => (
-                <Box
-                  key={task.taskId}
-                  id={`task-${task.taskId}`}
-                  sx={{
-                    margin:"3 auto",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    padding:"1em",
-                    backgroundColor: "#fff",
-                    justifyContent: "left",
-                    transition: "transform 0.2s, box-shadow 0.2s",
-                    "&:hover": {
-                      transform: "scale(1.02)",
-                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                      cursor: "pointer",
-                    },
-                    width: "100%",
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{ cursor: "pointer", textAlign: "left" }}
-                    >
-                      {task.taskName}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        cursor: "pointer",
-                        textAlign: "left",
-                        marginBottom: 3,
-                        marginTop: 3,
-                      }}
-                    >
-                      {task.taskDescription}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        cursor: "pointer",
-                        textAlign: "left",
-                        marginBottom: 3,
-                        marginTop: 3,
-                      }}
-                    >
-                      Fecha de inicio: {task.startDate}, Fecha de terminación:{" "}
-                      {task.endDate}
-                    </Typography>
-                  </Box>
+          <Row key={section} className="mb-4">
+            <Col>
+              <h5>{sectionMapping[section]?.icon} {sectionMapping[section]?.name || section}</h5>
+              {tasks[section] &&
+                tasks[section].map((task) => (
+                  <div key={task.taskId} className="mb-3 shadow p-4 border rounded text-start " style={{ transition: "transform 0.2s", cursor: "pointer" }}>
+                    <h6>{task.taskName}</h6>
+                    <p>{task.taskDescription}</p>
+                    <p>Fecha de inicio: {task.startDate}, Fecha de terminación: {task.endDate}</p>
 
-                  <Box>
-                    <Box display="flex" flexDirection={isMobile ? "column" : "row"} width= {isMobile? "auto" : "400px"} sx={{gap:1}} >
+                    <Row>
+                      {task.prevImages && task.prevImages.map((image, index) => (
+                        <Col key={index} xs={12} sm={6} md={4} className="mb-3 shadow">
+                          <Image src={image} alt={`Prev Image ${index + 1}`} fluid />
+                        </Col>
+                      ))}
+                    </Row>
 
-                      {task.prevImages &&
-                        task.prevImages.map((image, index) => (
-                          <CardMedia
-                            key={index}
-                            component="img"
-                            alt={`Prev Image ${index + 1}`}
-                            height="200"
-                            
-                            image={image}
-                            title={`Prev Image ${index + 1}`}
-                            sx={{marginBottom:"1em"}}
-                          />
-                        ))}
-                    </Box>
-                    
-                    <Box display="flex" flexDirection={isMobile ? "column" : "row"} marginBottom={isMobile ? "1em" : "auto"} width= {isMobile? "auto" : "400px"}sx={{gap:1}} >
-                      {task.finalImages &&
-                        task.finalImages.map((image, index) => (
-                          <CardMedia
-                            key={index}
-                            component="img"
-                            alt={`Final Image ${index + 1}`}s
-                            height="200"
-                            image={image}
-                            title={`Final Image ${index + 1}`}
-                          />
-                        ))}
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-          </Box>
+                    <Row>
+                      {task.finalImages && task.finalImages.map((image, index) => (
+                        <Col key={index} xs={12} sm={6} md={4} className="mb-3">
+                          <Image src={image} alt={`Final Image ${index + 1}`} fluid />
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ))}
+            </Col>
+          </Row>
         ))}
-      </Box>
+      </Container>
 
-      <Box sx={{ marginTop: "2em" }}>
+      <Container className="text-center mt-5 mb-5">
         <CreatePDFButtonPData
           project={project}
           tasks={tasks}
           fileName={`reporte_Proyecto_${project.projectName}.pdf`}
-          projectId={projectId} 
+          projectId={projectId}
         />
-      </Box>
+      </Container>
     </>
   );
 }

@@ -15,10 +15,28 @@ export const NewProjectFormSchema = yup.object().shape({
   projectDescription: yup.string().nullable(true),
   sections: yup.array().of(yup.string()).nullable(true),
   status: yup.string().oneOf(["noIniciado", "iniciado", "terminado"]).nullable(true),
-  image: yup.string().nullable(true)
+  image: yup.mixed().nullable(true)
 });
 
 
+
+
+ 
+
+
+ 
+ 
+  
+ 
+
+
+ 
+
+ 
+  
+ 
+
+ 
 
 
 

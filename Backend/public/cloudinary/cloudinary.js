@@ -10,10 +10,13 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "SincroProjectPic",
-    resource_type: "auto",
-    public_id: (req, file) => `${Date.now()}-${file.originalname}`,
+  params: async (req, file) => {
+    const userId = req.user.userId;  
+    return {
+      folder: `SincroProjectPic/${userId}`,  
+      resource_type: "auto",
+      public_id: `${Date.now()}-${file.originalname}`, 
+    };
   },
 });
 

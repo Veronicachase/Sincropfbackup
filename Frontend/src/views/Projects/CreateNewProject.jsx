@@ -1,5 +1,4 @@
 import { Formik, Form, Field } from "formik";
-import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { initialValues } from "./ProyectsSchemaAndInitialValues/CrearProyectoInitialValues";
 import { NewProjectFormSchema } from "./ProyectsSchemaAndInitialValues/NewProjectFormSchema";
@@ -37,11 +36,11 @@ function CreateNewProject() {
         errors,
         touched,
       }) => (
-        <Form>
-          <div className="container mt-5">
+        <Form className="w-100" >
+          <div className="container-fluid mt-5 " >
             <div className="row justify-content-center">
-              <div className="col-md-8">
-                <div className="card shadow p-4">
+              <div className="col-md-10 shadow">
+                
                   <h4 className="text-center mb-4">Crear Proyecto</h4>
 
                   {/* Campos del formulario */}
@@ -239,9 +238,11 @@ function CreateNewProject() {
                     <label className="form-label ms-2">Agregar Imagen</label>
                     <input
                       type="file"
+                      name="image"
                       className="form-control"
                       onChange={(e) => {
                         const file = e.target.files[0];
+                        console.log("Archivo seleccionado desde la vista createNewProject:", file);
                         if (file) {
                           setFieldValue("image", file);
                         }
@@ -258,7 +259,7 @@ function CreateNewProject() {
                   </div>
 
                   {/* Botones de acción */}
-                  <div className="d-flex justify-content-center gap-3">
+                  <div className="d-flex justify-content-center gap-3 mb-5 mt-5">
                     <button
                       type="button"
                       className="btn btn-outline-secondary"
@@ -269,8 +270,9 @@ function CreateNewProject() {
                     </button>
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary "
                       disabled={isSubmitting}
+                     
                     >
                       {isSubmitting ? "Creando..." : "Crear Proyecto"}
                     </button>
@@ -278,7 +280,7 @@ function CreateNewProject() {
                 </div>
               </div>
             </div>
-          </div>
+         
           <Toaster />
         </Form>
       )}

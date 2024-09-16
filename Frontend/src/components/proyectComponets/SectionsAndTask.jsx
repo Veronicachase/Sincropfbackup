@@ -1,19 +1,15 @@
 import { useState, useEffect, useCallback, useContext } from "react";
+import PropTypes from 'prop-types';
 
 import {
-  Box,
-  Typography,
-  IconButton,
+  Button,
   Collapse,
   Modal,
-  TextField,
-  useMediaQuery,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import PropTypes from "prop-types";
+  Form,
+  Card,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { deleteTask } from "../../api/projectsAndTaskApis/deleteTask";
 import { getTaskBySection } from "../../api/projectsAndTaskApis/getTaskBySection";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +18,7 @@ import { getProjectById } from "../../api/projectsAndTaskApis/getProjectById";
 import VoiceInputNoFormik from "../generalComponents/VoiceInputNoFormik";
 import ExpandableImage from "../../components/imageComponents/ExpandableImage";
 import { SectionMappingContext } from "../../context/MappingContext";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import IconColors from "../generalComponents/IconColors";
 import toast from "react-hot-toast";
 
@@ -38,7 +35,7 @@ export const SectionsAndTasks = ({
   const [selectedImage, setSelectedImage] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const { sectionMapping } = useContext(SectionMappingContext);
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -54,9 +51,17 @@ export const SectionsAndTasks = ({
       if (projectId && sectionKey) {
         try {
           const tasks = await getTaskBySection(projectId, sectionKey);
-          setTaskData(tasks);
+          if (tasks === null) {
+            setError("No hay tareas disponibles para esta sección.");
+            setTaskData([]);
+          } else {
+           
+            setTaskData(tasks);
+          }
         } catch (error) {
           console.error("Error fetching tasks:", error);
+          setError("Error al obtener las tareas.");
+          setTaskData([]);
         }
       }
     };
@@ -97,232 +102,154 @@ export const SectionsAndTasks = ({
     setSelectedImage(null);
   }, []);
 
-  const handleModalClick = useCallback(
-    (event) => {
-      if (event.target.tagName !== "IMG") {
-        handleCloseModal();
-      }
-    },
-    [handleCloseModal]
-  );
-
   const handleAdditionalInfoChange = useCallback((text) => {
     setAdditionalInfo(text);
   }, []);
 
   return (
-    <Box sx={{ width: isMobile ? "300px" : "100%" }}>
-      <Typography
-        sx={{ textAlign: "left", marginBottom: "1em", marginTop: "1em" }}
-        variant={isMobile ? "subtitle1" : "h5"}
-      >
+    <div className="container-fluid">
+      <h5 className="text-left mt-3 mb-3">
         Tareas : {sectionMapping[sectionKey].name || sectionKey}
-      </Typography>
-      {taskData && taskData.length === 0 ? (
-        <Typography>No hay tareas para esta sección.</Typography>
+      </h5>
+      {error ? (
+        <div className="alert alert-danger">{error}</div>
+      ) : taskData.length === 0 ? (
+        <p>No hay tareas para esta sección.</p>
       ) : (
         taskData.map((task) => (
-          <Box
-            key={task.taskId}
-            id={`task-${task.taskId}`}
-            sx={{
-              marginBottom: 3,
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              padding: 2,
-              backgroundColor: "#fff",
-              justifyContent: "left",
-              transition: "transform 0.2s, box-shadow 0.2s",
-              "&:hover": {
-                transform: "scale(1.02)",
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                cursor: "pointer",
-              },
-              width: isMobile ? "100%" : "auto",
-            }}
-          >
-            <Box
-              display={isMobile ? "block" : "flex"}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Box display={"flex"} gap={3} justifyContent={"space-between"}>
-                {task.status ? <IconColors status={task.status} /> : null}
-
-                <Typography
-                  variant={isMobile ? "subtitle1" : "h6"}
-                  sx={{ cursor: "pointer", textAlign: "left" }}
-                >
-                  {task.taskName}
-                </Typography>
-              </Box>
-              <Box
-                display={isMobile ? "flex" : "block"}
-                justifyContent="space-between"
-                alignItems="center"
-                flexDirection={isMobile ? "row-reverse" : "none"}
-              >
-                <IconButton onClick={() => handleToggleExpand(task.taskId)}>
+          <Card key={task.taskId} className="mb-3 w-100 mw-100 p-2" >
+            
+              <Row className=" w-100 ">
+                <Col xs={10} className="mb-1 ">
+                  <div className="d-flex align-items-center ">
+                    {task.status && <IconColors status={task.status} />}
+                    <h6 className="ms-3 ml-3 mb-0  ">{task.taskName}</h6>
+                  </div>
+                </Col>
+                <Col xs={2} className="d-flex justify-content-end">
+                  <Button
+                    variant="link"
+                    onClick={() => handleToggleExpand(task.taskId)}
+                  >
                   {expandedTaskId === task.taskId ? (
-                    <ExpandLessIcon />
+                    <i className="bi bi-chevron-up"></i> 
                   ) : (
-                    <ExpandMoreIcon />
+                    <i className="bi bi-chevron-down"></i> 
                   )}
-                </IconButton>
-                <IconButton
-                  onClick={() => navigate(`/edit-task/${task.taskId}`)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDeleteTask(task.taskId)}>
-                  <DeleteForeverIcon sx={{ color: "red" }} />
-                </IconButton>
-              </Box>
-            </Box>
-            <Collapse in={expandedTaskId === task.taskId}>
-              <Box mt={2}>
-                <Typography
-                  sx={{ textAlign: "left", cursor: "default" }}
-                  variant="body1"
-                >
-                  <strong>Descripción: </strong>
-                  {task.taskDescription}
-                </Typography>
-
-                <Typography
-                  sx={{ textAlign: "left", cursor: "default" }}
-                  variant="body1"
-                >
-                  <strong>Trabajador: </strong>
-                  {task.employeeName}
-                </Typography>
-                <Typography
-                  sx={{ textAlign: "left", cursor: "default" }}
-                  variant="body1"
-                >
-                  <strong>Fecha de inicio: </strong>
-                  {task.startDate}
-                </Typography>
-                <Typography
-                  sx={{ textAlign: "left", cursor: "default" }}
-                  variant="body1"
-                >
-                  <strong>Fecha de fin: </strong>
-                  {task.endDate}
-                </Typography>
-
-                <Box mt={2}>
-                  <Typography
-                    sx={{ textAlign: "left", cursor: "default" }}
-                    variant="body1"
+                  </Button>
+                  <Button
+                    variant="link"
+                    onClick={() => navigate(`/edit-task/${task.taskId}`)}
                   >
-                    <strong>Imágenes Iniciales:</strong>
-                  </Typography>
-                  <Box
-                    display="flex"
-                    flexWrap="wrap"
-                    backgroundColor="#edf3f9"
-                    borderRadius={"10px"}
-                    padding={"1em"}
+                    Editar
+                  </Button>
+                  <Button
+                    variant="link"
+                    className="text-danger"
+                    onClick={() => handleDeleteTask(task.taskId)}
                   >
-                    {Array.isArray(task.prevImages) &&
-                      task.prevImages.map((image, index) => {
-                        return (
+                    Eliminar
+                  </Button>
+                </Col>
+              </Row>
+
+              <Collapse in={expandedTaskId === task.taskId}>
+                <div className="mt-3 text-start p-3">
+                  <p >
+                    <strong>Descripción: </strong>
+                    {task.taskDescription}
+                  </p>
+                  <p>
+                    <strong>Trabajador: </strong>
+                    {task.employeeName}
+                  </p>
+                  <p>
+                    <strong>Fecha de inicio: </strong>
+                    {task.startDate}
+                  </p>
+                  <p>
+                    <strong>Fecha de fin: </strong>
+                    {task.endDate}
+                  </p>
+
+                  <div className="mt-3">
+                    <p>
+                      <strong>Imágenes Iniciales:</strong>
+                    </p>
+                    <div className="d-flex flex-wrap">
+                      {Array.isArray(task.prevImages) &&
+                        task.prevImages.map((image, index) => (
                           <ExpandableImage
                             src={image}
                             key={index}
                             alt={`Inicial ${index}`}
                             onClick={() => handleImageClick(image)}
                           />
-                        );
-                      })}
-                  </Box>
-                </Box>
+                        ))}
+                    </div>
+                  </div>
 
-                <Box mt={2}>
-                  <Typography
-                    sx={{ textAlign: "left", cursor: "default" }}
-                    variant="body1"
-                  >
-                    <strong>Imágenes Finales:</strong>
-                  </Typography>
-                  <Box
-                    display="flex"
-                    flexWrap="wrap"
-                    backgroundColor="#edf3f9"
-                    borderRadius={"10px"}
-                    padding={"1em"}
-                  >
-                    {Array.isArray(task.finalImages) &&
-                      task.finalImages.map((image, index) => (
-                        <ExpandableImage
-                          src={image}
-                          key={index}
-                          alt={`Final ${index}`}
-                          onClick={() => handleImageClick(image)}
-                        />
-                      ))}
-                  </Box>
-                </Box>
+                  <div className="mt-3">
+                    <p>
+                      <strong>Imágenes Finales:</strong>
+                    </p>
+                    <div className="d-flex flex-wrap">
+                      {Array.isArray(task.finalImages) &&
+                        task.finalImages.map((image, index) => (
+                          <ExpandableImage
+                            src={image}
+                            key={index}
+                            alt={`Final ${index}`}
+                            onClick={() => handleImageClick(image)}
+                          />
+                        ))}
+                    </div>
+                  </div>
 
-                <Box mt={2}>
-                  <Typography
-                    sx={{ textAlign: "left", cursor: "default" }}
-                    variant="body1"
-                  >
-                    <strong>
-                      Escribe aquí información que solo aparecerá en tu pdf:
-                    </strong>
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Escribe información adicional aquí..."
-                    value={additionalInfo}
-                    onChange={(e) => setAdditionalInfo(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <VoiceInputNoFormik
-                          onTextChange={handleAdditionalInfoChange}
-                        />
-                      ),
-                    }}
-                    sx={{ cursor: "text" }}
-                  />
-                </Box>
+                  <div className="mt-3">
+                    <Form.Group>
+                      <Form.Label>
+                        Escribe aquí información que solo aparecerá en tu pdf:
+                      </Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Escribe información adicional aquí..."
+                        value={additionalInfo}
+                        onChange={(e) => setAdditionalInfo(e.target.value)}
+                      />
+                      <VoiceInputNoFormik
+                        onTextChange={handleAdditionalInfoChange}
+                      />
+                    </Form.Group>
+                  </div>
 
-                {project && (
-                  <CreatePDFButton
-                    project={project}
-                    tasks={[task]}
-                    additionalInfo={additionalInfo}
-                    fileName={`reporte_${project.projectName}_${task.taskName}.pdf`}
-                  />
-                )}
-              </Box>
-            </Collapse>
-          </Box>
+                  {project && (
+                    <CreatePDFButton
+                      project={project}
+                      tasks={[task]}
+                      additionalInfo={additionalInfo}
+                      fileName={`reporte_${project.projectName}_${task.taskName}.pdf`}
+                    />
+                  )}
+                </div>
+              </Collapse>
+            
+          </Card>
         ))
       )}
 
-      <Modal open={modalOpen} onClose={handleCloseModal}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          onClick={handleModalClick}
-        >
+      <Modal show={modalOpen} onHide={handleCloseModal} centered>
+        <Modal.Body>
           {selectedImage && (
             <ExpandableImage
               src={selectedImage}
               alt="Selected"
-              style={{ maxWidth: "90%", maxHeight: "90%" }}
+              style={{ maxWidth: "100%" }}
             />
           )}
-        </Box>
+        </Modal.Body>
       </Modal>
-    </Box>
+    </div>
   );
 };
 

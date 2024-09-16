@@ -3,17 +3,23 @@ export const handleSubmitProject = async (values) => {
   try {
     const token = localStorage.getItem("token");
     const formData = new FormData();
-    for (const key in values) {
-      formData.append(key, values[key]);
-    }
+    console.log("Valores del formulario desde la api:",values);
+    console.log("Valores del formulario desde la api:",values.image);
+for (const key in values) {
+  formData.append(key, values[key]);
+}
+formData.append("image", values.image); 
 
-    const response = await fetch(`${apiUrl}/projects`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+
+const response = await fetch(`${apiUrl}/projects`, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+  body: formData,
+  
+});
+
 
     if (!response.ok) {
       throw new Error(
@@ -22,7 +28,7 @@ export const handleSubmitProject = async (values) => {
     }
 
     const data = await response.json();
-
+    console.log("respuesta despues de recibir el respose del fetch", data)
     return data;
   } catch (error) {
     console.error("Error al enviar datos del formulario", error);

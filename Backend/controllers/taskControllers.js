@@ -18,7 +18,7 @@ const addTask = async (req, res) => {
     if (req.files && req.files.prevImages) {
       for (const file of req.files.prevImages) {
         const uploadedImage = await cloudinary.uploader.upload(file.path, {
-          upload_preset: "presets",
+          upload_preset: "SincroProjectPic",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
 
@@ -31,7 +31,7 @@ const addTask = async (req, res) => {
     if (req.files && req.files.finalImages) {
       for (const file of req.files.finalImages) {
         const uploadedImage = await cloudinary.uploader.upload(file.path, {
-          upload_preset: "presets",
+          upload_preset: "SincroProjectPic",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
 
@@ -121,7 +121,7 @@ const updateTask = async (req, res) => {
     if (req.files && req.files.prevImages) {
       for (const file of req.files.prevImages) {
         const uploadedImage = await cloudinary.uploader.upload(file.path, {
-          upload_preset: "presets",
+          upload_preset: "SincroProjectPic",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
         prevImagesUrls.push(uploadedImage.secure_url);
@@ -139,7 +139,7 @@ const updateTask = async (req, res) => {
     if (req.files && req.files.finalImages) {
       for (const file of req.files.finalImages) {
         const uploadedImage = await cloudinary.uploader.upload(file.path, {
-          upload_preset: "presets",
+          upload_preset: "SincroProjectPic",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
         });
         finalImagesUrls.push(uploadedImage.secure_url);
