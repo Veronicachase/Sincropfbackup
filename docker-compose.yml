@@ -1,0 +1,44 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./Frontend
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+    # volumes:
+    #   - ./Frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro 
+    depends_on:
+      - db
+    environment:
+      - VITE_API_URL=https://sincro.pro:3001
+
+  backend:
+    build:
+      context: ./Backend
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      DB_PORT: 3306
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: 66839527Av#b
+      DB_NAME: sincro
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 66839527Av#b
+      MYSQL_DATABASE: sincro
+   
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:

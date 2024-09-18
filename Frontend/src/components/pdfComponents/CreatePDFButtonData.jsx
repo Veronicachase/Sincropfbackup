@@ -44,8 +44,7 @@ const CreatePDFButtonPData = ({ project, tasks, projectId }) => {
     y += 10;
     doc.text(`Fecha de entrega: ${project.endDate}`, 10, y);
     y += 10;
-    doc.text(`Identificador: ${project.identifier}`, 10, y);
-    y += 10;
+   
     doc.text(`Empresa contratante: ${project.hiringCompany}`, 10, y);
     y += 10;
     doc.text(
