@@ -79,11 +79,12 @@ const getProject = async (req, res) => {
 const getAllProjects = async (req, res) => {
   try {
     const userId = req.user.userId;
+    console.log("userId en el controlador:", userId);
     const projects = await projectDao.getAllProjects(userId);
     if (projects && projects.length > 0) {
-      res.json(projects);
+      res.status(200).json(projects);
     } else {
-      res.json([]);
+      res.status(204).send(); 
     }
   } catch (error) {
     console.error("Error al obtener tus proyectos:", error.message);

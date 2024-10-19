@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import SideMenu from "../../components/generalComponents/SideMenu";
 import { getAllProjects } from "../../api/projectsAndTaskApis/getAllProjects";
 import { deleteProject } from "../../api/projectsAndTaskApis/deleteProject";
-import { useAuthContext } from "../../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import './myProjects.css';
@@ -11,31 +10,28 @@ import './myProjects.css';
 export default function MyProjects() {
   const [projects, setProjects] = useState([]);
   const [status, setStatus] = useState("loading");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { auth } = useAuthContext();
+  
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const projectsData = await getAllProjects();
-        if (projectsData.status === "success") {
-          setProjects(projectsData.data);
+  
+        if (projectsData.length > 0) {
+          setProjects(projectsData); 
           setStatus("success");
-        } else if (projectsData.status === "empty") {
-          setStatus("empty");
         } else {
-          setStatus("error");
+          setStatus("empty");
         }
       } catch (error) {
         console.error("Error de conexión:", error);
-        setError("No se puede conectar al servidor");
         setStatus("error");
       }
     };
-
+  
     fetchProjects();
-  }, [auth]);
+  }, []);
 
   const handleClickProject = (projectId) => {
     navigate(`/project-info/${projectId}`);

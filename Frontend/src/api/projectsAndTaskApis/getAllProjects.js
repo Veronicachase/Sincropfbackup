@@ -20,6 +20,6 @@ export const getAllProjects = async () => {
 
   } catch (error) {
     console.error("Error al obtener tus proyectos:", error);
-    return [];  
+    throw error; 
   }
 };

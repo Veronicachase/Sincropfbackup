@@ -19,6 +19,6 @@ export const deleteOrder = async (orderId) => {
       prevTasks.filter((task) => task.taskid !== orderId)
     );
   } catch (error) {
-    console.error("Error al eliminar la tarea:", error);
+    console.error("Error al eliminar el pedido:", error);
   }
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import { getContactById } from "../../api/contactApi/getContactById";
 import { updateContactById } from "../../api/contactApi/updateContactById";
+import { deleteContact } from "../../api/contactApi/deleteContact"
 import { NewContactFormSchema } from "./ContactsSchemaAndInitialValues/NewContactSchema";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -31,6 +33,7 @@ const defaultInitialValues = {
 
 export default function ContactDetails() {
   const { contactId } = useParams();
+  const navigate =useNavigate()
   const [contact, setContact] = useState({});
   const [formValues, setFormValues] = useState(defaultInitialValues);
   const [loading, setLoading] = useState(false);
@@ -41,10 +44,18 @@ export default function ContactDetails() {
       try {
         if (contactId) {
           const contactById = await getContactById(contactId);
-          setContact(contactById);
-          setFormValues({ ...defaultInitialValues, ...contactById });
-        } else {
-        }
+          const sanitizedContact = {
+            ...contactById,
+            phone: contactById.phone || "",       
+            email: contactById.email || "",     
+            mobile: contactById.mobile || "",
+            address: contactById.address || "",
+            comments: contactById.comments || "",
+          };
+
+          setContact(sanitizedContact);
+          setFormValues({ ...defaultInitialValues, ...sanitizedContact });
+        } 
       } catch (error) {
         console.error("Error fetching contacts:", error);
       }
@@ -68,6 +79,19 @@ export default function ContactDetails() {
       toast.error("No has podido editar, intenta denuevo.");
     }
   };
+  const handleDelete = async (contactId) => {
+    try {
+      await deleteContact(contactId);
+      toast.success("Contacto eliminado exitosamente!", {
+        icon: "👏",
+      });
+      navigate("/allcontacts"); 
+    } catch (error) {
+      toast.error("No se ha podido eliminar el contacto, intenta de nuevo.");
+    }
+  };
+  
+
 
   return (
     <Box display="flex" justifyContent="center" marginTop="2em">
@@ -199,11 +223,22 @@ export default function ContactDetails() {
                   >
                     Guardar Cambios
                   </Button>
+
+                  
+
                 </Grid>
               </Grid>
             </Form>
           )}
         </Formik>
+        <Button
+        variant="outlined"
+        color="error"
+        sx={{ marginTop: "1em" }}
+        onClick={() => handleDelete(contact.contactId)}
+      >
+        Eliminar Contacto
+      </Button>
       </Box>
     </Box>
   );
