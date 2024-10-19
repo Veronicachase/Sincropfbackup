@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
     const jwt = await jwtConstructor
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setIssuedAt()
-      .setExpirationTime("8h")
+      .setExpirationTime("24h")
       .sign(encoder.encode(process.env.JWT_SECRET));
 
     return res.send({ token: jwt, user });

@@ -6,7 +6,7 @@ export const getAllOrders = async () => {
     const response = await fetch(`${apiUrl}/orders/`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

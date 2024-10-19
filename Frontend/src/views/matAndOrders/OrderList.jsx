@@ -9,7 +9,7 @@ import SimpleSnackbar from "../../components/generalComponents/SnackBar";
 import AlertDialog from "../../components/generalComponents/AlertDialog";
 import IconColorsOrder from "../../components/orderComponets/IconColorsOrder";
 import OrderDetailsModal from "../../components/orderComponets/orderDetailModal";
-import { addOrder } from "../../api/orderApis/addOrder";
+import { handleSubmitOrder } from "../../api/orderApis/handleSubmitOrder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -111,24 +111,8 @@ function OrderList() {
     setModalOpen(false);
     setSelectedOrder(null);
   };
-  const handleAddOrder = async (projectId) => {
-    try {
-      const newOrder = await addOrder({
-        productName: "Nuevo Producto",
-        projectId: projectId,
-        date: new Date().toISOString(),
-        status: "pendiente",
-        description: "Descripción del nuevo producto",
-      });
-      setOrders((prevOrders) => [...prevOrders, newOrder]);
-      setSnackbarMessage("Pedido creado con éxito");
-      setSnackbarOpen(true);
-      navigate("/create-order");
-    } catch (error) {
-      console.error("Error al crear el pedido:", error);
-      setSnackbarMessage("Error al crear el pedido");
-      setSnackbarOpen(true);
-    }
+  const handleAddOrder = () => {
+    navigate("/create-order");
   };
 
   const generateMailToLink = (projectId) => {
@@ -177,7 +161,6 @@ function OrderList() {
                 ":hover": {
                   transform: "scale(1.02)",
                   backgroundColor: "#f5f5f5",
-                  
                 },
               }}
             >
@@ -186,7 +169,7 @@ function OrderList() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap:2
+                  gap: 2,
                 }}
               >
                 <Typography variant="h6">
@@ -227,13 +210,12 @@ function OrderList() {
                             ":hover": {
                               transform: "scale(1.02)",
                               backgroundColor: "#e0f7fa",
-                            
                             },
                           }}
                         >
                           <Box sx={{ display: "flex", gap: 2 }}>
                             <Box sx={{ display: "flex" }}>
-                              <IconColorsOrder status={order.status}  />
+                              <IconColorsOrder status={order.status} />
                               {/*<Typography variant="body2">
                               {formatDate(order.date)}
                             </Typography> */}

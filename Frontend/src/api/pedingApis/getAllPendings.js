@@ -6,7 +6,7 @@ export const getAllPendings = async () => {
     const response = await fetch(`${apiUrl}/pendings/`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

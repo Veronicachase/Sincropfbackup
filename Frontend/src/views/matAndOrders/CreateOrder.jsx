@@ -13,8 +13,7 @@ function CreateOrder() {
   const navigate = useNavigate();
   const { projectId: currentProjectId } = useParams();
   const [image, setImage] = useState("");
-  const [file, setFile] = useState(null);
-  const [projects, setProjects] = useState(null); // Ahora inicia como `null` para controlar la carga
+  const [projects, setProjects] = useState(null); 
   const [initialValues, setInitialValues] = useState(InitialValues);
 
   useEffect(() => {
@@ -35,45 +34,21 @@ function CreateOrder() {
               projectName: currentProject.projectName,
             }));
           }
-        } else {
-          // Si no hay proyectos, usar el proyecto ficticio
-          setProjects([
-            { projectId: "default", projectName: "Default Project" },
-          ]);
-          console.log(
-            "No hay proyectos creados. Usando proyecto predeterminado."
-          );
-          setInitialValues((prevValues) => ({
-            ...prevValues,
-            projectId: "default",
-            projectName: "Default Project",
-          }));
-        }
+        } 
       } catch (error) {
         console.error(
           "Error al obtener los proyectos: No hay proyectos o permisos denegados"
         );
-        setProjects([{ projectId: "default", projectName: "Default Project" }]); // Si ocurre un error, también usar el proyecto predeterminado
+      
       }
     };
 
     fetchProjects();
   }, [currentProjectId]);
 
-  function previewFiles(file) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-  }
+ 
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFile(file);
-    previewFiles(file);
-  };
-
+ 
   // Si no hay proyectos, mostramos un mensaje y un botón para crear uno
   if (projects && projects.length === 0) {
     return (
@@ -101,11 +76,9 @@ function CreateOrder() {
           validationSchema={OrderFormSchema}
           enableReinitialize
           onSubmit={(values, actions) => {
-            if (image) {
-              values.image = image;
-            }
+          
 
-            handleSubmitOrder(values)
+            handleSubmitOrder(values, image)
               .then(() => {
                 actions.setSubmitting(false);
                 actions.resetForm();
@@ -120,7 +93,7 @@ function CreateOrder() {
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form>
-              <div className="card shadow p-4">
+              <div className=" shadow p-4">
                 <h4 className="text-center mb-4">Crear Pedido</h4>
 
                 <div className="mb-3">
@@ -234,12 +207,12 @@ function CreateOrder() {
                     id="fileInput"
                     type="file"
                     hidden
-                    onChange={handleFileChange}
+                    onChange={(e) => setImage(e.target.files[0])}
                   />
 
                   {image && (
                     <img
-                      src={image}
+                    src={URL.createObjectURL(image)} 
                       alt="Preview"
                       className="img-fluid mt-3"
                       style={{ maxHeight: "200px" }}

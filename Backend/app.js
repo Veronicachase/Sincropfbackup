@@ -1,5 +1,5 @@
 
-require('./utils/config');
+ require('./utils/config');
 const express = require("express");
 const logger = require("morgan");
 const userRouter = require("./routes/userRouter");
@@ -11,7 +11,7 @@ const orderRouter = require("./routes/orderRouter");
 const hoursRouter = require("./routes/hoursRouter");
 const pendingRouter = require("./routes/pendingRouter");
 const cors = require("cors");
-const { jwtVerify } = require("jose");
+const authenticateToken =require("./middleWares/authenticateToken")
 
  
 const app = express();
@@ -28,28 +28,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para verificar el token JWT
-const authenticateToken = async (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
 
-
-  if (!token) {
-  
-    return res.sendStatus(401); 
-  }
-
-  try {
-    const encoder = new TextEncoder();
-    const { payload } = await jwtVerify(token, encoder.encode(process.env.JWT_SECRET));
-
-    req.user = payload;
-    next();
-  } catch (err) {
-    console.log("Error en la verificación del JWT:", err);
-    return res.sendStatus(403); 
-  }
-};
 
 // Aplicar el middleware de autenticación a las rutas que requieran autenticación
 app.use("/projects", authenticateToken, projectRouter);

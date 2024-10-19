@@ -5,7 +5,7 @@ export const getAllTasks = async () => {
     const response = await fetch(`${apiUrl}/tasks/`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

@@ -5,7 +5,7 @@ export const getAllOrdersByProjectId = async (projectId) => {
     const response = await fetch(`${apiUrl}/api/orders/${projectId}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

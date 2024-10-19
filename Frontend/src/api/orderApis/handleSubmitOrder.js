@@ -1,22 +1,30 @@
 const apiUrl = import.meta.env.VITE_API_URL;
-export const handleSubmitOrder = async (values) => {
-  const formData = { ...values, status: "pendiente" };
-  //delete formData.files;
+export const handleSubmitOrder = async (values, imageFile) => {
+
+  const formData = new FormData();
+  
+  
+  Object.keys(values).forEach((key) => {
+    formData.append(key, values[key]);
+  });
+
+ 
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
 
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(`${apiUrl}/orders`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, 
       },
-
-      body: JSON.stringify(formData),
+      body: formData,  
     });
+
     if (response.ok) {
       const data = await response.json();
-
       return data;
     } else {
       throw new Error(

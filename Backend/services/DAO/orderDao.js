@@ -5,10 +5,11 @@ const orderDao = {};
 
 orderDao.addOrder = async (orderData) => {
   let conn = null;
+  const formattedDate = orderData.date ? moment(orderData.date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
   try {
     conn = await db.createConnection();
     let orderObj = {
-      date: orderData.date || moment().format("YYYY-MM-DD"),
+      date: formattedDate,
       productName: orderData.productName,
       provider: orderData.provider || null,
       brand: orderData.brand || null,

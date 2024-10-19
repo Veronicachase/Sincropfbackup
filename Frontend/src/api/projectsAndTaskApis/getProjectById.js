@@ -5,7 +5,7 @@ export const getProjectById = async (projectId) => {
     const response = await fetch(`${apiUrl}/projects/${projectId}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

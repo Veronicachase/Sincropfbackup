@@ -5,7 +5,7 @@ export const getTaskBySection = async (projectId, sectionKey) => {
     const response = await fetch(`${apiUrl}/tasks/${projectId}/${sectionKey}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });
@@ -13,8 +13,7 @@ export const getTaskBySection = async (projectId, sectionKey) => {
     if (response.ok) {
       const tasks = await response.json();
 
-      //return tasks.filter(task => task.sectionKey === sectionKey && task.sectionIsActive);
-
+    
       return tasks.length > 0 ? tasks : null;
     } else if (response.status === 404) {
       return null;

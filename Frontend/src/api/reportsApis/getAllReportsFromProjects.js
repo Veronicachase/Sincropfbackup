@@ -6,7 +6,7 @@ export const getAllReportsFromProjects = async () => {
     const response = await fetch(`${apiUrl}/projects/reports/all`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+       
         Authorization: `Bearer ${token}`,
       },
     });

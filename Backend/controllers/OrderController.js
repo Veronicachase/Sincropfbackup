@@ -2,17 +2,23 @@ const orderDao = require("../services/DAO/orderDao");
 const path = require("path");
 const uploadImage = require("../public/cloudinary/uploadImage")
 
+
 const addOrder = async (req, res) => {
     try {
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({ message: "Usuario no autenticado" });
+      }
+  
       const userId = req.user.userId;
-      const { image, ...orderData } = req.body;
+      const { ...orderData } = req.body; 
       
-      if (image) {
-        const uploadedImage = await uploadImage(image);
+      if (req.file) {
+        const uploadedImage = await uploadImage(req.file.path);
         orderData.image = uploadedImage.secure_url;
       }
 
       const completeOrderData = {
+        date: orderData.date || moment().format("YYYY-MM-DD"),
         projectId: orderData.projectId || null,
         projectName: orderData.projectName || null,
         productName: orderData.productName || null,
@@ -21,12 +27,11 @@ const addOrder = async (req, res) => {
         brand: orderData.brand || null,
         details: orderData.details || null,
         status: orderData.status || 'pendiente',
-        date: orderData.date || moment().format("YYYY-MM-DD"),
         image: orderData.image || null,
        
       };
    
-      const orderId = await orderDao.addOrder(orderData, userId);
+      const orderId = await orderDao.addOrder(completeOrderData, userId);
       res.status(201).json({ message: "Pedido de orden creado exitosamente", orderId });
     } catch (error) {
       console.error("Error al agregar el pedido:", error.message);
