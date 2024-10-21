@@ -5,8 +5,7 @@ const cloudinary = require("cloudinary").v2;
 
 const addProject = async (req, res) => {
   const userId = req.user.userId;
-  console.log("Archivo recibido por multer controller:", req.file);
-  console.log("Campos del formulario controller:", req.body);
+  
 
   try {
     const { body, file } = req;
@@ -14,11 +13,7 @@ const addProject = async (req, res) => {
     let imageUrl = "";
     if (file) {
 
-      const uploadedImage = await cloudinary.uploader.upload(file.path, {
-        folder: "SincroProjectPic",
-        allowed_formats: ["jpg", "png", "jpeg", "svg", "ico", "jfif", "webp"],
-      });
-      imageUrl = uploadedImage.secure_url;
+      imageUrl = file.path;
     }
 
     let sections ;

@@ -10,11 +10,11 @@ const addOrder = async (req, res) => {
       }
   
       const userId = req.user.userId;
-      const { ...orderData } = req.body; 
+      const orderData = req.body;
       
       if (req.file) {
-        const uploadedImage = await uploadImage(req.file.path);
-        orderData.image = uploadedImage.secure_url;
+      
+        orderData.image = req.file.path;
       }
 
       const completeOrderData = {
@@ -59,10 +59,11 @@ const getAllOrders = async (req, res) => {
     try {
       const userId = req.user.userId;
         const orders = await orderDao.getAllOrders(userId);
-        if (orders) {
-            res.json(orders);
+        
+        if (orders && orders.length > 0) {
+            res.status(200).json(orders)
         } else {
-            res.status(404).json({ message: "No hay pedidos creados" });
+            res.status(200).json([]);
         }
     } catch (error) {
         console.error("Error al obtener tus pedidos:", error.message);

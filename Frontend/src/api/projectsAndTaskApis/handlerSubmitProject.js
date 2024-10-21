@@ -3,13 +3,18 @@ export const handleSubmitProject = async (values) => {
   try {
     const token = localStorage.getItem("token");
     const formData = new FormData();
-    console.log("Valores del formulario desde la api:",values);
-    console.log("Valores del formulario desde la api:",values.image);
-for (const key in values) {
-  formData.append(key, values[key]);
-}
-formData.append("image", values.image); 
+  
+    for (const key in values) {
+     
+      if (key !== 'image') {
+        formData.append(key, values[key]);
+      }
+    }
 
+ 
+    if (values.image) {
+      formData.append("image", values.image);
+    }
 
 const response = await fetch(`${apiUrl}/projects`, {
   method: "POST",

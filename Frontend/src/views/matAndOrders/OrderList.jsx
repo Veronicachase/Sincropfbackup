@@ -1,4 +1,4 @@
-// cambiar order de fecha, incluir selec de estados,  agregar otros estados, tipo devuelto
+
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,6 @@ import SimpleSnackbar from "../../components/generalComponents/SnackBar";
 import AlertDialog from "../../components/generalComponents/AlertDialog";
 import IconColorsOrder from "../../components/orderComponets/IconColorsOrder";
 import OrderDetailsModal from "../../components/orderComponets/orderDetailModal";
-import { handleSubmitOrder } from "../../api/orderApis/handleSubmitOrder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -46,12 +45,20 @@ function OrderList() {
   }, []);
 
   const fetchProjectsAndOrders = async () => {
+   
     setLoading(true);
     try {
       const projectResponse = await getAllProjects();
-      setProjects(projectResponse);
+
+      if(!projectResponse || projectResponse.length === 0 ){
+        console.log("no se han encontrado proyectos")
+      } else {setProjects(projectResponse || []);}
+      
       const orderResponse = await getAllOrders();
-      setOrders(orderResponse);
+      if(!orderResponse || orderResponse.length === 0){
+        console.log("No se han encontrado pedidos")
+      } else{setOrders(orderResponse || []); }
+      
     } catch (error) {
       console.error("Error al obtener los datos:", error);
       setSnackbarMessage("Error al cargar los datos");
@@ -216,9 +223,7 @@ function OrderList() {
                           <Box sx={{ display: "flex", gap: 2 }}>
                             <Box sx={{ display: "flex" }}>
                               <IconColorsOrder status={order.status} />
-                              {/*<Typography variant="body2">
-                              {formatDate(order.date)}
-                            </Typography> */}
+                              
                             </Box>
                             <Box
                               sx={{

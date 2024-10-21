@@ -79,8 +79,8 @@ orderDao.getAllOrders = async () => {
   try {
     conn = await db.createConnection();
     const results = await db.query(
-      "SELECT * FROM orders ",
-      null,
+      "SELECT * FROM orders ",null,
+    
       "select",
       conn
     );
